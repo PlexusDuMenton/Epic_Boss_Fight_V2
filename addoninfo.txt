@@ -1,0 +1,10 @@
+"AddonInfo"
+{
+  "TeamCount" "10"
+  "maps"      "Arena_Map"
+  "IsPlayable"  "1"
+  "Arena_Map"
+  {
+          "MaxPlayers"                    "10"
+  }
+}

@@ -1,0 +1,19 @@
+"DOTAAbilities"
+{
+  "item_rust_dagger"
+  { 
+    "ID"              "1010"
+    "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+    "BaseClass"           "item_datadriven"
+    "AbilityTextureName"      "item_rust_dagger"
+
+    "ItemShopTags"          "consumable"
+    "ItemQuality"         "component"
+    "ItemStackable"         "0"
+    "ItemKillable"          "0"
+    "ItemPurchasable"       "1"
+    "ItemCost"            "40"
+    "ItemShareability"        "ITEM_NOT_SHAREABLE"
+    "ItemPermanent"         "0"
+  }
+}
