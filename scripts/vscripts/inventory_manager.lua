@@ -112,8 +112,51 @@ function inv_manager:Create_Inventory(hero) -- call this when the hero entity is
 end
 
 function inv_manager:Create_Item(Item)
-    local item
-    --TO BE DONE
+    local item = Item or return nil
+    local item_list = GameRules.items
+    local item_info = item_list[item:GetName()]
+    if item_info == nil then 
+        print ("WHAT THE FUCK ARE YOU DOING KID , THERE IS NO KV FILE FOR THIS ITEM ARE YOU AN FUCKING LAZYBOY ?")
+        return item 
+    end
+    item = tableMerge(item_info,item)
+    if item.stack == true then
+        item.ammount = 1
+    end
+    if item.Equipement == true then
+        if item.cat == "weapon" then
+            item.durability = weapon.max_dur
+            item.level = 1
+            item.XP = 0
+            item.upgrade_point = 0
+
+            item.as_upgrade = {}
+            for i=0,50 do 
+                item.as_upgrade[i] = ((i/2))*item.as_mult + 2
+            end
+            item.as_lvl = 0
+        
+            item.range_upgrade = {}
+            item.range_lvl = 0
+            --if weapon is a ranged weapon then range upgrade GREATLY increase range , else it's slighty increase it (can be see as lenghten the weapon :) )
+            if ranged == true then
+                for i=0,50 do 
+                    item.range_upgrade[i] = (1 + (i/5))*item.range_mult + 15
+                end
+            else
+                for i=0,50 do 
+                    item.range_upgrade[i] = item.range_mult
+                end
+            end
+
+            item.damage_upgrade = {}
+                for i=0,50 do 
+                    item.damage_upgrade[i] = (1 + (i/2))*item.dmg_mult + 2
+                end
+                item.dmg_lvl = 0
+            end
+        end
+    end
     return item
 end
 
@@ -122,13 +165,21 @@ end
 function inv_manager:Add_Item(hero,Item) --will be called when a item is purshased or picked up
     local inventory = hero.inventory
     if item ~= nil and item:IsItem() then
-        if #inventory >= 20 then
-            DropItemAtPositionImmediate(item,hero:GetOrigin())
+        if item.stackable == true then
+            item_name = item:GetName()
+            for i=0,19 do
+                if inventory[i]~= nil and inventory[i]:GetName() = item_name then
+                    hero.inventory[i].ammount = inventory[i].ammount + item.ammount
+                end
         else
-            table.sort(hero.inventory)
-            table.insert(hero.inventory,item)
-            hero:RemoveItem(item)
-            Notifications:Bottom(hero:GetPlayerOwner(), {text="#NOSLOT",duration=2,style={color="red"}})
+            if #inventory >= 20 then
+                DropItemAtPositionImmediate(item,hero:GetOrigin())
+            else
+                table.sort(hero.inventory)
+                table.insert(hero.inventory,item)
+                hero:RemoveItem(item)
+                Notifications:Bottom(hero:GetPlayerOwner(), {text="#NOSLOT",duration=2,style={color="red"}})
+            end
         end
     end
 end
@@ -137,9 +188,13 @@ function inv_manager:drop_Item(hero,inv_slot) --will be called when player want 
     local inventory = hero.inventory
     if inv_slot >= 0 and inv_slot < 20 then
         local item = inventory[inv_slot]
-        DropItemAtPositionImmediate(item,hero:GetOrigin())
-        hero.inventory[inv_slot] == nil
-        table.sort(hero.inventory)
+        if item ~= nil then
+            DropItemAtPositionImmediate(item,hero:GetOrigin())
+            hero.inventory[inv_slot] == nil
+            table.sort(hero.inventory)
+        else
+            Notifications:Bottom(hero:GetPlayerOwner(), {text="#EMPTY_SLOT",duration=2,style={color="red"}})
+        end
     else
         print ("Slot number is invalid or inventory don't exist")
     end
@@ -149,76 +204,80 @@ function inv_manager:Use_Item(hero,inv_slot) --also equip item
     local inventory = hero.inventory
     if inv_slot >= 0 and inv_slot < 20 then
         local item = inventory[inv_slot]
-        if item.Equipement == true then
-            if item.cat == "weapon" then
-                if hero.equipement.weapon == nil then
-                    hero.equipement.weapon = item
-                    hero.inventory[inv_slot] = nil
-                    table.sort(hero.inventory)
+        if item ~= nil then
+            if item.Equipement == true then
+                if item.cat == "weapon" then
+                    if hero.equipement.weapon == nil then
+                        hero.equipement.weapon = item
+                        hero.inventory[inv_slot] = nil
+                        table.sort(hero.inventory)
+                    else
+                        hero.inventory[inv_slot] = hero.equipement.weapon
+                        hero.equipement.weapon = item
+                    end
+                end
+                if item.cat == "chest" then
+                    if hero.equipement.chest_armor == nil then
+                        hero.equipement.chest_armor = item
+                        hero.inventory[inv_slot] = nil
+                        table.sort(hero.inventory)
+                    else
+                        hero.inventory[inv_slot] = hero.equipement.chest_armor
+                        hero.equipement.chest_armor = item
+                    end
+                end
+                if item.cat == "legs" then
+                    if hero.equipement.legs_armor == nil then
+                        hero.equipement.legs_armor = item
+                        hero.inventory[inv_slot] = nil
+                        table.sort(hero.inventory)
+                    else
+                        hero.inventory[inv_slot] = hero.equipement.legs_armor
+                        hero.equipement.legs_armor = item
+                    end
+                end
+                if item.cat == "helmet" then
+                    if hero.equipement.helmet == nil then
+                        hero.equipement.helmet = item
+                        hero.inventory[inv_slot] = nil
+                        table.sort(hero.inventory)
+                    else
+                        hero.inventory[inv_slot] = hero.equipement.helmet
+                        hero.equipement.helmet = item
+                    end
+                end
+                if item.cat == "gloves" then
+                    if hero.equipement.gloves == nil then
+                        hero.equipement.gloves = item
+                        hero.inventory[inv_slot] = nil
+                        table.sort(hero.inventory)
+                    else
+                        hero.inventory[inv_slot] = hero.equipement.gloves
+                        hero.equipement.gloves = item
+                    end
+                end
+                if item.cat == "boots" then
+                    if hero.equipement.boots == nil then
+                        hero.equipement.boots = item
+                        hero.inventory[inv_slot] = nil
+                        table.sort(hero.inventory)
+                    elses
+                        hero.inventory[inv_slot] = hero.equipement.boots
+                        hero.equipement.boots = item
+                    end
+                end
+            elseif item.consommable == true then
+                if item.ammount > 1 then
+                    item:use(hero)
+                    hero.inventory[inv_slot].ammount = item.ammount - 1
                 else
-                    hero.inventory[inv_slot] = hero.equipement.weapon
-                    hero.equipement.weapon = item
-                end
-            end
-            if item.cat == "chest" then
-                if hero.equipement.chest_armor == nil then
-                    hero.equipement.chest_armor = item
+                    item:use(hero)
                     hero.inventory[inv_slot] = nil
                     table.sort(hero.inventory)
-                else
-                    hero.inventory[inv_slot] = hero.equipement.chest_armor
-                    hero.equipement.chest_armor = item
                 end
             end
-            if item.cat == "legs" then
-                if hero.equipement.legs_armor == nil then
-                    hero.equipement.legs_armor = item
-                    hero.inventory[inv_slot] = nil
-                    table.sort(hero.inventory)
-                else
-                    hero.inventory[inv_slot] = hero.equipement.legs_armor
-                    hero.equipement.legs_armor = item
-                end
-            end
-            if item.cat == "helmet" then
-                if hero.equipement.helmet == nil then
-                    hero.equipement.helmet = item
-                    hero.inventory[inv_slot] = nil
-                    table.sort(hero.inventory)
-                else
-                    hero.inventory[inv_slot] = hero.equipement.helmet
-                    hero.equipement.helmet = item
-                end
-            end
-            if item.cat == "gloves" then
-                if hero.equipement.gloves == nil then
-                    hero.equipement.gloves = item
-                    hero.inventory[inv_slot] = nil
-                    table.sort(hero.inventory)
-                else
-                    hero.inventory[inv_slot] = hero.equipement.gloves
-                    hero.equipement.gloves = item
-                end
-            end
-            if item.cat == "boots" then
-                if hero.equipement.boots == nil then
-                    hero.equipement.boots = item
-                    hero.inventory[inv_slot] = nil
-                    table.sort(hero.inventory)
-                elses
-                    hero.inventory[inv_slot] = hero.equipement.boots
-                    hero.equipement.boots = item
-                end
-            end
-        elseif item.consommable == true then
-            if item.ammount > 1 then
-                item:use(hero)
-                hero.inventory[inv_slot].ammount = item.ammount - 1
-            else
-                item:use(hero)
-                hero.inventory[inv_slot] = nil
-                table.sort(hero.inventory)
-            end
+        else
+            Notifications:Bottom(hero:GetPlayerOwner(), {text="#EMPTY_SLOT",duration=2,style={color="red"}})
         end
     else
         print ("Slot number is invalid or inventory don't exist")
@@ -233,12 +292,16 @@ function inv_manager:Sell_Item(hero,inv_slot) --sell item if the player is in a 
     local inventory = hero.inventory
     if inv_slot >= 0 and inv_slot < 20 then
         local item = inventory[inv_slot]
-        if hero.Isinshop then
-            ModifyGold(hero:GetPlayerID() , item.price , true, 0)
-            hero.inventory[inv_slot] = nil
-            table.sort(hero.inventory)
+        if item ~= nil then
+            if hero.Isinshop then
+                ModifyGold(hero:GetPlayerID() , item.price , true, 0)
+                hero.inventory[inv_slot] = nil
+                table.sort(hero.inventory)
+            else
+                Notifications:Bottom(hero:GetPlayerOwner(), {text="#NOSHOP",duration=2,style={color="red"}})
+            end
         else
-            Notifications:Bottom(hero:GetPlayerOwner(), {text="#NOSHOP",duration=2,style={color="red"}})
+            Notifications:Bottom(hero:GetPlayerOwner(), {text="#EMPTY_SLOT",duration=2,style={color="red"}})
         end
     else
         print ("Slot number is invalid or inventory don't exist")
@@ -252,27 +315,29 @@ function inv_manager:upgrade_weapon(hero,stat) --will be called when a weapon is
             if stat = "damage" then
                 if weapon.damage_upgrade > 0 and weapon.dmg_lvl < 51 then --limit weapon damage upgrade , similar stuff will be add to other upgrades
                     hero.equipement.weapon.damage = weapon.damage + weapon.damage_upgrade[weapon.dmg_lvl]
-                    hero.equipement.weapon.damage.dmg_lvl = weapon.dmg_lvl + 1
+                    hero.equipement.weapon.dmg_lvl = weapon.dmg_lvl + 1
                     hero.equipement.weapon.upgrade_point = weapon.upgrade_point - 1
                 else
                     Notifications:Bottom(hero:GetPlayerOwner(), {text="#CANT_UPGRADE",duration=2,style={color="red"}})
                 end
             elseif stat = "attack_speed" then
-                if weapon.AS_upgrade >0 then
-                    hero.equipement.weapon.attack_speed = weapon.attack_speed + weapon.AS_upgrade
+                if weapon.AS_upgrade > 0 and weapon.as_lvl < 51 then
+                    hero.equipement.weapon.attack_speed = weapon.attack_speed + weapon.as_upgrade[weapon.as_lvl]
+                    hero.equipement.weapon.as_lvl = weapon.as_lvl + 1
                     hero.equipement.weapon.upgrade_point = weapon.upgrade_point - 1
                 else
                     Notifications:Bottom(hero:GetPlayerOwner(), {text="#CANT_UPGRADE",duration=2,style={color="red"}})
                 end
             elseif stat = "range" then
-                if weapon.range_upgrade >0 then
-                    hero.equipement.weapon.range = weapon.range + weapon.range_upgrade
+                if weapon.range_upgrade > 0 and weapon.range_lvl < 51 then
+                    hero.equipement.weapon.range = weapon.range + weapon.range_upgrade[weapon.range_lvl]
+                    hero.equipement.weapon.range_lvl = weapon.range_lvl + 1
                     hero.equipement.weapon.upgrade_point = weapon.upgrade_point - 1
                 else
                     Notifications:Bottom(hero:GetPlayerOwner(), {text="#CANT_UPGRADE",duration=2,style={color="red"}})
                 end
             elseif stat = "durability" then
-                if weapon.range_upgrade >0 thenpon.range_upgrade
+                if weapon.range_upgrade > 0 then
                     hero.equipement.weapon.max_dur = weapon.max_dur + weapon.dur_upgrade
                     hero.equipement.weapon.upgrade_point = weapon.upgrade_point - 1
                 else
@@ -301,57 +366,91 @@ end
 
  
 function inv_manager:repair_weapon(hero) --will be called when a weapon is repaired
-    --TO BE DONE
+    if hero ~= nil then
+        price = (hero.equipement.weapon.LVL/50 + hero.equipement.weapon.repair_cost_base) * (hero.equipement.weapon.max_dur - hero.equipement.weapon.durability)
+        if hero.equipement.weapon ~= nil then
+            if hero:GetGold() >= price then
+                hero.equipement.weapon.durability = hero.equipement.weapon.max_dur
+                hero:ModifyGold(-price, false, 0) --may no work , idk if modify gold love negative value (i guess it's okay , but you know, volvo...)
+            else
+                Notifications:Bottom(hero:GetPlayerOwner(), {text="#NO_GOLD",duration=2,style={color="red"}})
+            end
+        else
+            Notifications:Bottom(hero:GetPlayerOwner(), {text="#NO_WEAPON",duration=2,style={color="red"}})
+        end
+    end
 end
 
 function inv_manager:transmute_weapon(hero,inv_slot) --will be called when a weapon is upgraded with a smith
     local inventory = hero.inventory
-    if inv_slot >= 0 and inv_slot < 20 then
-        local item = inventory[inv_slot]
-        if item.cat == "weapon" then
-            hero.equipement.weapon.XP = hero.equipement.weapon.XP + (item.XP/2) + 10*item.LVL
-            inv_manager:weapon_checklevelup(hero)
-            inventory[inv_slot] = nil
+    if hero.equipement.weapon ~= nil then
+        if inv_slot >= 0 and inv_slot < 20 then
+            local item = inventory[inv_slot]
+            if item.cat == "weapon" then
+                hero.equipement.weapon.XP = hero.equipement.weapon.XP + (item.XP/2) + 10*item.LVL
+                inv_manager:weapon_checklevelup(hero)
+                inventory[inv_slot] = nil
+            else
+                Notifications:Bottom(hero:GetPlayerOwner(), {text="IS_NOT_WEAPON",duration=2,style={color="red"}})
+            end
         else
-            Notifications:Bottom(hero:GetPlayerOwner(), {text="#NOT_WEAPON",duration=2,style={color="red"}})
+            print ("Slot number is invalid or inventory don't exist")
         end
     else
-        print ("Slot number is invalid or inventory don't exist")
+        Notifications:Bottom(hero:GetPlayerOwner(), {text="#NO_WEAPON",duration=2,style={color="red"}})
     end
 end
+
 
 --[[
         Here will go to the KV files for each item
 
-        max_dur = 500
-        dur_upgrade = 100
-        dmg_mult = 1
+    EQUIPEMENT ONLY
+        Equipement = true
+        cat = weapon
         damage = 5
         attack_speed = 100
+        loh = 0
+        ls = 0
+        effect = {"effect1","effect2"} 
+        effect will be read , i'll make a function thas add a modifier depend on effect name 
+        
+        hp = 0
+        mp = 0
+        hp_regen = 0 
+        mp_regen = 0
+        armor = 0
+        m_ress = 0
+
+
+
+    WEAPON ONLY :
+        max_dur = 200
+        dur_upgrade = 50
+
+        dmg_mult = 1
+        as_mult = 0.75
+        range_mult = 1
+
+        repair_cost_base = 0.05
+
         range = 40
         ranged = False
+
         dmg_grow = 2
         range_grow = 1
         as_grow = 5
-        effect = {"effect1","effect2"} 
-        effect will be read , i'll make a function thas add a modifier depend on effect name 
 
+        
+        
+
+
+
+        
 
     
-        Here is set in lua when an item is created to keep KV file as small as possible 
+        -Here is set in lua when an item is created to keep KV file as small as possible 
 
-        item.durability = weapon.max_dur
-        item.level = 1
-        item.XP = 0
-        item.upgrade_point = 0
-
-        item.damage_upgrade = {}
-        for i=0,20 do 
-            item.damage_upgrade[i] = (2 + i)*item.dmg_mult
-        end
-        weapon.dmg_lvl = 0
-
-
-
+        
 
 ]]
