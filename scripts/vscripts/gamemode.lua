@@ -113,7 +113,6 @@ function epic_boss_fight:InitGameMode()
   GameRules:SetCustomGameTeamMaxPlayers( DOTA_TEAM_BADGUYS, 0 )
 
   ListenToGameEvent("dota_item_picked_up", Dynamic_Wrap(epic_boss_fight, "OnItemPickUp"), self)
-  ListenToGameEvent("dota_item_purchased", Dynamic_Wrap(epic_boss_fight, "OnItemPurchased"), self)
 
   CustomGameEventManager:RegisterListener( "inventory_change_lua", Dynamic_Wrap(epic_boss_fight, 'inventory_change_lua'))
   CustomGameEventManager:RegisterListener( "load_player_data", Dynamic_Wrap(epic_boss_fight, 'load_player_data'))
@@ -139,5 +138,24 @@ function epic_boss_fight:OnThink( )
   end
   return 0.1
 end
-function dota_create_item()
+
+function epic_boss_fight:Create_Item(item_name,owner) --a function to create an item from name , will be used over "CreateItem" because 
+  --it'll make the change we need on items
+  Item = CreateItem(item_name, owner, owner) 
+  Item = inv_manager:Create_Item(Item)
+  return Item
+
+end
+
+function epic_boss_fight:OnItemPickUp(event)
+  pID = event.PlayerID
+  local player = PlayerResource:GetPlayer(pID)
+  local hero = player:GetAssignedHero() 
+  for itemSlot = 0, 5, 1 do
+    local Item = hero:GetItemInSlot( itemSlot )
+    if Item ~= nil then
+      inv_manager:Add_Item(hero,Item)
+      hero:RemoveItem(Item) --now it's added to OUR inventory , let's delete it from dota one :p
+    end
+  end
 end

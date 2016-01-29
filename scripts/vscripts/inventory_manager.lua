@@ -103,6 +103,7 @@ function inv_manager:Calculate_stats(hero) -- call this when equipement is modif
 
     hero.equip_stats = stats
     --to add : a function that add hero side stats (levels...) and apply them
+    print (hero.equip_stats.damage,hero.equip_stats.range,hero.equip_stats.attack_speed,hero.equip_stats.armor)
 end
 
   
@@ -284,9 +285,6 @@ function inv_manager:Use_Item(hero,inv_slot) --also equip item
     end
 end
 
-
- 
-
   --TBD : SUPPORT ITEM STACK
 function inv_manager:Sell_Item(hero,inv_slot) --sell item if the player is in a shop
     local inventory = hero.inventory
@@ -362,7 +360,6 @@ function inv_manager:weapon_checklevelup(hero)
         --up stats
     end
 end
- 
 
  
 function inv_manager:repair_weapon(hero) --will be called when a weapon is repaired
