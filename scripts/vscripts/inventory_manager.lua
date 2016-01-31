@@ -5,6 +5,7 @@ end
  --INVENTORY MANAGER IS WHAT MAKE ALL THE INVENTORY SYSTEM WORK , FROM CREATION OF ITEM  TO REPAIR ,UPGRADE, AND STATS CALCULATION
 
 inv_manager.XP_Table = {}
+inv_manager.XP_Table[0] = 0
 for i=1,200 do
   inv_manager.XP_Table[i] = math.floor(i*19 + i^2) + inv_manager.XP_Table[i-1]
 end
@@ -112,7 +113,7 @@ function inv_manager:Create_Inventory(hero) -- call this when the hero entity is
 end
 
 function inv_manager:Create_Item(Item)
-    local item = Item or return nil
+    local item = Item
     local item_list = GameRules.items
     local item_info = item_list[item:GetName()]
     if item_info == nil then 
@@ -168,9 +169,10 @@ function inv_manager:Add_Item(hero,Item) --will be called when a item is purshas
         if item.stackable == true then
             item_name = item:GetName()
             for i=0,19 do
-                if inventory[i]~= nil and inventory[i]:GetName() = item_name then
+                if inventory[i]~= nil and inventory[i]:GetName() == item_name then
                     hero.inventory[i].ammount = inventory[i].ammount + item.ammount
                 end
+            end
         else
             if #inventory >= 20 then
                 DropItemAtPositionImmediate(item,hero:GetOrigin())
@@ -190,7 +192,7 @@ function inv_manager:drop_Item(hero,inv_slot) --will be called when player want 
         local item = inventory[inv_slot]
         if item ~= nil then
             DropItemAtPositionImmediate(item,hero:GetOrigin())
-            hero.inventory[inv_slot] == nil
+            hero.inventory[inv_slot] = nil
             table.sort(hero.inventory)
         else
             Notifications:Bottom(hero:GetPlayerOwner(), {text="#EMPTY_SLOT",duration=2,style={color="red"}})
@@ -261,7 +263,7 @@ function inv_manager:Use_Item(hero,inv_slot) --also equip item
                         hero.equipement.boots = item
                         hero.inventory[inv_slot] = nil
                         table.sort(hero.inventory)
-                    elses
+                    else
                         hero.inventory[inv_slot] = hero.equipement.boots
                         hero.equipement.boots = item
                     end
@@ -313,7 +315,7 @@ function inv_manager:upgrade_weapon(hero,stat) --will be called when a weapon is
     local weapon = hero.equipement.weapon
     if weapon ~= nil then
         if weapon.upgrade_point > 0 then
-            if stat = "damage" then
+            if stat == "damage" then
                 if weapon.damage_upgrade > 0 and weapon.dmg_lvl < 51 then --limit weapon damage upgrade , similar stuff will be add to other upgrades
                     hero.equipement.weapon.damage = weapon.damage + weapon.damage_upgrade[weapon.dmg_lvl]
                     hero.equipement.weapon.dmg_lvl = weapon.dmg_lvl + 1
@@ -321,7 +323,7 @@ function inv_manager:upgrade_weapon(hero,stat) --will be called when a weapon is
                 else
                     Notifications:Bottom(hero:GetPlayerOwner(), {text="#CANT_UPGRADE",duration=2,style={color="red"}})
                 end
-            elseif stat = "attack_speed" then
+            elseif stat == "attack_speed" then
                 if weapon.AS_upgrade > 0 and weapon.as_lvl < 51 then
                     hero.equipement.weapon.attack_speed = weapon.attack_speed + weapon.as_upgrade[weapon.as_lvl]
                     hero.equipement.weapon.as_lvl = weapon.as_lvl + 1
@@ -329,7 +331,7 @@ function inv_manager:upgrade_weapon(hero,stat) --will be called when a weapon is
                 else
                     Notifications:Bottom(hero:GetPlayerOwner(), {text="#CANT_UPGRADE",duration=2,style={color="red"}})
                 end
-            elseif stat = "range" then
+            elseif stat == "range" then
                 if weapon.range_upgrade > 0 and weapon.range_lvl < 51 then
                     hero.equipement.weapon.range = weapon.range + weapon.range_upgrade[weapon.range_lvl]
                     hero.equipement.weapon.range_lvl = weapon.range_lvl + 1
@@ -337,7 +339,7 @@ function inv_manager:upgrade_weapon(hero,stat) --will be called when a weapon is
                 else
                     Notifications:Bottom(hero:GetPlayerOwner(), {text="#CANT_UPGRADE",duration=2,style={color="red"}})
                 end
-            elseif stat = "durability" then
+            elseif stat == "durability" then
                 if weapon.range_upgrade > 0 then
                     hero.equipement.weapon.max_dur = weapon.max_dur + weapon.dur_upgrade
                     hero.equipement.weapon.upgrade_point = weapon.upgrade_point - 1
@@ -354,7 +356,7 @@ function inv_manager:upgrade_weapon(hero,stat) --will be called when a weapon is
 end
  
 function inv_manager:weapon_checklevelup(hero)
-    while hero.equipement.weapon.XP >= hero.equipement.weapon.XP_Table[hero.equipement.weapon.LVL] then
+    while hero.equipement.weapon.XP >= hero.equipement.weapon.XP_Table[hero.equipement.weapon.LVL] do
         hero.equipement.weapon.LVL = hero.equipement.weapon.LVL + 1
         hero.equipement.weapon.upgrade_point = hero.equipement.weapon.upgrade_point + 1
         hero.equipement.weapon.damage = hero.equipement.weapon.damage + hero.equipement.weapon.dmg_grow
