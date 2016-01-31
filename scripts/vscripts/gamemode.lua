@@ -119,8 +119,36 @@ function epic_boss_fight:InitGameMode()
 
   DebugPrint('[BAREBONES] Done loading Barebones gamemode!\n\n')
 
-  Convars:RegisterCommand("dota_create_item", dota_create_item, "dota_create_item", 0)
+  Convars:RegisterCommand("ebf_give_item", function(...) return self:ebf_give_item( ... ) end, "send an item directly to inventory", FCVAR_CHEAT )
 end
+
+function epic_boss_fight:ebf_give_item(item_name)
+  local hero = PlayerResource:GetSelectedHeroEntity( 0 )
+  epic_boss_fight:Create_Item(item_name,hero)
+  inv_manager:Add_Item(hero,Item)
+end
+
+function epic_boss_fight:ebf_use_item(slot_num)
+  local slot = tonumber( slot_num )
+  local hero = PlayerResource:GetSelectedHeroEntity( 0 )
+  inv_manager:Use_Item(hero,slot)
+end
+
+function epic_boss_fight:ebf_drop_item(slot_num)
+  local slot = tonumber( slot_num )
+  local hero = PlayerResource:GetSelectedHeroEntity( 0 )
+  inv_manager:drop_Item(hero,slot)
+end
+
+function epic_boss_fight:ebf_sell_item(slot_num)
+  local slot = tonumber( slot_num )
+  local hero = PlayerResource:GetSelectedHeroEntity( 0 )
+  inv_manager:Sell_Item(hero,slot)
+end
+
+
+
+
 
 function epic_boss_fight:OnThink( )
   if GameRules:State_Get() == DOTA_GAMERULES_STATE_GAME_IN_PROGRESS or GameRules:State_Get() == DOTA_GAMERULES_STATE_PRE_GAME then
@@ -144,7 +172,6 @@ function epic_boss_fight:Create_Item(item_name,owner) --a function to create an 
   Item = CreateItem(item_name, owner, owner) 
   Item = inv_manager:Create_Item(Item)
   return Item
-
 end
 
 function epic_boss_fight:OnItemPickUp(event)

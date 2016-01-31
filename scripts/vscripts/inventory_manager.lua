@@ -54,7 +54,6 @@ function inv_manager:calc_stat_item(equipement,stats)
 
 
     return stats
-    
 end
 
 function tableMerge(t1, t2)
@@ -292,7 +291,11 @@ function inv_manager:Sell_Item(hero,inv_slot) --sell item if the player is in a 
         local item = inventory[inv_slot]
         if item ~= nil then
             if hero.Isinshop then
-                ModifyGold(hero:GetPlayerID() , item.price , true, 0)
+                if item.stack == true then
+                    ModifyGold(hero:GetPlayerID() , item.price*item.ammount , true, 0)
+                else
+                    ModifyGold(hero:GetPlayerID() , item.price , true, 0)
+                end
                 hero.inventory[inv_slot] = nil
                 table.sort(hero.inventory)
             else
