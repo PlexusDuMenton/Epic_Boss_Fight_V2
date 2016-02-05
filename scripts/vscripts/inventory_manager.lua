@@ -1,7 +1,10 @@
 if inv_manager == nil then
     DebugPrint( 'created inv_manager' )
-    _G.inv_manager = class({})
+    inv_manager = {}
+    inv_manager.__index = inv_manager
+    print ("CREATED INVENTORY MANAGER")
 end
+
  --INVENTORY MANAGER IS WHAT MAKE ALL THE INVENTORY SYSTEM WORK , FROM CREATION OF ITEM  TO REPAIR ,UPGRADE, AND STATS CALCULATION
 
 inv_manager.XP_Table = {}
@@ -12,7 +15,7 @@ end
  
 require('libraries/notifications')
 
-function inv_manager:calc_stat_item(equipement,stats)
+function inv_manager:_calc_stat_item(equipement,stats)
     
     local eq_slot = equipement 
 
@@ -72,7 +75,7 @@ function tableMerge(t1, t2)
     return t1
 end
 
-function inv_manager:Calculate_stats(hero) -- call this when equipement is modified (equip new item , load caracter , weapon broke down)
+function inv_manager:_Calculate_stats(hero) -- call this when equipement is modified (equip new item , load caracter , weapon broke down)
     local stats= {}
     stats.effect = {} --here goes every effect an item/equipement add (every modifier on hit ie : chance to stun on hit , modifier )
     stats.damage = 0
@@ -107,12 +110,12 @@ function inv_manager:Calculate_stats(hero) -- call this when equipement is modif
 end
 
   
-function inv_manager:Create_Inventory(hero) -- call this when the hero entity is created
+function inv_manager:_Create_Inventory(hero) -- call this when the hero entity is created
     hero.inventory = {}
     hero.equipement = {weapon = {} ,chest_armor = {} ,legs_armor = {} ,helmet = {} ,gloves = {} ,boots = {} }
 end
 
-function inv_manager:Create_Item(Item)
+function inv_manager:_Create_Item(Item)
     local item = Item
     local item_list = GameRules.items
     local item_info = item_list[item:GetName()]
@@ -163,7 +166,7 @@ end
 
 
    --TBD : SUPPORT ITEM STACK
-function inv_manager:Add_Item(hero,Item) --will be called when a item is purshased or picked up
+function inv_manager:_Add_Item(hero,Item) --will be called when a item is purshased or picked up
     local inventory = hero.inventory
     if item ~= nil and item:IsItem() then
         if item.stackable == true then
@@ -186,7 +189,7 @@ function inv_manager:Add_Item(hero,Item) --will be called when a item is purshas
     end
 end
       --TBD : SUPPORT ITEM STACK
-function inv_manager:drop_Item(hero,inv_slot) --will be called when player want to put an item on the ground
+function inv_manager:_drop_Item(hero,inv_slot) --will be called when player want to put an item on the ground
     local inventory = hero.inventory
     if inv_slot >= 0 and inv_slot < 20 then
         local item = inventory[inv_slot]
@@ -202,7 +205,7 @@ function inv_manager:drop_Item(hero,inv_slot) --will be called when player want 
     end
 end
   --TBD : SUPPORT ITEM STACK
-function inv_manager:Use_Item(hero,inv_slot) --also equip item
+function inv_manager:_Use_Item(hero,inv_slot) --also equip item
     local inventory = hero.inventory
     if inv_slot >= 0 and inv_slot < 20 then
         local item = inventory[inv_slot]
@@ -287,7 +290,7 @@ function inv_manager:Use_Item(hero,inv_slot) --also equip item
 end
 
   --TBD : SUPPORT ITEM STACK
-function inv_manager:Sell_Item(hero,inv_slot) --sell item if the player is in a shop
+function inv_manager:_Sell_Item(hero,inv_slot) --sell item if the player is in a shop
     local inventory = hero.inventory
     if inv_slot >= 0 and inv_slot < 20 then
         local item = inventory[inv_slot]
@@ -311,7 +314,7 @@ function inv_manager:Sell_Item(hero,inv_slot) --sell item if the player is in a 
     end
 end
  
-function inv_manager:upgrade_weapon(hero,stat) --will be called when a weapon is upgraded with a smith
+function inv_manager:_upgrade_weapon(hero,stat) --will be called when a weapon is upgraded with a smith
     local weapon = hero.equipement.weapon
     if weapon ~= nil then
         if weapon.upgrade_point > 0 then
@@ -355,7 +358,7 @@ function inv_manager:upgrade_weapon(hero,stat) --will be called when a weapon is
     end
 end
  
-function inv_manager:weapon_checklevelup(hero)
+function inv_manager:_weapon_checklevelup(hero)
     while hero.equipement.weapon.XP >= hero.equipement.weapon.XP_Table[hero.equipement.weapon.LVL] do
         hero.equipement.weapon.LVL = hero.equipement.weapon.LVL + 1
         hero.equipement.weapon.upgrade_point = hero.equipement.weapon.upgrade_point + 1
@@ -367,7 +370,7 @@ function inv_manager:weapon_checklevelup(hero)
 end
 
  
-function inv_manager:repair_weapon(hero) --will be called when a weapon is repaired
+function inv_manager:_repair_weapon(hero) --will be called when a weapon is repaired
     if hero ~= nil then
         price = (hero.equipement.weapon.LVL/50 + hero.equipement.weapon.repair_cost_base) * (hero.equipement.weapon.max_dur - hero.equipement.weapon.durability)
         if hero.equipement.weapon ~= nil then
@@ -383,7 +386,7 @@ function inv_manager:repair_weapon(hero) --will be called when a weapon is repai
     end
 end
 
-function inv_manager:transmute_weapon(hero,inv_slot) --will be called when a weapon is upgraded with a smith
+function inv_manager:_transmute_weapon(hero,inv_slot) --will be called when a weapon is upgraded with a smith
     local inventory = hero.inventory
     if hero.equipement.weapon ~= nil then
         if inv_slot >= 0 and inv_slot < 20 then
@@ -402,7 +405,6 @@ function inv_manager:transmute_weapon(hero,inv_slot) --will be called when a wea
         Notifications:Bottom(hero:GetPlayerOwner(), {text="#NO_WEAPON",duration=2,style={color="red"}})
     end
 end
-
 
 --[[
         Here will go to the KV files for each item

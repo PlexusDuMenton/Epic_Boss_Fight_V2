@@ -26,7 +26,7 @@ require('storageapi/json')
 require('storageapi/storage')
 Storage:SetApiKey("1a632e691765ceac74723d73de5d72abb6374146") -- TBD : load this from another file
 
-require ("save")
+--require ("save")
 --require ("click_functions")
 require ("inventory_manager")
 
@@ -97,7 +97,7 @@ function epic_boss_fight:InitGameMode()
 
   GameMode:SetLoseGoldOnDeath(false)
   GameMode:SetBuybackEnabled(false)
-  GameMode:SetCameraDistanceOverride(1150)  
+  --GameMode:SetCameraDistanceOverride(2300)  
   GameMode:SetRecommendedItemsDisabled(true)
   GameMode:SetCustomXPRequiredToReachNextLevel( XP_PER_LEVEL_TABLE )
   GameMode:SetCustomGameForceHero( "npc_dota_hero_legion_commander" )
@@ -113,6 +113,7 @@ function epic_boss_fight:InitGameMode()
   GameRules:SetCustomGameTeamMaxPlayers( DOTA_TEAM_BADGUYS, 0 )
 
   ListenToGameEvent("dota_item_picked_up", Dynamic_Wrap(epic_boss_fight, "OnItemPickUp"), self)
+  ListenToGameEvent("dota_player_pick_hero", Dynamic_Wrap( epic_boss_fight, "OnHeroPick"), self )
 
   CustomGameEventManager:RegisterListener( "inventory_change_lua", Dynamic_Wrap(epic_boss_fight, 'inventory_change_lua'))
   CustomGameEventManager:RegisterListener( "load_player_data", Dynamic_Wrap(epic_boss_fight, 'load_player_data'))
@@ -121,10 +122,30 @@ function epic_boss_fight:InitGameMode()
 
   Convars:RegisterCommand("ebf_give_item", function(...) return self:ebf_give_item( ... ) end, "send an item directly to inventory", FCVAR_CHEAT )
 end
+function CHoldoutGameMode:OnHeroPick (event)
+  local hero = EntIndexToHScript(event.heroindex)
+  inv_manager:Create_Inventory(hero)
+end
+
+
+function print_inv_info()
+  local hero = PlayerResource:GetSelectedHeroEntity( 0 )
+  for i=0,19 do
+    if hero.inventory[i] ~= nil then
+      print(hero.inventory[i]:GetName())
+    end
+  end
+  print ("Weapon : ",hero.equipement.weapon)
+  print ("Chest : ",hero.equipement.chest_armor)
+  print ("Legs : ",hero.equipement.legs_armor)
+  print ("Head : ",hero.equipement.helmet)
+  print ("Hands : ",hero.equipement.gloves)
+  print ("Feets: : ",hero.equipement.boots)
+end
 
 function epic_boss_fight:ebf_give_item(item_name)
   local hero = PlayerResource:GetSelectedHeroEntity( 0 )
-  epic_boss_fight:Create_Item(item_name,hero)
+  epic_boss_fight:CreateItem(item_name,hero)
   inv_manager:Add_Item(hero,Item)
 end
 
@@ -167,7 +188,7 @@ function epic_boss_fight:OnThink( )
   return 0.1
 end
 
-function epic_boss_fight:Create_Item(item_name,owner) --a function to create an item from name , will be used over "CreateItem" because 
+function epic_boss_fight:CreateItem(item_name,owner) --a function to create an item from name , will be used over "CreateItem" because 
   --it'll make the change we need on items
   Item = CreateItem(item_name, owner, owner) 
   Item = inv_manager:Create_Item(Item)
