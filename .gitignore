@@ -1,0 +1,11 @@
+*.vpk
+*.vpcf_c
+*.vsnd_c
+*.vsndevts_c
+*.vmat_c
+*.bin
+*.vxml_c
+*.vcss_c
+*.vjs_c
+
+panorama_debugger.cfg
