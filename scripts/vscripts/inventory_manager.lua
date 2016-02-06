@@ -1,7 +1,6 @@
 if inv_manager == nil then
     DebugPrint( 'created inv_manager' )
-    inv_manager = {}
-    inv_manager.__index = inv_manager
+    _G.inv_manager = class({})
     print ("CREATED INVENTORY MANAGER")
 end
 

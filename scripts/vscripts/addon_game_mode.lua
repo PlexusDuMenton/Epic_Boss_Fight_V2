@@ -2,6 +2,7 @@
 
 require('internal/util')
 require('gamemode')
+require("inventory_manager")
 
 function Precache( context )
 --[[

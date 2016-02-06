@@ -28,7 +28,7 @@ Storage:SetApiKey("1a632e691765ceac74723d73de5d72abb6374146") -- TBD : load this
 
 --require ("save")
 --require ("click_functions")
-require ("inventory_manager")
+
 
 
 -- These internal libraries set up barebones's events and processes.  Feel free to inspect them/change them if you need to.
@@ -122,7 +122,7 @@ function epic_boss_fight:InitGameMode()
 
   Convars:RegisterCommand("ebf_give_item", function(...) return self:ebf_give_item( ... ) end, "send an item directly to inventory", FCVAR_CHEAT )
 end
-function CHoldoutGameMode:OnHeroPick (event)
+function epic_boss_fight:OnHeroPick (event)
   local hero = EntIndexToHScript(event.heroindex)
   inv_manager:Create_Inventory(hero)
 end
