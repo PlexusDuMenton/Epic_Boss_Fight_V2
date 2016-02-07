@@ -121,47 +121,79 @@ function epic_boss_fight:InitGameMode()
   DebugPrint('[BAREBONES] Done loading Barebones gamemode!\n\n')
 
   Convars:RegisterCommand("ebf_give_item", function(...) return self:ebf_give_item( ... ) end, "send an item directly to inventory", FCVAR_CHEAT )
+  Convars:RegisterCommand("ebf_drop_item", function(...) return self:ebf_drop_item( ... ) end, "send an item directly to inventory", FCVAR_CHEAT )
+  Convars:RegisterCommand("ebf_inventory", function(...) return self:print_inv_info( ... ) end, "send an item directly to inventory", FCVAR_CHEAT )
 end
 function epic_boss_fight:OnHeroPick (event)
+
   local hero = EntIndexToHScript(event.heroindex)
   inv_manager:Create_Inventory(hero)
 end
 
 
-function print_inv_info()
+function epic_boss_fight:print_inv_info()
   local hero = PlayerResource:GetSelectedHeroEntity( 0 )
-  for i=0,19 do
+  for i=1,20 do
+    print ("slot :" ,i)
     if hero.inventory[i] ~= nil then
-      print(hero.inventory[i]:GetName())
+      print("       ",hero.inventory[i].Name)
+    else print ('       Empty')
     end
+    
   end
-  print ("Weapon : ",hero.equipement.weapon)
-  print ("Chest : ",hero.equipement.chest_armor)
-  print ("Legs : ",hero.equipement.legs_armor)
-  print ("Head : ",hero.equipement.helmet)
-  print ("Hands : ",hero.equipement.gloves)
-  print ("Feets: : ",hero.equipement.boots)
+  if hero.equipement.weapon.name== nil then
+    print ("Weapon : Empty")
+  else
+    print ("Weapon : ",hero.equipement.weapon.name)
+  end
+  if hero.equipement.chest_armor.name== nil then
+    print ("Weapon : Empty")
+  else
+  print ("Chest : ",hero.equipement.chest_armor.name)
+  end
+  if hero.equipement.legs_armor.name== nil then
+  print ("Weapon : Empty")
+  else
+  print ("Legs : ",hero.equipement.legs_armor.name)
+  end
+  if hero.equipement.helmet.name== nil then
+  print ("Weapon : Empty")
+  else
+  print ("Head : ",hero.equipement.helmet.name)
+  end
+  if hero.equipement.gloves.name== nil then
+  print ("Weapon : Empty")
+  else
+  print ("Hands : ",hero.equipement.gloves.name)
+  end
+  if hero.equipement.boots.name== nil then
+  print ("Weapon : Empty")
+  else
+  print ("Feets: : ",hero.equipement.boots.name)
+  end
 end
 
-function epic_boss_fight:ebf_give_item(item_name)
+function epic_boss_fight:ebf_give_item(com_name,item_name)
+  print (item_name)
   local hero = PlayerResource:GetSelectedHeroEntity( 0 )
-  epic_boss_fight:CreateItem(item_name,hero)
+  Item = epic_boss_fight:_CreateItem(item_name,hero)
+  for k,v in pairs(Item) do print(k,v) end
   inv_manager:Add_Item(hero,Item)
 end
 
-function epic_boss_fight:ebf_use_item(slot_num)
+function epic_boss_fight:ebf_use_item(com_name,slot_num)
   local slot = tonumber( slot_num )
   local hero = PlayerResource:GetSelectedHeroEntity( 0 )
   inv_manager:Use_Item(hero,slot)
 end
 
-function epic_boss_fight:ebf_drop_item(slot_num)
+function epic_boss_fight:ebf_drop_item(com_name,slot_num)
   local slot = tonumber( slot_num )
   local hero = PlayerResource:GetSelectedHeroEntity( 0 )
   inv_manager:drop_Item(hero,slot)
 end
 
-function epic_boss_fight:ebf_sell_item(slot_num)
+function epic_boss_fight:ebf_sell_item(com_name,slot_num)
   local slot = tonumber( slot_num )
   local hero = PlayerResource:GetSelectedHeroEntity( 0 )
   inv_manager:Sell_Item(hero,slot)
@@ -188,9 +220,10 @@ function epic_boss_fight:OnThink( )
   return 0.1
 end
 
-function epic_boss_fight:CreateItem(item_name,owner) --a function to create an item from name , will be used over "CreateItem" because 
+function epic_boss_fight:_CreateItem(item_name,owner) --a function to create an item from name , will be used over "CreateItem" because 
   --it'll make the change we need on items
   Item = CreateItem(item_name, owner, owner) 
+
   Item = inv_manager:Create_Item(Item)
   return Item
 end
@@ -201,9 +234,10 @@ function epic_boss_fight:OnItemPickUp(event)
   local hero = player:GetAssignedHero() 
   for itemSlot = 0, 5, 1 do
     local Item = hero:GetItemInSlot( itemSlot )
-    if Item ~= nil then
-      inv_manager:Add_Item(hero,Item)
-      hero:RemoveItem(Item) --now it's added to OUR inventory , let's delete it from dota one :p
+    if Item ~= nil and Item:IsItem() then
+      local item = epic_boss_fight:_CreateItem(Item:GetName(),hero)
+      inv_manager:Add_Item(hero,item)
+      hero:RemoveItem(Item)
     end
   end
 end

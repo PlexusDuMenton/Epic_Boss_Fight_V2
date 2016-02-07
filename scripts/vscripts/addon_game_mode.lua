@@ -1,8 +1,9 @@
 -- This is the entry-point to your game mode and should be used primarily to precache models/particles/sounds/etc
 
 require('internal/util')
-require('gamemode')
 require("inventory_manager")
+require('gamemode')
+
 
 function Precache( context )
 --[[

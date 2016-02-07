@@ -1,6 +1,6 @@
 if inv_manager == nil then
     DebugPrint( 'created inv_manager' )
-    _G.inv_manager = class({})
+    inv_manager = class({})
     print ("CREATED INVENTORY MANAGER")
 end
 
@@ -14,7 +14,57 @@ end
  
 require('libraries/notifications')
 
-function inv_manager:_calc_stat_item(equipement,stats)
+
+function inv_manager:Create_Item(Item)
+    local item = Item
+    local item_list = GameRules.items
+    local item_info = item_list[item:GetName()]
+    if item_info == nil then 
+        print ("WHAT THE FUCK ARE YOU DOING KID , THERE IS NO KV FILE FOR THIS ITEM ARE YOU AN FUCKING LAZYBOY ?")
+        return item 
+    end
+    item = merge_item(item,item_info)
+    print ("item merged with his info")
+    if item.stack == true then
+        item.ammount = 1
+    end
+    if item.Equipement == true then
+        if item.cat == "weapon" then
+            item.durability = weapon.max_dur
+            item.level = 1
+            item.XP = 0
+            item.upgrade_point = 0
+
+            item.as_upgrade = {}
+            for i=0,50 do 
+                item.as_upgrade[i] = ((i/2))*item.as_mult + 2
+            end
+            item.as_lvl = 0
+        
+            item.range_upgrade = {}
+            item.range_lvl = 0
+            --if weapon is a ranged weapon then range upgrade GREATLY increase range , else it's slighty increase it (can be see as lenghten the weapon :) )
+            if ranged == true then
+                for i=0,50 do 
+                    item.range_upgrade[i] = (1 + (i/5))*item.range_mult + 15
+                end
+            else
+                for i=0,50 do 
+                    item.range_upgrade[i] = item.range_mult
+                end
+            end
+
+            item.damage_upgrade = {}
+            for i=0,50 do 
+                item.damage_upgrade[i] = (1 + (i/2))*item.dmg_mult + 2
+            end
+            item.dmg_lvl = 0
+        end
+    end
+    return item
+end
+
+function inv_manager:calc_stat_item(equipement,stats)
     
     local eq_slot = equipement 
 
@@ -33,7 +83,7 @@ function inv_manager:_calc_stat_item(equipement,stats)
     if not eq_slot.mp_regen then eq_slot.mp_regen = 0 end
     if not eq_slot.ls then eq_slot.ls = 0 end
     if not eq_slot.loh then eq_slot.loh = 0 end
-    if not eq_slot.effect then eq_slot.effect = {}
+    if not eq_slot.effect then eq_slot.effect = {} end
 
 
     --weapon main stats
@@ -59,7 +109,14 @@ function inv_manager:_calc_stat_item(equipement,stats)
     return stats
 end
 
-function tableMerge(t1, t2)
+function merge_item (item,item_info)
+    for k,v in pairs(item_info) do
+        item[k] = item_info[k]
+    end
+    return item
+end
+
+function tableMerge(t2, t1)
     for k,v in pairs(t2) do
         if type(v) == "table" then
             if type(t1[k] or false) == "table" then
@@ -72,9 +129,10 @@ function tableMerge(t1, t2)
         end
     end
     return t1
+    
 end
 
-function inv_manager:_Calculate_stats(hero) -- call this when equipement is modified (equip new item , load caracter , weapon broke down)
+function inv_manager:Calculate_stats(hero) -- call this when equipement is modified (equip new item , load caracter , weapon broke down)
     local stats= {}
     stats.effect = {} --here goes every effect an item/equipement add (every modifier on hit ie : chance to stun on hit , modifier )
     stats.damage = 0
@@ -109,93 +167,85 @@ function inv_manager:_Calculate_stats(hero) -- call this when equipement is modi
 end
 
   
-function inv_manager:_Create_Inventory(hero) -- call this when the hero entity is created
+function inv_manager:Create_Inventory(hero) -- call this when the hero entity is created
     hero.inventory = {}
     hero.equipement = {weapon = {} ,chest_armor = {} ,legs_armor = {} ,helmet = {} ,gloves = {} ,boots = {} }
 end
 
-function inv_manager:_Create_Item(Item)
-    local item = Item
-    local item_list = GameRules.items
-    local item_info = item_list[item:GetName()]
-    if item_info == nil then 
-        print ("WHAT THE FUCK ARE YOU DOING KID , THERE IS NO KV FILE FOR THIS ITEM ARE YOU AN FUCKING LAZYBOY ?")
-        return item 
-    end
-    item = tableMerge(item_info,item)
-    if item.stack == true then
-        item.ammount = 1
-    end
-    if item.Equipement == true then
-        if item.cat == "weapon" then
-            item.durability = weapon.max_dur
-            item.level = 1
-            item.XP = 0
-            item.upgrade_point = 0
-
-            item.as_upgrade = {}
-            for i=0,50 do 
-                item.as_upgrade[i] = ((i/2))*item.as_mult + 2
-            end
-            item.as_lvl = 0
-        
-            item.range_upgrade = {}
-            item.range_lvl = 0
-            --if weapon is a ranged weapon then range upgrade GREATLY increase range , else it's slighty increase it (can be see as lenghten the weapon :) )
-            if ranged == true then
-                for i=0,50 do 
-                    item.range_upgrade[i] = (1 + (i/5))*item.range_mult + 15
-                end
-            else
-                for i=0,50 do 
-                    item.range_upgrade[i] = item.range_mult
-                end
-            end
-
-            item.damage_upgrade = {}
-                for i=0,50 do 
-                    item.damage_upgrade[i] = (1 + (i/2))*item.dmg_mult + 2
-                end
-                item.dmg_lvl = 0
-            end
-        end
-    end
-    return item
-end
-
-
-   --TBD : SUPPORT ITEM STACK
-function inv_manager:_Add_Item(hero,Item) --will be called when a item is purshased or picked up
+function inv_manager:Add_Item(hero,item) --will be called when a item is purshased or picked up
     local inventory = hero.inventory
-    if item ~= nil and item:IsItem() then
+    if item ~= nil then
+        print ("item is added")
         if item.stackable == true then
-            item_name = item:GetName()
-            for i=0,19 do
-                if inventory[i]~= nil and inventory[i]:GetName() == item_name then
+            print ("item is stackable")
+            item_name = item.Name
+            for i=1,20 do
+                if inventory[i]~= nil and inventory[i].Name== item_name then
+                    print ("item is stacked")
                     hero.inventory[i].ammount = inventory[i].ammount + item.ammount
+                elseif i==20 and #inventory<21 then 
+                    print ("item_added to inventory")
+                    table.sort(hero.inventory,
+                        function (v1, v2)
+                        if v2~= nil and v1 ~= nil then
+                            return v1.Name < v2.Name
+                        end
+                       end )
+                    table.insert(hero.inventory,item)
+                    hero:RemoveItem(item)
+                elseif i==20 and #inventory>=21 then 
+                    print ("inventory is full")
+                    inv_manager:drop(item,hero:GetOrigin())
+                    hero:RemoveItem(item)
+                    Notifications:Bottom(hero:GetPlayerOwner(), {text="#NOSLOT",duration=2,style={color="red"}})
                 end
             end
         else
-            if #inventory >= 20 then
-                DropItemAtPositionImmediate(item,hero:GetOrigin())
-            else
-                table.sort(hero.inventory)
-                table.insert(hero.inventory,item)
+            if #inventory >= 21 then
+                print ("inventory is full")
+                inv_manager:drop(item,hero:GetOrigin())
                 hero:RemoveItem(item)
                 Notifications:Bottom(hero:GetPlayerOwner(), {text="#NOSLOT",duration=2,style={color="red"}})
+            else
+                print ("item_added to inventory")
+                table.sort(hero.inventory,
+                        function (v1, v2)
+                        if v2~= nil and v1 ~= nil then
+                            return v1.Name < v2.Name
+                        end
+                       end )
+                table.insert(hero.inventory,item)
+                hero:RemoveItem(item)
             end
+        end
+    else
+        if item == nil then print ("item is nil")
+        else print ("error , item not item (LOGIC BITCH)")
         end
     end
 end
+
+function inv_manager:drop(item,pos)
+
+            local Item = CreateItem(item.item_name, owner, owner) 
+            local drop = CreateItemOnPositionForLaunch(pos, Item )
+            pos = pos+RandomVector(RandomFloat(150,200))
+            Item:LaunchLoot(false, 200, 0.75,pos)
+end
       --TBD : SUPPORT ITEM STACK
-function inv_manager:_drop_Item(hero,inv_slot) --will be called when player want to put an item on the ground
+function inv_manager:drop_Item(hero,inv_slot) --will be called when player want to put an item on the ground
     local inventory = hero.inventory
     if inv_slot >= 0 and inv_slot < 20 then
         local item = inventory[inv_slot]
         if item ~= nil then
-            DropItemAtPositionImmediate(item,hero:GetOrigin())
+            inv_manager:drop(item,hero:GetOrigin())
             hero.inventory[inv_slot] = nil
-            table.sort(hero.inventory)
+            table.sort(hero.inventory,
+                        function (v1, v2)
+                        if v2~= nil and v1 ~= nil then
+                            return v1.Name < v2.Name
+                        end
+                       end )
         else
             Notifications:Bottom(hero:GetPlayerOwner(), {text="#EMPTY_SLOT",duration=2,style={color="red"}})
         end
@@ -204,7 +254,7 @@ function inv_manager:_drop_Item(hero,inv_slot) --will be called when player want
     end
 end
   --TBD : SUPPORT ITEM STACK
-function inv_manager:_Use_Item(hero,inv_slot) --also equip item
+function inv_manager:Use_Item(hero,inv_slot) --also equip item
     local inventory = hero.inventory
     if inv_slot >= 0 and inv_slot < 20 then
         local item = inventory[inv_slot]
@@ -214,7 +264,12 @@ function inv_manager:_Use_Item(hero,inv_slot) --also equip item
                     if hero.equipement.weapon == nil then
                         hero.equipement.weapon = item
                         hero.inventory[inv_slot] = nil
-                        table.sort(hero.inventory)
+                        table.sort(hero.inventory,
+                        function (v1, v2)
+                        if v2~= nil and v1 ~= nil then
+                            return v1.Name < v2.Name
+                        end
+                       end )
                     else
                         hero.inventory[inv_slot] = hero.equipement.weapon
                         hero.equipement.weapon = item
@@ -224,7 +279,12 @@ function inv_manager:_Use_Item(hero,inv_slot) --also equip item
                     if hero.equipement.chest_armor == nil then
                         hero.equipement.chest_armor = item
                         hero.inventory[inv_slot] = nil
-                        table.sort(hero.inventory)
+                        table.sort(hero.inventory,
+                        function (v1, v2)
+                        if v2~= nil and v1 ~= nil then
+                            return v1.Name < v2.Name
+                        end
+                       end )
                     else
                         hero.inventory[inv_slot] = hero.equipement.chest_armor
                         hero.equipement.chest_armor = item
@@ -234,7 +294,12 @@ function inv_manager:_Use_Item(hero,inv_slot) --also equip item
                     if hero.equipement.legs_armor == nil then
                         hero.equipement.legs_armor = item
                         hero.inventory[inv_slot] = nil
-                        table.sort(hero.inventory)
+                        table.sort(hero.inventory,
+                        function (v1, v2)
+                        if v2~= nil and v1 ~= nil then
+                            return v1.Name < v2.Name
+                        end
+                       end )
                     else
                         hero.inventory[inv_slot] = hero.equipement.legs_armor
                         hero.equipement.legs_armor = item
@@ -244,7 +309,12 @@ function inv_manager:_Use_Item(hero,inv_slot) --also equip item
                     if hero.equipement.helmet == nil then
                         hero.equipement.helmet = item
                         hero.inventory[inv_slot] = nil
-                        table.sort(hero.inventory)
+                        table.sort(hero.inventory,
+                        function (v1, v2)
+                        if v2~= nil and v1 ~= nil then
+                            return v1.Name < v2.Name
+                        end
+                       end )
                     else
                         hero.inventory[inv_slot] = hero.equipement.helmet
                         hero.equipement.helmet = item
@@ -254,7 +324,12 @@ function inv_manager:_Use_Item(hero,inv_slot) --also equip item
                     if hero.equipement.gloves == nil then
                         hero.equipement.gloves = item
                         hero.inventory[inv_slot] = nil
-                        table.sort(hero.inventory)
+                        table.sort(hero.inventory,
+                        function (v1, v2)
+                        if v2~= nil and v1 ~= nil then
+                            return v1.Name < v2.Name
+                        end
+                       end )
                     else
                         hero.inventory[inv_slot] = hero.equipement.gloves
                         hero.equipement.gloves = item
@@ -264,7 +339,12 @@ function inv_manager:_Use_Item(hero,inv_slot) --also equip item
                     if hero.equipement.boots == nil then
                         hero.equipement.boots = item
                         hero.inventory[inv_slot] = nil
-                        table.sort(hero.inventory)
+                        table.sort(hero.inventory,
+                        function (v1, v2)
+                        if v2~= nil and v1 ~= nil then
+                            return v1.Name < v2.Name
+                        end
+                       end )
                     else
                         hero.inventory[inv_slot] = hero.equipement.boots
                         hero.equipement.boots = item
@@ -277,7 +357,12 @@ function inv_manager:_Use_Item(hero,inv_slot) --also equip item
                 else
                     item:use(hero)
                     hero.inventory[inv_slot] = nil
-                    table.sort(hero.inventory)
+                    table.sort(hero.inventory,
+                        function (v1, v2)
+                        if v2~= nil and v1 ~= nil then
+                            return v1.Name < v2.Name
+                        end
+                       end )
                 end
             end
         else
@@ -289,7 +374,7 @@ function inv_manager:_Use_Item(hero,inv_slot) --also equip item
 end
 
   --TBD : SUPPORT ITEM STACK
-function inv_manager:_Sell_Item(hero,inv_slot) --sell item if the player is in a shop
+function inv_manager:Sell_Item(hero,inv_slot) --sell item if the player is in a shop
     local inventory = hero.inventory
     if inv_slot >= 0 and inv_slot < 20 then
         local item = inventory[inv_slot]
@@ -301,7 +386,12 @@ function inv_manager:_Sell_Item(hero,inv_slot) --sell item if the player is in a
                     ModifyGold(hero:GetPlayerID() , item.price , true, 0)
                 end
                 hero.inventory[inv_slot] = nil
-                table.sort(hero.inventory)
+                table.sort(hero.inventory,
+                        function (v1, v2)
+                        if v2~= nil and v1 ~= nil then
+                            return v1.Name < v2.Name
+                        end
+                       end )
             else
                 Notifications:Bottom(hero:GetPlayerOwner(), {text="#NOSHOP",duration=2,style={color="red"}})
             end
@@ -313,7 +403,7 @@ function inv_manager:_Sell_Item(hero,inv_slot) --sell item if the player is in a
     end
 end
  
-function inv_manager:_upgrade_weapon(hero,stat) --will be called when a weapon is upgraded with a smith
+function inv_manager:upgrade_weapon(hero,stat) --will be called when a weapon is upgraded with a smith
     local weapon = hero.equipement.weapon
     if weapon ~= nil then
         if weapon.upgrade_point > 0 then
@@ -357,7 +447,7 @@ function inv_manager:_upgrade_weapon(hero,stat) --will be called when a weapon i
     end
 end
  
-function inv_manager:_weapon_checklevelup(hero)
+function inv_manager:weapon_checklevelup(hero)
     while hero.equipement.weapon.XP >= hero.equipement.weapon.XP_Table[hero.equipement.weapon.LVL] do
         hero.equipement.weapon.LVL = hero.equipement.weapon.LVL + 1
         hero.equipement.weapon.upgrade_point = hero.equipement.weapon.upgrade_point + 1
@@ -369,7 +459,7 @@ function inv_manager:_weapon_checklevelup(hero)
 end
 
  
-function inv_manager:_repair_weapon(hero) --will be called when a weapon is repaired
+function inv_manager:repair_weapon(hero) --will be called when a weapon is repaired
     if hero ~= nil then
         price = (hero.equipement.weapon.LVL/50 + hero.equipement.weapon.repair_cost_base) * (hero.equipement.weapon.max_dur - hero.equipement.weapon.durability)
         if hero.equipement.weapon ~= nil then
@@ -385,7 +475,7 @@ function inv_manager:_repair_weapon(hero) --will be called when a weapon is repa
     end
 end
 
-function inv_manager:_transmute_weapon(hero,inv_slot) --will be called when a weapon is upgraded with a smith
+function inv_manager:transmute_weapon(hero,inv_slot) --will be called when a weapon is upgraded with a smith
     local inventory = hero.inventory
     if hero.equipement.weapon ~= nil then
         if inv_slot >= 0 and inv_slot < 20 then
