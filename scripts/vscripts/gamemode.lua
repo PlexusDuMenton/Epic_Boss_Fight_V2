@@ -109,6 +109,7 @@ function epic_boss_fight:InitGameMode()
   GameMode:SetAlwaysShowPlayerInventory(true)
 
   GameRules:SetSameHeroSelectionEnabled(true)
+  GameRules:SetGoldPerTick( 0 ) 
   GameRules:SetCustomGameTeamMaxPlayers( DOTA_TEAM_GOODGUYS, 10 )
   GameRules:SetCustomGameTeamMaxPlayers( DOTA_TEAM_BADGUYS, 0 )
 
@@ -121,8 +122,9 @@ function epic_boss_fight:InitGameMode()
   DebugPrint('[BAREBONES] Done loading Barebones gamemode!\n\n')
 
   Convars:RegisterCommand("ebf_give_item", function(...) return self:ebf_give_item( ... ) end, "send an item directly to inventory", FCVAR_CHEAT )
-  Convars:RegisterCommand("ebf_drop_item", function(...) return self:ebf_drop_item( ... ) end, "send an item directly to inventory", FCVAR_CHEAT )
-  Convars:RegisterCommand("ebf_inventory", function(...) return self:print_inv_info( ... ) end, "send an item directly to inventory", FCVAR_CHEAT )
+  Convars:RegisterCommand("ebf_drop_item", function(...) return self:ebf_drop_item( ... ) end, "drop an item from inventory", FCVAR_CHEAT )
+  Convars:RegisterCommand("ebf_sell_item", function(...) return self:ebf_sell_item( ... ) end, "sell an item", FCVAR_CHEAT )
+  Convars:RegisterCommand("ebf_inventory", function(...) return self:print_inv_info( ... ) end, "display inventory slots", FCVAR_CHEAT )
 end
 function epic_boss_fight:OnHeroPick (event)
 

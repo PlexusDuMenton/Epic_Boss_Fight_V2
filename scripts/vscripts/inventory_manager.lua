@@ -374,18 +374,26 @@ function inv_manager:Use_Item(hero,inv_slot) --also equip item
 end
 
   --TBD : SUPPORT ITEM STACK
-function inv_manager:Sell_Item(hero,inv_slot) --sell item if the player is in a shop
+function inv_manager:Sell_Item(hero,inv_slot,ammount) --sell item if the player is in a shop
     local inventory = hero.inventory
+    if ammount ~= nil and ammount<0 then ammount = nil end
     if inv_slot >= 0 and inv_slot < 20 then
         local item = inventory[inv_slot]
         if item ~= nil then
-            if hero.Isinshop then
+            if hero.Isinshop == true then   --will be seen later...
                 if item.stack == true then
-                    ModifyGold(hero:GetPlayerID() , item.price*item.ammount , true, 0)
+                    if ammount == nil or ammount >= item.ammount then
+                        PlayerResource:ModifyGold(hero:GetPlayerID() , item.price*item.ammount*0.75 , true, 6)
+                        hero.inventory[inv_slot] = nil
+                    else
+                        PlayerResource:ModifyGold(hero:GetPlayerID() , item.price*ammount*0.75 , true, 6)
+                        hero.inventory[inv_slot].ammount = item.ammount - ammount
+                    end
                 else
-                    ModifyGold(hero:GetPlayerID() , item.price , true, 0)
+                    PlayerResource:ModifyGold(hero:GetPlayerID() , item.price*0.75, true, 6)
+                    hero.inventory[inv_slot] = nil
                 end
-                hero.inventory[inv_slot] = nil
+
                 table.sort(hero.inventory,
                         function (v1, v2)
                         if v2~= nil and v1 ~= nil then
@@ -403,6 +411,14 @@ function inv_manager:Sell_Item(hero,inv_slot) --sell item if the player is in a 
     end
 end
  
+--TBD : make an "evolve" option for weapon , allowing them to upgrade unto a supperior weapon tier, (may be unique weapon , or maybe dropable , IDK yet, should make a strowpoll for)
+function inv_manager:evolve_weapon(hero,way)
+    local weapon = hero.equipement.weapon
+    if way > #weapon.evolution then return weapon end
+end
+
+
+
 function inv_manager:upgrade_weapon(hero,stat) --will be called when a weapon is upgraded with a smith
     local weapon = hero.equipement.weapon
     if weapon ~= nil then
