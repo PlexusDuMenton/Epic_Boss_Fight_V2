@@ -4,6 +4,14 @@
 {
   "Version"   "1"
 
+  "lua_equipement"
+  {
+      "BaseClass"                     "ability_lua"
+      "ScriptFile"                    "equipement_stats/lua_equipement.lua"
+      "AbilityType"                   "DOTA_ABILITY_TYPE_ATTRIBUTES"
+      "AbilityBehavior"               "DOTA_ABILITY_BEHAVIOR_PASSIVE"
+  }
+
   "containers_lua_targeting"
   {
     // General

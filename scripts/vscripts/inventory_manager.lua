@@ -25,12 +25,14 @@ function inv_manager:Create_Item(Item)
     end
     item = merge_item(item,item_info)
     print ("item merged with his info")
+    if item.stack == 1 then item.stack = true end
     if item.stack == true then
         item.ammount = 1
     end
+    if item.Equipement == 1 then item.Equipement = true end
     if item.Equipement == true then
         if item.cat == "weapon" then
-            item.durability = weapon.max_dur
+            item.durability = item.max_dur
             item.level = 1
             item.XP = 0
             item.upgrade_point = 0
@@ -72,6 +74,7 @@ function inv_manager:calc_stat_item(equipement,stats)
     to gain some memory size (you know , optimisation (while this code must be the least optimised cheat cause i suck)) especialy when
     saving items
     ]]
+    if eq_slot == nil then return stats end
     if not eq_slot.damage then eq_slot.damage = 0 end
     if not eq_slot.attack_speed then eq_slot.attack_speed = 0 end
     if not eq_slot.range then eq_slot.range = 0 end
@@ -81,6 +84,7 @@ function inv_manager:calc_stat_item(equipement,stats)
     if not eq_slot.hp_regen then eq_slot.hp_regen = 0 end
     if not eq_slot.mp then eq_slot.mp = 0 end
     if not eq_slot.mp_regen then eq_slot.mp_regen = 0 end
+    if not eq_slot.movespeed then eq_slot.movespeed = 0 end
     if not eq_slot.ls then eq_slot.ls = 0 end
     if not eq_slot.loh then eq_slot.loh = 0 end
     if not eq_slot.effect then eq_slot.effect = {} end
@@ -100,6 +104,7 @@ function inv_manager:calc_stat_item(equipement,stats)
     stats.mp = stats.mp + eq_slot.mp
     stats.mp_regen = stats.mp_regen + eq_slot.mp_regen
     --Special Stats
+    stats.movespeed = stats.movespeed + eq_slot.movespeed
     stats.ls = stats.ls + eq_slot.ls --Life Steal (a percent of your current damage)
     stats.loh = stats.loh + eq_slot.loh --Life On Hit , each time you hit , you regain this ammount of Health
     --Merge effect of all object
@@ -144,11 +149,9 @@ function inv_manager:Calculate_stats(hero) -- call this when equipement is modif
     stats.hp_regen = 0
     stats.mp = 0
     stats.mp_regen = 0
+    stats.movespeed = 0
     stats.ls = 0
     stats.loh = 0
-
-
-
 
     stats = self:calc_stat_item(hero.equipement.weapon,stats)
     stats = self:calc_stat_item(hero.equipement.chest_armor,stats)
@@ -157,19 +160,23 @@ function inv_manager:Calculate_stats(hero) -- call this when equipement is modif
     stats = self:calc_stat_item(hero.equipement.gloves,stats)
     stats = self:calc_stat_item(hero.equipement.boots,stats)
 
+    --stats = self:calc_stat_item(hero.equipement.shield,stats) must be done later  , it'll have to check if weapon if 2 handed or not, need to fix some other bug before working on this ^^
+
     --stats = self:calc_stat_item(hero.equipement.necklace,stats)
     --stats = self:calc_stat_item(hero.equipement.earring1,stats)
     --stats = self:calc_stat_item(hero.equipement.earring2,stats)
 
     hero.equip_stats = stats
     --to add : a function that add hero side stats (levels...) and apply them
-    print (hero.equip_stats.damage,hero.equip_stats.range,hero.equip_stats.attack_speed,hero.equip_stats.armor)
+    print ("damage :", hero.equip_stats.damage,"range :",hero.equip_stats.range,"attack speed :",hero.equip_stats.attack_speed,"armor :",hero.equip_stats.armor) -- just some print to check if value are indeed modified
+    
 end
 
   
 function inv_manager:Create_Inventory(hero) -- call this when the hero entity is created
     hero.inventory = {}
     hero.equipement = {weapon = {} ,chest_armor = {} ,legs_armor = {} ,helmet = {} ,gloves = {} ,boots = {} }
+    inv_manager:Calculate_stats(hero)
 end
 
 function inv_manager:Add_Item(hero,item) --will be called when a item is purshased or picked up
@@ -253,14 +260,94 @@ function inv_manager:drop_Item(hero,inv_slot) --will be called when player want 
         print ("Slot number is invalid or inventory don't exist")
     end
 end
-  --TBD : SUPPORT ITEM STACK
+function inv_manager:Unequip(hero,slot_name) --also equip item
+    local inventory = hero.inventory
+    if #inventory< 21 then
+        if slot_name == "weapon" then
+            table.insert(hero.inventory,hero.equipement.weapon)
+            table.sort(hero.inventory,
+                        function (v1, v2)
+                        if v2.Name~= nil and v1.Name ~= nil then
+                            return v1.Name < v2.Name
+                        end
+                       end )
+            hero.equipement.weapon= nil
+            print (hero.inventory.weapon)
+            inv_manager:Calculate_stats(hero)
+
+        elseif slot_name == "chest" then
+            table.insert(hero.inventory,hero.equipement.chest_armor)
+            table.sort(hero.inventory,
+                        function (v1, v2)
+                        if v2~= nil and v1 ~= nil then
+                            return v1.Name < v2.Name
+                        end
+                       end )
+            hero.equipement.chest_armor= nil
+            inv_manager:Calculate_stats(hero)
+
+        elseif slot_name == "legs" then
+            table.insert(hero.inventory,hero.equipement.legs_armor)
+            table.sort(hero.inventory,
+                        function (v1, v2)
+                        if v2~= nil and v1 ~= nil then
+                            return v1.Name < v2.Name
+                        end
+                       end )
+            hero.equipement.legs_armor = nil
+            inv_manager:Calculate_stats(hero)
+
+        elseif slot_name == "gloves" then
+            table.insert(hero.inventory,hero.equipement.gloves)
+            table.sort(hero.inventory,
+                        function (v1, v2)
+                        if v2~= nil and v1 ~= nil then
+                            return v1.Name < v2.Name
+                        end
+                       end )
+            hero.equipement.gloves= nil
+            inv_manager:Calculate_stats(hero)
+
+        elseif slot_name == "boots" then
+            table.insert(hero.inventory,hero.equipement.boots)
+            table.sort(hero.inventory,
+                        function (v1, v2)
+                        if v2~= nil and v1 ~= nil then
+                            return v1.Name < v2.Name
+                        end
+                       end )
+            hero.equipement.boots= nil
+            inv_manager:Calculate_stats(hero)
+
+        elseif slot_name == "helmet" then
+            table.insert(hero.inventory,hero.equipement.helmet)
+            table.sort(hero.inventory,
+                        function (v1, v2)
+                        if v2~= nil and v1 ~= nil then
+                            return v1.Name < v2.Name
+                        end
+                       end )
+            hero.equipement.helmet= nil
+            inv_manager:Calculate_stats(hero)
+
+        else
+            print ("Invalid Slot name given ;Valid item slot are : 'weapon' 'chest' 'helmet' legs' 'gloves' 'boots' ")
+        end
+    else
+        print ("Your inventory is full")
+    end
+end
 function inv_manager:Use_Item(hero,inv_slot) --also equip item
     local inventory = hero.inventory
-    if inv_slot >= 0 and inv_slot < 20 then
+    if inv_slot > 0 and inv_slot <= 20 then
         local item = inventory[inv_slot]
         if item ~= nil then
+            print ("equip/use item")
+            print (item.Equipement)
             if item.Equipement == true then
+                print ("equip item")
                 if item.cat == "weapon" then
+                    print ("equip weapon")
                     if hero.equipement.weapon == nil then
                         hero.equipement.weapon = item
                         hero.inventory[inv_slot] = nil
@@ -365,6 +452,7 @@ function inv_manager:Use_Item(hero,inv_slot) --also equip item
                        end )
                 end
             end
+            inv_manager:Calculate_stats(hero)
         else
             Notifications:Bottom(hero:GetPlayerOwner(), {text="#EMPTY_SLOT",duration=2,style={color="red"}})
         end
@@ -377,7 +465,7 @@ end
 function inv_manager:Sell_Item(hero,inv_slot,ammount) --sell item if the player is in a shop
     local inventory = hero.inventory
     if ammount ~= nil and ammount<0 then ammount = nil end
-    if inv_slot >= 0 and inv_slot < 20 then
+    if inv_slot > 0 and inv_slot <= 20 then
         local item = inventory[inv_slot]
         if item ~= nil then
             if hero.Isinshop == true then   --will be seen later...
@@ -494,7 +582,7 @@ end
 function inv_manager:transmute_weapon(hero,inv_slot) --will be called when a weapon is upgraded with a smith
     local inventory = hero.inventory
     if hero.equipement.weapon ~= nil then
-        if inv_slot >= 0 and inv_slot < 20 then
+        if inv_slot > 0 and inv_slot <= 20 then
             local item = inventory[inv_slot]
             if item.cat == "weapon" then
                 hero.equipement.weapon.XP = hero.equipement.weapon.XP + (item.XP/2) + 10*item.LVL
@@ -530,6 +618,9 @@ end
         mp_regen = 0
         armor = 0
         m_ress = 0
+        movespeed = 0
+
+        if a value is 0 , just don't write it , game will automaticaly set it to 0
 
 
 

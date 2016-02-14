@@ -124,12 +124,15 @@ function epic_boss_fight:InitGameMode()
   Convars:RegisterCommand("ebf_give_item", function(...) return self:ebf_give_item( ... ) end, "send an item directly to inventory", FCVAR_CHEAT )
   Convars:RegisterCommand("ebf_drop_item", function(...) return self:ebf_drop_item( ... ) end, "drop an item from inventory", FCVAR_CHEAT )
   Convars:RegisterCommand("ebf_sell_item", function(...) return self:ebf_sell_item( ... ) end, "sell an item", FCVAR_CHEAT )
+  Convars:RegisterCommand("ebf_use_item", function(...) return self:ebf_use_item( ... ) end, "Equip/Use an item", FCVAR_CHEAT )
+  Convars:RegisterCommand("ebf_unequip", function(...) return self:ebf_unequip( ... ) end, "Unequip an item", FCVAR_CHEAT )
   Convars:RegisterCommand("ebf_inventory", function(...) return self:print_inv_info( ... ) end, "display inventory slots", FCVAR_CHEAT )
 end
 function epic_boss_fight:OnHeroPick (event)
 
   local hero = EntIndexToHScript(event.heroindex)
   inv_manager:Create_Inventory(hero)
+  hero:AddAbility('lua_equipement')
 end
 
 
@@ -143,35 +146,35 @@ function epic_boss_fight:print_inv_info()
     end
     
   end
-  if hero.equipement.weapon.name== nil then
+  if hero.equipement.weapon.Name== nil then
     print ("Weapon : Empty")
   else
-    print ("Weapon : ",hero.equipement.weapon.name)
+    print ("Weapon : ",hero.equipement.weapon.Name)
   end
-  if hero.equipement.chest_armor.name== nil then
-    print ("Weapon : Empty")
+  if hero.equipement.chest_armor.Name == nil then
+    print ("Chest : Empty")
   else
-  print ("Chest : ",hero.equipement.chest_armor.name)
+  print ("Chest : ",hero.equipement.chest_armor.Name)
   end
-  if hero.equipement.legs_armor.name== nil then
-  print ("Weapon : Empty")
+  if hero.equipement.legs_armor.Name == nil then
+  print ("Legs : Empty")
   else
-  print ("Legs : ",hero.equipement.legs_armor.name)
+  print ("Legs : ",hero.equipement.legs_armor.Name)
   end
-  if hero.equipement.helmet.name== nil then
-  print ("Weapon : Empty")
+  if hero.equipement.helmet.Name== nil then
+  print ("Head : Empty")
   else
-  print ("Head : ",hero.equipement.helmet.name)
+  print ("Head : ",hero.equipement.helmet.Name)
   end
-  if hero.equipement.gloves.name== nil then
-  print ("Weapon : Empty")
+  if hero.equipement.gloves.Name== nil then
+  print ("Gloves : Empty")
   else
-  print ("Hands : ",hero.equipement.gloves.name)
+  print ("Gloves : ",hero.equipement.gloves.Name)
   end
-  if hero.equipement.boots.name== nil then
-  print ("Weapon : Empty")
+  if hero.equipement.boots.Name== nil then
+  print ("Boots : Empty")
   else
-  print ("Feets: : ",hero.equipement.boots.name)
+  print ("Boots : ",hero.equipement.boots.Name)
   end
 end
 
@@ -187,6 +190,12 @@ function epic_boss_fight:ebf_use_item(com_name,slot_num)
   local slot = tonumber( slot_num )
   local hero = PlayerResource:GetSelectedHeroEntity( 0 )
   inv_manager:Use_Item(hero,slot)
+end
+
+function epic_boss_fight:ebf_unequip(com_name,slot_name)
+  local slot = slot_name
+  local hero = PlayerResource:GetSelectedHeroEntity( 0 )
+  inv_manager:Unequip(hero,slot)
 end
 
 function epic_boss_fight:ebf_drop_item(com_name,slot_num)

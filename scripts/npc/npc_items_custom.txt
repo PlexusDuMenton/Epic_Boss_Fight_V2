@@ -7,13 +7,81 @@
     "BaseClass"           "item_datadriven"
     "AbilityTextureName"      "item_rust_dagger"
 
-    "ItemShopTags"          "consumable"
-    "ItemQuality"         "component"
     "ItemStackable"         "0"
     "ItemKillable"          "0"
     "ItemPurchasable"       "1"
-    "ItemCost"            "40"
+    "ItemCost"            "0"
     "ItemShareability"        "ITEM_NOT_SHAREABLE"
-    "ItemPermanent"         "0"
+    "ItemPermanent"         "1"
+  }
+  "item_leather_vest"
+  { 
+    "ID"              "1011"
+    "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+    "BaseClass"           "item_datadriven"
+    "AbilityTextureName"      "item_leather_vest"
+
+    "ItemStackable"         "0"
+    "ItemKillable"          "0"
+    "ItemPurchasable"       "1"
+    "ItemCost"            "0"
+    "ItemShareability"        "ITEM_NOT_SHAREABLE"
+    "ItemPermanent"         "1"
+  }
+  "item_leather_trousers"
+  { 
+    "ID"              "1012"
+    "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+    "BaseClass"           "item_datadriven"
+    "AbilityTextureName"      "item_leather_trousers"
+
+    "ItemStackable"         "0"
+    "ItemKillable"          "0"
+    "ItemPurchasable"       "1"
+    "ItemCost"            "0"
+    "ItemShareability"        "ITEM_NOT_SHAREABLE"
+    "ItemPermanent"         "1"
+  }
+  "item_leather_boots"
+  { 
+    "ID"              "1013"
+    "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+    "BaseClass"           "item_datadriven"
+    "AbilityTextureName"      "item_leather_boots"
+
+    "ItemStackable"         "0"
+    "ItemKillable"          "0"
+    "ItemPurchasable"       "1"
+    "ItemCost"            "0"
+    "ItemShareability"        "ITEM_NOT_SHAREABLE"
+    "ItemPermanent"         "1"
+  }
+  "item_leather_gloves"
+  { 
+    "ID"              "1014"
+    "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+    "BaseClass"           "item_datadriven"
+    "AbilityTextureName"      "item_leather_gloves"
+
+    "ItemStackable"         "0"
+    "ItemKillable"          "0"
+    "ItemPurchasable"       "1"
+    "ItemCost"            "0"
+    "ItemShareability"        "ITEM_NOT_SHAREABLE"
+    "ItemPermanent"         "1"
+  }
+  "item_leather_hood"
+  { 
+    "ID"              "1015"
+    "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+    "BaseClass"           "item_datadriven"
+    "AbilityTextureName"      "item_leather_hood"
+
+    "ItemStackable"         "0"
+    "ItemKillable"          "0"
+    "ItemPurchasable"       "1"
+    "ItemCost"            "0"
+    "ItemShareability"        "ITEM_NOT_SHAREABLE"
+    "ItemPermanent"         "1"
   }
 }
