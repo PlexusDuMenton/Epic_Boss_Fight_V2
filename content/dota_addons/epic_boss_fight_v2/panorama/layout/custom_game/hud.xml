@@ -1,0 +1,5 @@
+<root>
+    <scripts>
+        <include src="file://{resources}/scripts/custom_game/game_hud.js" />
+    </scripts>
+</root>
