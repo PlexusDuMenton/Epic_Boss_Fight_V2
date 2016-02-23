@@ -30,6 +30,7 @@ function inv_manager:Create_Item(Item)
         item.ammount = 1
     end
     if item.Equipement == 1 then item.Equipement = true end
+    if item.Equipement == 0 then item.Equipement = false else item.Equipement = true end
     if item.Equipement == true then
         if item.cat == "weapon" then
             item.durability = item.max_dur
@@ -61,6 +62,7 @@ function inv_manager:Create_Item(Item)
                 item.damage_upgrade[i] = (1 + (i/2))*item.dmg_mult + 2
             end
             item.dmg_lvl = 0
+            item.XP_Table = inv_manager.XP_Table
         end
     end
     return item
@@ -80,6 +82,7 @@ function inv_manager:calc_stat_item(equipement,stats)
     if not eq_slot.range then eq_slot.range = 0 end
     if not eq_slot.armor then eq_slot.armor = 0 end
     if not eq_slot.m_ress then eq_slot.m_ress = 0 end
+    if not eq_slot.dodge then eq_slot.dodge = 0 end
     if not eq_slot.hp then eq_slot.hp = 0 end
     if not eq_slot.hp_regen then eq_slot.hp_regen = 0 end
     if not eq_slot.mp then eq_slot.mp = 0 end
@@ -98,6 +101,7 @@ function inv_manager:calc_stat_item(equipement,stats)
     
     stats.armor = stats.armor + eq_slot.armor
     stats.m_ress = stats.m_ress + eq_slot.m_ress
+    stats.dodge = stats.dodge + eq_slot.dodge
     --casual HP/MP
     stats.hp = stats.hp + eq_slot.hp
     stats.hp_regen = stats.hp_regen + eq_slot.hp_regen
@@ -108,7 +112,7 @@ function inv_manager:calc_stat_item(equipement,stats)
     stats.ls = stats.ls + eq_slot.ls --Life Steal (a percent of your current damage)
     stats.loh = stats.loh + eq_slot.loh --Life On Hit , each time you hit , you regain this ammount of Health
     --Merge effect of all object
-    stats.effect = tableMerge(stats.effect,eq_slot.effect)
+    --stats.effect = tableMerge(stats.effect,eq_slot.effect)
 
 
     return stats
@@ -150,6 +154,7 @@ function inv_manager:Calculate_stats(hero) -- call this when equipement is modif
     stats.mp = 0
     stats.mp_regen = 0
     stats.movespeed = 0
+    stats.dodge = 0
     stats.ls = 0
     stats.loh = 0
 
@@ -168,14 +173,62 @@ function inv_manager:Calculate_stats(hero) -- call this when equipement is modif
 
     hero.equip_stats = stats
     --to add : a function that add hero side stats (levels...) and apply them
-    print ("damage :", hero.equip_stats.damage,"range :",hero.equip_stats.range,"attack speed :",hero.equip_stats.attack_speed,"armor :",hero.equip_stats.armor) -- just some print to check if value are indeed modified
+    local key = "player_0"
+    if hero:GetPlayerID() == 0 then
+        key = "player_0"
+    elseif hero:GetPlayerID() == 1 then
+        key = "player_1"
+    elseif hero:GetPlayerID() == 2 then
+        key = "player_2"
+    elseif hero:GetPlayerID() == 3 then
+        key = "player_3"
+    elseif hero:GetPlayerID() == 4 then
+        key = "player_4"
+    elseif hero:GetPlayerID() == 5 then
+        key = "player_5"
+    elseif hero:GetPlayerID() == 6 then
+        key = "player_6"
+    elseif hero:GetPlayerID() == 7 then
+        key = "player_7"
+    elseif hero:GetPlayerID() == 8 then
+        key = "player_8"
+    elseif hero:GetPlayerID() == 9 then
+        key = "player_9"
+    end
+
+
+    CustomNetTables:SetTableValue( "stats",key, {equip_stats = hero.equip_stats--[[,hero_stats = hero.hero_stats,stats = hero.stats]]} )
+    DeepPrintTable(CustomNetTables:GetTableValue("stats",key))
     
 end
 
-  
+function inv_manager:Init_Hero_Stat()
+    local stats = {}
+    stats.damage = 0
+    stats.attack_speed = 0
+    stats.range = 0
+    stats.armor = 0
+    stats.m_ress = 0
+    stats.hp = 0
+    stats.hp_regen = 0
+    stats.mp = 0
+    stats.mp_regen = 0
+    stats.movespeed = 0
+    stats.dodge = 0
+    stats.ls = 0
+    stats.loh = 0
+    stats.str = 0
+    stats.agi = 0
+    stats.int = 0
+
+    return stats
+end
+
 function inv_manager:Create_Inventory(hero) -- call this when the hero entity is created
     hero.inventory = {}
-    hero.equipement = {weapon = {} ,chest_armor = {} ,legs_armor = {} ,helmet = {} ,gloves = {} ,boots = {} }
+    hero.equipement = {}
+    
+    hero.hero_stats = inv_manager:Init_Hero_Stat()
     inv_manager:Calculate_stats(hero)
 end
 
@@ -552,8 +605,8 @@ function inv_manager:upgrade_weapon(hero,stat) --will be called when a weapon is
 end
  
 function inv_manager:weapon_checklevelup(hero)
-    while hero.equipement.weapon.XP >= hero.equipement.weapon.XP_Table[hero.equipement.weapon.LVL] do
-        hero.equipement.weapon.LVL = hero.equipement.weapon.LVL + 1
+    while hero.equipement.weapon.XP >= hero.equipement.weapon.XP_Table[hero.equipement.weapon.level] do
+        hero.equipement.weapon.level = hero.equipement.weapon.level + 1
         hero.equipement.weapon.upgrade_point = hero.equipement.weapon.upgrade_point + 1
         hero.equipement.weapon.damage = hero.equipement.weapon.damage + hero.equipement.weapon.dmg_grow
         hero.equipement.weapon.attack_speed = hero.equipement.weapon.attack_speed + hero.equipement.weapon.as_grow
@@ -565,7 +618,7 @@ end
  
 function inv_manager:repair_weapon(hero) --will be called when a weapon is repaired
     if hero ~= nil then
-        price = (hero.equipement.weapon.LVL/50 + hero.equipement.weapon.repair_cost_base) * (hero.equipement.weapon.max_dur - hero.equipement.weapon.durability)
+        price = (hero.equipement.weapon.level/50 + hero.equipement.weapon.repair_cost_base) * (hero.equipement.weapon.max_dur - hero.equipement.weapon.durability)
         if hero.equipement.weapon ~= nil then
             if hero:GetGold() >= price then
                 hero.equipement.weapon.durability = hero.equipement.weapon.max_dur
@@ -585,7 +638,7 @@ function inv_manager:transmute_weapon(hero,inv_slot) --will be called when a wea
         if inv_slot > 0 and inv_slot <= 20 then
             local item = inventory[inv_slot]
             if item.cat == "weapon" then
-                hero.equipement.weapon.XP = hero.equipement.weapon.XP + (item.XP/2) + 10*item.LVL
+                hero.equipement.weapon.XP = hero.equipement.weapon.XP + (item.XP/2) + 10*item.level
                 inv_manager:weapon_checklevelup(hero)
                 inventory[inv_slot] = nil
             else

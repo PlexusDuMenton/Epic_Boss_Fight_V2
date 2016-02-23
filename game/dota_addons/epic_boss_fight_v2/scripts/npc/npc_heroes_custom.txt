@@ -4,7 +4,6 @@
   {
     "AbilityLayout"     "6"
     "override_hero"     "npc_dota_hero_legion_commander"
-    "SoundSet"          "0" 
     "Ability1"        "" 
     "Ability2"        "" 
     "Ability3"        "" 
@@ -14,9 +13,8 @@
 
 
     "ArmorPhysical"       "0"                 // Physical protection.
-    "MagicalResistance"       "10"                 // Magical protection (percentage).
+    "MagicalResistance"       "0"                 // Magical protection (percentage).
 
-    "AttackCapabilities"    "DOTA_UNIT_CAP_NO_ATTACK"
     "AttackDamageMin"     "1"                   // Damage range min.
     "AttackDamageMax"     "3"                   // Damage range max.
 
@@ -39,13 +37,13 @@
     "MovementSpeed"       "280"                 // Speed.
     "MovementTurnRate"      "1.0"                 // Turning rate.
 
-    "StatusHealth"        "20"                 // Base health.
-    "StatusHealthRegen"     "0.5"                 // Health regeneration rate.
+    "StatusHealth"        "40"                 // Base health.
+    "StatusHealthRegen"     "0.1"                 // Health regeneration rate.
     "StatusMana"        "0"                   // Base mana.
-    "StatusManaRegen"     "0.2"                 // Mana regeneration rate.
+    "StatusManaRegen"     "0"                 // Mana regeneration rate.
 
-    "VisionDaytimeRange"    "1800"                  // Range of vision at night time.
-    "VisionNighttimeRange"    "1800"                  // Range of vision at night time.
+    "VisionDaytimeRange"    "4500"                  // Range of vision at night time.
+    "VisionNighttimeRange"    "4500"                  // Range of vision at night time.
   }
 
   
