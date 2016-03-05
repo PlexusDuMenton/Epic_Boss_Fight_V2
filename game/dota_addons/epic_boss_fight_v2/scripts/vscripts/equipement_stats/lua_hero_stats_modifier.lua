@@ -50,7 +50,7 @@ end
 
 function lua_hero_stats_modifier:GetModifierAttackSpeedBonus_Constant()
 	if IsServer() then
-		return self:GetCaster().hero_stats.attack_speed + self:GetCaster().hero_stats.agi
+		return self:GetCaster().hero_stats.attack_speed + self:GetCaster().hero_stats.agi*0.33
 	end
 end
 

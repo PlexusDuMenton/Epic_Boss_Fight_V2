@@ -80,7 +80,6 @@ function lua_equipement_modifier:GetModifierMagicalResistanceBonus()
 end
 
 function lua_equipement_modifier:GetModifierHealthBonus()
-	print("ok")
 	if IsServer() then
 		return self:GetCaster().equip_stats.hp
 	end

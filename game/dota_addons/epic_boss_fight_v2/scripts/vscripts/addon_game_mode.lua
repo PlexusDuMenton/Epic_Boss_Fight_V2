@@ -2,8 +2,11 @@
 
 require('internal/util')
 require("inventory_manager")
+require('libraries/notifications')
+require('storageapi/storage')
+require("selecthero")
 require('gamemode')
-
+require('save')
 
 function Precache( context )
 --[[

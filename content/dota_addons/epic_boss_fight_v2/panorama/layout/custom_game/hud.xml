@@ -2,4 +2,6 @@
     <scripts>
         <include src="file://{resources}/scripts/custom_game/game_hud.js" />
     </scripts>
+	<Panel class="bullshit" hittest="false">
+	</Panel>
 </root>

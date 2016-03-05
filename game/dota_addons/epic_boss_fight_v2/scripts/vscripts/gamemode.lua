@@ -86,6 +86,7 @@ function epic_boss_fight:OnHeroLevelUp(event)
   local hero = player:GetAssignedHero()
   local level = hero:GetLevel()
   local Primary = hero:GetPrimaryAttribute()
+  hero:SetAbilityPoints(0) 
   hero.stats_points = hero.stats_points + 1
   if Primary == 0 then
       print (hero.hero_stats.hp)
@@ -151,8 +152,9 @@ function epic_boss_fight:InitGameMode()
   GameRules:SetCustomGameTeamMaxPlayers( DOTA_TEAM_BADGUYS, 0 )
 
   ListenToGameEvent("dota_item_picked_up", Dynamic_Wrap(epic_boss_fight, "OnItemPickUp"), self)
-  ListenToGameEvent("dota_player_pick_hero", Dynamic_Wrap( epic_boss_fight, "OnHeroPick"), self )
   ListenToGameEvent("dota_player_gained_level", Dynamic_Wrap( epic_boss_fight, "OnHeroLevelUp"), self )
+
+  HeroSelection:Start()
   
 
 
@@ -165,17 +167,17 @@ function epic_boss_fight:InitGameMode()
   Convars:RegisterCommand("ebf_drop_item", function(...) return self:ebf_drop_item( ... ) end, "drop an item from inventory", FCVAR_CHEAT )
   Convars:RegisterCommand("ebf_sell_item", function(...) return self:ebf_sell_item( ... ) end, "sell an item", FCVAR_CHEAT )
   Convars:RegisterCommand("ebf_use_item", function(...) return self:ebf_use_item( ... ) end, "Equip/Use an item", FCVAR_CHEAT )
+  Convars:RegisterCommand("ebf_upgrade", function(...) return self:ebf_upgrade( ... ) end, "Upgrade your equiped weapon", FCVAR_CHEAT )
   Convars:RegisterCommand("ebf_unequip", function(...) return self:ebf_unequip( ... ) end, "Unequip an item", FCVAR_CHEAT )
   Convars:RegisterCommand("ebf_inventory", function(...) return self:print_inv_info( ... ) end, "display inventory slots", FCVAR_CHEAT )
-end
-function epic_boss_fight:OnHeroPick (event)
 
-  local hero = EntIndexToHScript(event.heroindex)
-  if hero:IsHero() then
-    inv_manager:Create_Inventory(hero)
-    hero:AddAbility('lua_equipement')
-    hero:AddAbility('lua_hero_stats')
-  end
+  Convars:RegisterCommand("ebf_save", function(...) return self:save( ... ) end, "save your current character to a slot", FCVAR_CHEAT )
+end
+
+function epic_boss_fight:save(com_name,save_slot)
+  local slot = tonumber( save_slot )
+  local hero = PlayerResource:GetSelectedHeroEntity( 0 )
+  save(hero,slot,false)
 end
 
 function epic_boss_fight:print_inv_info()
@@ -183,7 +185,11 @@ function epic_boss_fight:print_inv_info()
   for i=1,20 do
     print ("slot :" ,i)
     if hero.inventory[i] ~= nil then
-      print("       ",hero.inventory[i].Name)
+      if hero.inventory[i].level ~= nil then
+        print("       ",hero.inventory[i].Name," Level : ",hero.inventory[i].level)
+      else
+        print("       ",hero.inventory[i].Name)
+      end
     else 
       print ('       Empty')
     end
@@ -192,7 +198,7 @@ function epic_boss_fight:print_inv_info()
   if hero.equipement.weapon == nil or hero.equipement.weapon.Name == nil then
     print ("Weapon : Empty")
   else
-    print ("Weapon : ",hero.equipement.weapon.Name)
+    print ("Weapon : ",hero.equipement.weapon.Name," Level : ",hero.equipement.weapon.level)
   end
   if hero.equipement.chest_armor == nil or hero.equipement.chest_armor.Name == nil then
     print ("Chest : Empty")
@@ -233,6 +239,11 @@ function epic_boss_fight:ebf_use_item(com_name,slot_num)
   local slot = tonumber( slot_num )
   local hero = PlayerResource:GetSelectedHeroEntity( 0 )
   inv_manager:Use_Item(hero,slot)
+end
+
+function epic_boss_fight:ebf_upgrade(com_name,stat)
+  local hero = PlayerResource:GetSelectedHeroEntity( 0 )
+  inv_manager:upgrade_weapon(hero,stat)
 end
 
 function epic_boss_fight:ebf_unequip(com_name,slot_name)

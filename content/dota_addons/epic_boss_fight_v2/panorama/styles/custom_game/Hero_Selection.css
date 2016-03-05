@@ -1,0 +1,221 @@
+@define TotalLength: 5s;
+@define TimingFunc: linear;
+@define IterationCount: 1;
+@define AnimationDelay: 0s;
+.character_selection
+{
+    width: 100%;
+    height: 100%;
+    overflow: clip;
+}
+
+#Title
+{
+  margin-left: -1200px;
+  margin-top: 0px;
+  pre-transform-scale2d: 1.0;
+  animation-name: Title_anim;
+  animation-delay: 0s;
+  animation-duration: 5s;
+  animation-timing-function: TimingFunc;
+  animation-iteration-count: IterationCount;
+}
+#made
+{
+  margin-left: -1200px;
+  margin-top: 450px;
+  pre-transform-scale2d: 1.0;
+  animation-name: Title_anim;
+  animation-delay: 0s;
+  animation-duration: 5s;
+  animation-timing-function: TimingFunc;
+  animation-iteration-count: IterationCount;
+}
+
+
+#madea
+{
+  margin-left: 0px;
+  margin-bottom: 0px;
+}
+
+#titlea
+{
+  margin-left: 0px;
+  margin-bottom: 0px;
+}
+
+@keyframes 'Title_anim'
+{
+  0%
+  {
+	transform: translateX( 1200px ) translateY( 0px );
+    pre-transform-scale2d: 1.0;
+  }
+
+  100%
+  {
+	transform: translateX( 0px ) translateY( 0px );
+  }
+}
+
+#BG
+{
+
+}
+#menu
+{
+  margin-top: 250px;
+  margin-left: 460px;
+}
+#new
+{
+  margin-top: 250px;
+  margin-left: 460px;
+}
+#load
+{
+  margin-top: 250px;
+  margin-left: 460px;
+}
+
+#hero_1
+{
+  margin-top: 100px;
+  height: 100px;
+  width: 600px;
+}
+#slot_1
+{
+  margin-top: 100px;
+  height: 100px;
+  width: 600px;
+}
+#New_Hero
+{
+  margin-top: 100px;
+  height: 100px;
+  width: 600px;
+}
+
+
+#hero_2
+{
+  margin-top: 300px;
+  height: 100px;
+  width: 600px;
+}
+#slot_2
+{
+  margin-top: 300px;
+  height: 100px;
+  width: 600px;
+}
+#Load_hero
+{
+  margin-top: 300px;
+  height: 100px;
+  width: 600px;
+}
+
+#hero_3
+{
+  margin-top: 500px;
+  height: 100px;
+  width: 600px;
+}
+#slot_3
+{
+  margin-top: 500px;
+  height: 100px;
+  width: 600px;
+}
+
+#back
+{
+  margin-top: 700px;
+  height: 100px;
+  width: 600px;
+}
+
+#nht
+{
+	font-size: 50px;
+	margin-top: 25px;
+	margin-left: 30px;
+    font-weight: bold;
+	color: #FFFFFF;
+}
+#ldt
+{
+	font-size: 50px;
+	margin-top: 25px;
+	margin-left: 30px;
+    font-weight: bold;
+	color: #FFFFFF;
+}
+#c1t
+{
+	font-size: 50px;
+	margin-top: 25px;
+	margin-left: 30px;
+    font-weight: bold;
+	color: #FFFFFF;
+}
+#c2t
+{
+	font-size: 50px;
+	margin-top: 25px;
+	margin-left: 30px;
+    font-weight: bold;
+	color: #FFFFFF;
+}
+#c3t
+{
+	font-size: 50px;
+	margin-top: 25px;
+	margin-left: 30px;
+    font-weight: bold;
+	color: #FFFFFF;
+}
+#bbt
+{
+	font-size: 50px;
+	margin-top: 25px;
+	margin-left: 30px;
+    font-weight: bold;
+	color: #FFFFFF;
+}
+#st1
+{
+	font-size: 50px;
+	margin-top: 25px;
+	margin-left: 30px;
+    font-weight: bold;
+	color: #FFFFFF;
+}
+#st2
+{
+	font-size: 50px;
+	margin-top: 25px;
+	margin-left: 30px;
+    font-weight: bold;
+	color: #FFFFFF;
+}
+#st3
+{
+	font-size: 50px;
+	margin-top: 25px;
+	margin-left: 30px;
+    font-weight: bold;
+	color: #FFFFFF;
+}
+
+#question
+{
+font-size: 50px;
+	margin-left: 0px;
+	margin-top: 0px;
+    font-weight: bold;
+	color: #FFFFFF;
+}

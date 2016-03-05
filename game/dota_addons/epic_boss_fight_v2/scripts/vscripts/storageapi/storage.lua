@@ -79,6 +79,7 @@ function Storage:Put(steam_id, data, callback)
 
 	-- Invalidate cache since we're setting new data
 	self:Invalidate(steam_id)
+	DeepPrintTable(data)
 
 	if not pcall(function()
 		data = JSON:encode(data)
