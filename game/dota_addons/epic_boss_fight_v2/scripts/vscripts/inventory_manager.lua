@@ -196,6 +196,7 @@ function inv_manager:Calculate_stats(hero) -- call this when equipement is modif
 
 
     CustomNetTables:SetTableValue( "stats",key, {equip_stats = hero.equip_stats--[[,hero_stats = hero.hero_stats,stats = hero.stats]]} )
+    CreateItem("item_void", hero, hero) 
     DeepPrintTable(CustomNetTables:GetTableValue("stats",key))
     
 end

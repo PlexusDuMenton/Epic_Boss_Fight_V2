@@ -175,10 +175,11 @@ function epic_boss_fight:InitGameMode()
 end
 
 function epic_boss_fight:save(com_name,save_slot)
-  local slot = tonumber( save_slot )
+  local slot = save_slot
   local hero = PlayerResource:GetSelectedHeroEntity( 0 )
   save(hero,slot,false)
 end
+
 
 function epic_boss_fight:print_inv_info()
   local hero = PlayerResource:GetSelectedHeroEntity( 0 )
@@ -230,6 +231,7 @@ end
 function epic_boss_fight:ebf_give_item(com_name,item_name)
   print (item_name)
   local hero = PlayerResource:GetSelectedHeroEntity( 0 )
+  print("step 1")
   Item = epic_boss_fight:_CreateItem(item_name,hero)
   for k,v in pairs(Item) do print(k,v) end
   inv_manager:Add_Item(hero,Item)
@@ -287,8 +289,8 @@ end
 
 function epic_boss_fight:_CreateItem(item_name,owner) --a function to create an item from name , will be used over "CreateItem" because 
   --it'll make the change we need on items
+  print("step 2")
   Item = CreateItem(item_name, owner, owner) 
-
   Item = inv_manager:Create_Item(Item)
   return Item
 end

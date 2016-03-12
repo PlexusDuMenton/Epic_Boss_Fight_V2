@@ -43,15 +43,15 @@
 		</Panel>
 		<Panel id="load" hittest="false">
 			<Label hittest="false" id="question" text="Which Save Slot?"/>
-			<Button id="slot_1" onactivate='load_character("slot1")'>
+			<Button id="slot_1" onactivate='load_character("1")'>
 				<Image id="sl1" src="file://{images}/custom_game/hero/button.png"/>
 				<Label hittest="false" id="st1" text="slot 1"/>
 			</Button>
-			<Button id="slot_2" onactivate='load_character("slot2")'>
+			<Button id="slot_2" onactivate='load_character("2")'>
 				<Image id="sl2" src="file://{images}/custom_game/hero/button.png"/>
 				<Label hittest="false" id="st2" text="slot 2"/>
 			</Button>
-			<Button id="hero_3" onactivate='load_character("slot3")'>
+			<Button id="hero_3" onactivate='load_character("3")'>
 				<Image id="sl3" src="file://{images}/custom_game/hero/button.png"/>
 				<Label hittest="false" id="st3" text="slot 3"/>
 			</Button> 

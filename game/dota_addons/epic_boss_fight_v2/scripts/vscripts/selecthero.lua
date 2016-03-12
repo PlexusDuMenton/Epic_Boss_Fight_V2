@@ -20,9 +20,9 @@ end
 function HeroSelection:NewHero(table)
 	print ("create_hero")
 	local player = PlayerResource:GetPlayer(table.PID)
-	local oldhero = player:GetAssignedHero()
 	local hero = PlayerResource:ReplaceHeroWith( table.PID, table.Hero_Name, 0, 0 )
-	inv_manager:Create_Inventory(hero)
+	local heroent = player:GetAssignedHero()
+	inv_manager:Create_Inventory(heroent)
 
 	hero:AddAbility('lua_equipement')
 	hero:AddAbility('lua_hero_stats')

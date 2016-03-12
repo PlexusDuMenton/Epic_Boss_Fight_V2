@@ -84,4 +84,18 @@
     "ItemShareability"        "ITEM_NOT_SHAREABLE"
     "ItemPermanent"         "1"
   }
+  "item_void"
+  { 
+    "ID"              "1016"
+    "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+    "BaseClass"           "item_datadriven"
+    "AbilityTextureName"      "item_void"
+
+    "ItemStackable"         "0"
+    "ItemKillable"          "0"
+    "ItemPurchasable"       "0"
+    "ItemCost"            "0"
+    "ItemShareability"        "ITEM_NOT_SHAREABLE"
+    "ItemPermanent"         "0"
+  }
 }

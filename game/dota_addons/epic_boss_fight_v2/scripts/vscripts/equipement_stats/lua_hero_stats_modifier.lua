@@ -73,7 +73,6 @@ function lua_hero_stats_modifier:GetModifierMagicalResistanceBonus()
 end
 
 function lua_hero_stats_modifier:GetModifierHealthBonus()
-	print("ok")
 	if IsServer() then
 		return self:GetCaster().hero_stats.hp
 	end
