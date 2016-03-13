@@ -22,7 +22,6 @@ function inv_manager:Create_Item(Item)
         return Item
     end
     item = item_info
-    print ("item merged with his info")
     if item.stack == 1 then item.stack = true end
     if item.stack == true then
         item.ammount = 1

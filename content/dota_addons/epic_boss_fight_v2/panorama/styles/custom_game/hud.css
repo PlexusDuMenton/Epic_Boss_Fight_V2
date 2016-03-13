@@ -1,0 +1,277 @@
+ .bar_panel
+{
+    width: 100%;
+    height: 100%;
+    overflow: clip;
+}
+#Bar_BG
+{
+	horizontal-align: left;
+    vertical-align: bottom;
+	width: 1004px;
+  height: 284px;
+}
+#Bar_OL
+{
+	horizontal-align: left;
+    vertical-align: bottom;
+	width: 1004px;
+  height: 284px;
+}
+#hp_bar_parent
+{
+	horizontal-align: left;
+    vertical-align: bottom;
+	width: 1004px;
+  height: 284px;
+}
+#mp_bar_parent
+{
+	horizontal-align: left;
+    vertical-align: bottom;
+	width: 1004px;
+  height: 284px;
+}
+#hxp_bar_parent
+{
+	horizontal-align: left;
+    vertical-align: bottom;
+	width: 1004px;
+  height: 284px;
+}
+#wxp_bar_parent
+{
+	horizontal-align: left;
+    vertical-align: bottom;
+	width: 1004px;
+  height: 284px;
+}
+
+#bar_general
+{
+  horizontal-align: left;
+  vertical-align: bottom;
+  width: 1004px;
+  height: 284px;
+ }
+ 
+ #bar_bg
+ {
+    horizontal-align: right;
+    vertical-align: top;
+ }
+ 
+#hp_bar
+{
+	horizontal-align: left;
+    vertical-align: bottom;
+	width: 1004px;
+  height: 284px;
+}
+#mp_bar
+{
+	horizontal-align: left;
+    vertical-align: bottom;
+	width: 1004px;
+  height: 284px;
+}
+#hxp_bar
+{
+	horizontal-align: left;
+    vertical-align: bottom;
+	width: 1004px;
+  height: 284px;
+}
+#hero_icon
+{
+	horizontal-align: left;
+    vertical-align: bottom;
+	width: 1004px;
+  height: 284px;
+}
+#icon
+{
+	horizontal-align: left;
+    vertical-align: bottom;
+	width: 1004px;
+  height: 284px;
+}
+#wxp_bar
+{
+	horizontal-align: left;
+    vertical-align: bottom;
+	width: 1004px;
+  height: 284px;
+}
+#no_weapon
+{
+	horizontal-align: left;
+    vertical-align: bottom;
+	width: 1004px;
+  height: 284px;
+}
+#no_mana
+{
+	horizontal-align: left;
+    vertical-align: bottom;
+	width: 1004px;
+  height: 284px;
+}
+ 
+ #hp_bar_current
+{
+	margin-right: 420px;
+	font-size: 25px;
+	margin-top: 40px;
+    font-weight: bold;
+	color: #FFFFFF;
+	horizontal-align: right;
+ }
+  #hp_bar_slash
+{
+	margin-left: 600px;
+	font-size: 25px;
+	margin-top: 40px;
+    font-weight: bold;
+	color: #FFFFFF;
+ }
+  #hp_bar_total
+{
+	margin-left: 620px;
+	font-size: 25px;
+	margin-top: 40px;
+    font-weight: bold;
+	color: #FFFFFF;
+ }
+
+  #mp_bar_current
+{
+	margin-right: 470px;
+	font-size: 25px;
+	margin-top: 82px;
+    font-weight: bold;
+	color: #FFFFFF;
+	horizontal-align: right;
+ }
+  #mp_bar_slash
+{
+	margin-left: 550px;
+	font-size: 25px;
+	margin-top: 82px;
+    font-weight: bold;
+	color: #FFFFFF;
+ }
+  #mp_bar_total
+{
+	margin-left: 570px;
+	font-size: 25px;
+	margin-top: 82px;
+    font-weight: bold;
+	color: #FFFFFF;
+ }
+ 
+   #hxp_bar_current
+{
+	margin-right: 420px;
+	font-size: 25px;
+	margin-top: 123px;
+    font-weight: bold;
+	color: #FFFFFF;
+	horizontal-align: right;
+ }
+  #hxp_bar_slash
+{
+	margin-left: 600px;
+	font-size: 25px;
+	margin-top: 123px;
+    font-weight: bold;
+	color: #FFFFFF;
+ }
+  #hxp_bar_total
+{
+	margin-left: 620px;
+	font-size: 25px;
+	margin-top: 123px;
+    font-weight: bold;
+	color: #FFFFFF;
+ }
+ 
+   #wxp_bar_current
+{
+	margin-right: 320px;
+	font-size: 25px;
+	margin-top: 154px;
+    font-weight: bold;
+	color: #FFFFFF;
+	horizontal-align: right;
+ }
+  #wxp_bar_slash
+{
+	margin-left: 700px;
+	font-size: 25px;
+	margin-top: 154px;
+    font-weight: bold;
+	color: #FFFFFF;
+ }
+  #wxp_bar_total
+{
+	margin-left: 720px;
+	font-size: 25px;
+	margin-top: 154px;
+    font-weight: bold;
+	color: #FFFFFF;
+ }
+ 
+   #wlevel
+{
+	margin-left: 720px;
+	font-size: 25px;
+	margin-top: 180px;
+    font-weight: bold;
+	color: #FFFFFF;
+ }
+   #wlevellab
+{
+	margin-left: 620px;
+	font-size: 25px;
+	margin-top: 180px;
+    font-weight: bold;
+	color: #FFFFFF;
+ }
+   #wname
+{
+	margin-right: 400px;
+	font-size: 20px;
+	margin-top: 180px;
+    font-weight: bold;
+	color: #FFFFFF;
+	horizontal-align: right;
+ }
+ 
+   #name
+{
+	margin-right: 690px;
+	font-size: 40px;
+	margin-top: 160px;
+    font-weight: bold;
+	color: #FFFFFF;
+	horizontal-align: center;
+ }
+    #level
+{
+	margin-right: 690px;
+	font-size: 40px;
+	margin-top: 200px;
+    font-weight: bold;
+	color: #FFFFFF;
+	horizontal-align: center;
+ }
+    #space
+{
+	margin-left: 1004px;
+	font-size: 20px;
+	margin-top: 180px;
+    font-weight: bold;
+	color: #FFFFFF;
+ }
+ 

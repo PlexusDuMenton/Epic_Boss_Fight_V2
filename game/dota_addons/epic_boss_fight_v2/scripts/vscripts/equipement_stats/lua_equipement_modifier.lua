@@ -81,7 +81,6 @@ end
 
 function lua_equipement_modifier:GetModifierHealthBonus()
 	if IsServer() then
-		print ('refreh HP')
 		return self:GetCaster().equip_stats.hp
 	end
 end

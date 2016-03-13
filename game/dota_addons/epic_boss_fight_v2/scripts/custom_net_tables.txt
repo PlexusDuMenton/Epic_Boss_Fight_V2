@@ -4,5 +4,6 @@
   [
     "inventory",
     "stats",
+    "info",
   ]
 }

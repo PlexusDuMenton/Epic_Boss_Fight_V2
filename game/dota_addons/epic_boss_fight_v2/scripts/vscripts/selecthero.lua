@@ -27,9 +27,10 @@ function HeroSelection:NewHero(table)
 	hero:AddAbility('lua_equipement')
 	hero:AddAbility('lua_hero_stats')
 
-	FindClearSpaceForUnit(hero, Vector(0,0,0), false)
+
 	PlayerResource:SetCameraTarget(table.PID, hero)
 	PlayerResource:SetCameraTarget(table.PID, nil)
+	CustomGameEventManager:Send_ServerToPlayer(player,"Display_Bar", {}) 
 end
 
 function HeroSelection:Load(table)
@@ -44,16 +45,12 @@ function HeroSelection:load_hero(table,PID)
 		print ("load slot is empty or corrupted , back to hero selection menu")
 		return
 	end
+	CustomGameEventManager:Send_ServerToPlayer(player,"Display_Bar", {}) 
 	local oldhero = player:GetAssignedHero()
 	local Hero_Name = table.hero_name
 	local hero = PlayerResource:ReplaceHeroWith( PID, Hero_Name, 0, 0 )
 	hero.inventory = table.inventory
 	hero.equipement = table.equipement
-	if table.level>1 then
-		for i=1,table.level do
-			hero:HeroLevelUp(false) 
-		end
-	end
 	hero:AddExperience(table.XP,0, false,false) 
 	PlayerResource:SetGold(PID, table.gold, true)
 	hero.stats_points = table.stats_points

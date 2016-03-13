@@ -1,3 +1,4 @@
+MAX_LEVEL = 100 --level higger than 100 seam to bug a bit
 
 --FOR NOW ITS STILL BAREBONE , I FOCUSED ON INVENTORY MANAGER FOR NOW
 BAREBONES_DEBUG_SPEW = false 
@@ -40,11 +41,15 @@ Storage:SetApiKey("1a632e691765ceac74723d73de5d72abb6374146") -- TBD : load this
 
 --require('ebf_boss_manager')
 
-
-XP_PER_LEVEL_TABLE = {} --creating xp for 200 level , may increase it later on
-for i=1,200 do 
-  XP_PER_LEVEL_TABLE[i] = math.floor(i*18 + (5*i^2) + (10 * i^1.5))
+XP_PER_LEVEL_TABLE = {} 
+REAL_XP_TABLE = {}
+for i=0,MAX_LEVEL do 
+  XP_PER_LEVEL_TABLE[i] = math.floor(i*40 + (10*i^4) + (20 * i^3))
+  if i > 0 then
+    REAL_XP_TABLE[i] = XP_PER_LEVEL_TABLE[i] - XP_PER_LEVEL_TABLE[i-1]
+  end
 end
+REAL_XP_TABLE[0] = 0
 
 
 
@@ -138,9 +143,10 @@ function epic_boss_fight:InitGameMode()
   --GameMode:SetCameraDistanceOverride(2300)  
   GameMode:SetRecommendedItemsDisabled(true)
   GameMode:SetCustomXPRequiredToReachNextLevel( XP_PER_LEVEL_TABLE )
+  DeepPrintTable (REAL_XP_TABLE)
   GameMode:SetCustomGameForceHero( "npc_dota_hero_legion_commander" )
   GameMode:SetUseCustomHeroLevels ( true )
-  GameMode:SetCustomHeroMaxLevel( 100 )
+  GameMode:SetCustomHeroMaxLevel( MAX_LEVEL )
 
   GameMode:SetMaximumAttackSpeed(1000)
   GameMode:SetMinimumAttackSpeed(-100)
@@ -155,7 +161,17 @@ function epic_boss_fight:InitGameMode()
   ListenToGameEvent("dota_player_gained_level", Dynamic_Wrap( epic_boss_fight, "OnHeroLevelUp"), self )
 
   HeroSelection:Start()
-  
+  Timers:CreateTimer(0.2,function()
+    for i=0,PlayerResource:GetPlayerCount()-1 do
+      local player = PlayerResource:GetPlayer(i)
+      local hero = player:GetAssignedHero()
+      if hero~=nil and hero.equipement~=nil then
+        epic_boss_fight:update_net_table(hero)
+      else
+      end
+    end
+    return 0.025
+  end)
 
 
   CustomGameEventManager:RegisterListener( "inventory_change_lua", Dynamic_Wrap(epic_boss_fight, 'inventory_change_lua'))
@@ -306,5 +322,37 @@ function epic_boss_fight:OnItemPickUp(event)
       inv_manager:Add_Item(hero,item)
       hero:RemoveItem(Item)
     end
+  end
+end
+
+function epic_boss_fight:update_net_table(hero)
+  local key = "player_"..hero:GetPlayerID()
+  --[[
+  if hero:GetPlayerID() == 1 then
+    key = "player_1"
+  elseif hero:GetPlayerID() == 2 then
+    key = "player_2"
+  elseif hero:GetPlayerID() == 3 then
+    key = "player_3"
+  elseif hero:GetPlayerID() == 4 then
+    key = "player_4"
+  elseif hero:GetPlayerID() == 5 then
+    key = "player_5"
+  elseif hero:GetPlayerID() == 6 then
+    key = "player_6"
+  elseif hero:GetPlayerID() == 7 then
+    key = "player_7"
+  elseif hero:GetPlayerID() == 8 then
+    key = "player_8"
+  elseif hero:GetPlayerID() == 9 then
+    key = "player_9"
+  end
+  ]]
+  local current_XP = hero:GetCurrentXP()-XP_PER_LEVEL_TABLE[hero:GetLevel()-1]
+
+  if hero.equipement.weapon ~= nil then  
+    CustomNetTables:SetTableValue( "info",key, {LVL = hero:GetLevel() ,WName = hero.equipement.weapon.Name, WLVL = hero.equipement.weapon.level ,HP = hero:GetHealth(),MAXHP = hero:GetMaxHealth(),MP = hero:GetMana(),MAXMP = hero:GetMaxMana(),HXP =current_XP,MAXHXP = REAL_XP_TABLE[hero:GetLevel()],WXP = hero.equipement.weapon.XP,MAXWXP = hero.equipement.weapon.XP_Table[hero.equipement.weapon.level]  } )
+  else
+    CustomNetTables:SetTableValue( "info",key, {LVL = hero:GetLevel() ,WName = "Fist", WLVL = 0 ,HP = hero:GetHealth(),MAXHP = hero:GetMaxHealth(),MP = hero:GetMana(),MAXMP = hero:GetMaxMana(),HXP = current_XP,MAXHXP = REAL_XP_TABLE[hero:GetLevel()],WXP = 0,MAXWXP = 0  } )
   end
 end

@@ -2,6 +2,58 @@
     <scripts>
         <include src="file://{resources}/scripts/custom_game/game_hud.js" />
     </scripts>
-	<Panel class="bullshit" hittest="false">
+	<styles>
+		<include src="file://{resources}/styles/custom_game/hud.css" />
+	</styles>
+	<Panel class="bar_panel" hittest="false">
+		<Panel id="bar_general" hittest="false">
+			<Panel id="hero_icon" hittest="false">
+				<Image hittest="false" id="icon" src="file://{images}/custom_game/HUD/hero_icon/npc_legion.png"/>
+			</Panel>
+			<Panel id="Bar_BG" hittest="false">
+				<Image hittest="false" id="bar_bg" src="file://{images}/custom_game/HUD/background_info.png"/>
+			</Panel>
+			<Panel id="hp_bar_parent" hittest="false">
+				<Image hittest="false" id="hp_bar" src="file://{images}/custom_game/HUD/HP_bar.png"/>
+			</Panel>
+			<Panel id="mp_bar_parent" hittest="false">
+				<Image hittest="false" id="mp_bar" src="file://{images}/custom_game/HUD/MP_bar.png"/>
+				<Image hittest="false" id="no_mana" src="file://{images}/custom_game/HUD/no_mana.png"/>
+			</Panel>
+			<Panel id="hxp_bar_parent" hittest="false">
+				<Image hittest="false" id="hxp_bar" src="file://{images}/custom_game/HUD/HXP_bar.png"/>
+			</Panel>
+			<Panel id="wxp_bar_parent" hittest="false">
+				<Image hittest="false" id="wxp_bar" src="file://{images}/custom_game/HUD/WXP_bar.png"/>
+				<Image hittest="false" id="no_weapon" src="file://{images}/custom_game/HUD/no_weapon.png"/>
+			</Panel>
+			<Panel id="label_bar_parent" hittest="false">
+				<Label hittest="false" id="hp_bar_current" text="0.00"/>
+				<Label hittest="false" id="hp_bar_slash" text="/"/>
+				<Label hittest="false" id="hp_bar_total" text="0.00"/>
+				
+				<Label hittest="false" id="mp_bar_current" text="0.00"/>
+				<Label hittest="false" id="mp_bar_slash" text="/"/>
+				<Label hittest="false" id="mp_bar_total" text="0.00"/>
+				
+				<Label hittest="false" id="hxp_bar_current" text="0.00"/>
+				<Label hittest="false" id="hxp_bar_slash" text="/"/>
+				<Label hittest="false" id="hxp_bar_total" text="0.00"/>
+				
+				<Label hittest="false" id="wxp_bar_current" text="0.00"/>
+				<Label hittest="false" id="wxp_bar_slash" text="/"/>
+				<Label hittest="false" id="wxp_bar_total" text="0.00"/>
+				<Label hittest="false" id="wname" text="Name"/>
+				<Label hittest="false" id="wlevellab" text="Level :"/>
+				<Label hittest="false" id="wlevel" text="1"/>
+				<Label hittest="false" id="space" text=""/>
+				
+				<Label hittest="false" id="name" text="name"/>
+				<Label hittest="false" id="level" text="Level 1"/>
+			</Panel>
+			<Panel id="Bar_OL" hittest="false">
+				<Image hittest="false" id="bar_front" src="file://{images}/custom_game/HUD/Outline_info.png"/>
+			</Panel>
+		</Panel>
 	</Panel>
 </root>
