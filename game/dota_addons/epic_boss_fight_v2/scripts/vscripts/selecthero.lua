@@ -22,15 +22,21 @@ function HeroSelection:NewHero(table)
 	local player = PlayerResource:GetPlayer(table.PID)
 	local hero = PlayerResource:ReplaceHeroWith( table.PID, table.Hero_Name, 0, 0 )
 	local heroent = player:GetAssignedHero()
-	inv_manager:Create_Inventory(heroent)
+	if heroent == nil then
+		Timers:CreateTimer(0.5,function()
+			HeroSelection:NewHero(table)
+		end)
+	else
+		inv_manager:Create_Inventory(heroent)
 
-	hero:AddAbility('lua_equipement')
-	hero:AddAbility('lua_hero_stats')
+		hero:AddAbility('lua_equipement')
+		hero:AddAbility('lua_hero_stats')
 
 
-	PlayerResource:SetCameraTarget(table.PID, hero)
-	PlayerResource:SetCameraTarget(table.PID, nil)
-	CustomGameEventManager:Send_ServerToPlayer(player,"Display_Bar", {}) 
+		PlayerResource:SetCameraTarget(table.PID, hero)
+		PlayerResource:SetCameraTarget(table.PID, nil)
+		CustomGameEventManager:Send_ServerToPlayer(player,"Display_Bar", {}) 
+	end
 end
 
 function HeroSelection:Load(table)

@@ -8,7 +8,7 @@
 	<Panel class="bar_panel" hittest="false">
 		<Panel id="bar_general" hittest="false">
 			<Panel id="hero_icon" hittest="false">
-				<Image hittest="false" id="icon" src="file://{images}/custom_game/HUD/hero_icon/npc_legion.png"/>
+				<Image hittest="false" id="icon" src="file://{images}/custom_game/HUD/hero_icon/unknow.png"/>
 			</Panel>
 			<Panel id="Bar_BG" hittest="false">
 				<Image hittest="false" id="bar_bg" src="file://{images}/custom_game/HUD/background_info.png"/>

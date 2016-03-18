@@ -1,4 +1,4 @@
-MAX_LEVEL = 100 --level higger than 100 seam to bug a bit
+MAX_LEVEL = 99 --level higger than 99 seam to bug a bit
 
 --FOR NOW ITS STILL BAREBONE , I FOCUSED ON INVENTORY MANAGER FOR NOW
 BAREBONES_DEBUG_SPEW = false 
@@ -44,7 +44,7 @@ Storage:SetApiKey("1a632e691765ceac74723d73de5d72abb6374146") -- TBD : load this
 XP_PER_LEVEL_TABLE = {} 
 REAL_XP_TABLE = {}
 for i=0,MAX_LEVEL do 
-  XP_PER_LEVEL_TABLE[i] = math.floor(i*40 + (10*i^4) + (20 * i^3))
+  XP_PER_LEVEL_TABLE[i] = math.floor(i*40 + (1*i^3) + (2 * i^2)) - i*3
   if i > 0 then
     REAL_XP_TABLE[i] = XP_PER_LEVEL_TABLE[i] - XP_PER_LEVEL_TABLE[i-1]
   end
@@ -94,24 +94,22 @@ function epic_boss_fight:OnHeroLevelUp(event)
   hero:SetAbilityPoints(0) 
   hero.stats_points = hero.stats_points + 1
   if Primary == 0 then
-      print (hero.hero_stats.hp)
-      print (math.ceil((level^0.75)*5))
       hero.hero_stats.hp = hero.hero_stats.hp + math.ceil((level^0.75)*5)
       hero.hero_stats.str = hero.hero_stats.str + math.ceil((level^0.75))
-      hero.hero_stats.hp_regen = hero.hero_stats.hp_regen + math.ceil((level^0.5)*0.1)
+      hero.hero_stats.hp_regen = hero.hero_stats.hp_regen + math.ceil(100*(level^0.2)*0.15)/100
   else
       hero.hero_stats.hp = hero.hero_stats.hp + math.ceil((level^0.7)*3.5)
       hero.hero_stats.str = hero.hero_stats.str + math.ceil((level^0.5))
-      hero.hero_stats.hp_regen = hero.hero_stats.hp_regen + math.ceil((level^0.25)*0.05)
+      hero.hero_stats.hp_regen = hero.hero_stats.hp_regen + math.ceil(100*(level^0.1)*0.10)/100
   end
   if Primary == 2 then
       hero.hero_stats.mp = hero.hero_stats.mp + math.ceil((level^0.75)*5)
       hero.hero_stats.int = hero.hero_stats.int + math.ceil((level^0.75))
-      hero.hero_stats.mp_regen = hero.hero_stats.mp_regen + math.ceil((level^0.5)*0.2)
+      hero.hero_stats.mp_regen = hero.hero_stats.mp_regen + math.ceil(100*(level^0.25)*0.03)/100
   else
       hero.hero_stats.mp = hero.hero_stats.mp + math.ceil((hero:GetLevel()^0.7)*2)
       hero.hero_stats.int = hero.hero_stats.int + math.ceil((level^0.5))
-      hero.hero_stats.mp_regen = hero.hero_stats.mp_regen + math.ceil((level^0.25)*0.1)
+      hero.hero_stats.mp_regen = hero.hero_stats.mp_regen + math.ceil(100*(level^0.15)*0.15)/100
   end
   if Primary == 1 then
       hero.hero_stats.armor = hero.hero_stats.armor + math.ceil((level^0.5))
@@ -120,7 +118,7 @@ function epic_boss_fight:OnHeroLevelUp(event)
       hero.hero_stats.armor = hero.hero_stats.armor + math.ceil((level^0.25))
       hero.hero_stats.agi = hero.hero_stats.agi + math.ceil((level^0.5))
   end
-
+  print (hero.hero_stats.hp_regen)
 
 
 end
@@ -174,7 +172,10 @@ function epic_boss_fight:InitGameMode()
   end)
 
 
-  CustomGameEventManager:RegisterListener( "inventory_change_lua", Dynamic_Wrap(epic_boss_fight, 'inventory_change_lua'))
+  CustomGameEventManager:RegisterListener( "Use_Item", Dynamic_Wrap(epic_boss_fight, 'Use_Item'))
+  CustomGameEventManager:RegisterListener( "Unequip_Item", Dynamic_Wrap(epic_boss_fight, 'Unequip_Item'))
+  CustomGameEventManager:RegisterListener( "Drop_Item", Dynamic_Wrap(epic_boss_fight, 'Drop_Item'))
+  CustomGameEventManager:RegisterListener( "Sell_Item", Dynamic_Wrap(epic_boss_fight, 'Sell_Item'))
   CustomGameEventManager:RegisterListener( "load_player_data", Dynamic_Wrap(epic_boss_fight, 'load_player_data'))
 
   DebugPrint('[BAREBONES] Done loading Barebones gamemode!\n\n')
@@ -245,9 +246,7 @@ function epic_boss_fight:print_inv_info()
 end
 
 function epic_boss_fight:ebf_give_item(com_name,item_name)
-  print (item_name)
   local hero = PlayerResource:GetSelectedHeroEntity( 0 )
-  print("step 1")
   Item = epic_boss_fight:_CreateItem(item_name,hero)
   for k,v in pairs(Item) do print(k,v) end
   inv_manager:Add_Item(hero,Item)
@@ -257,6 +256,30 @@ function epic_boss_fight:ebf_use_item(com_name,slot_num)
   local slot = tonumber( slot_num )
   local hero = PlayerResource:GetSelectedHeroEntity( 0 )
   inv_manager:Use_Item(hero,slot)
+end
+
+function epic_boss_fight:Sell_Item(data)
+  local slot = tonumber( data.Slot )
+  local hero = PlayerResource:GetSelectedHeroEntity( data.PlayerID )
+  inv_manager:Sell_Item(hero,slot)
+end
+
+function epic_boss_fight:Use_Item(data)
+  local slot = tonumber( data.Slot )
+  local hero = PlayerResource:GetSelectedHeroEntity( data.PlayerID )
+  inv_manager:Use_Item(hero,slot)
+end
+
+function epic_boss_fight:Drop_Item(data)
+  local slot = tonumber( data.Slot )
+  local hero = PlayerResource:GetSelectedHeroEntity( data.PlayerID )
+  inv_manager:drop_Item(hero,slot)
+end
+
+function epic_boss_fight:Unequip_Item(data)
+  local slot = tonumber( data.Slot )
+  local hero = PlayerResource:GetSelectedHeroEntity( data.PlayerID )
+  inv_manager:Unequip(hero,slot)
 end
 
 function epic_boss_fight:ebf_upgrade(com_name,stat)
@@ -327,32 +350,12 @@ end
 
 function epic_boss_fight:update_net_table(hero)
   local key = "player_"..hero:GetPlayerID()
-  --[[
-  if hero:GetPlayerID() == 1 then
-    key = "player_1"
-  elseif hero:GetPlayerID() == 2 then
-    key = "player_2"
-  elseif hero:GetPlayerID() == 3 then
-    key = "player_3"
-  elseif hero:GetPlayerID() == 4 then
-    key = "player_4"
-  elseif hero:GetPlayerID() == 5 then
-    key = "player_5"
-  elseif hero:GetPlayerID() == 6 then
-    key = "player_6"
-  elseif hero:GetPlayerID() == 7 then
-    key = "player_7"
-  elseif hero:GetPlayerID() == 8 then
-    key = "player_8"
-  elseif hero:GetPlayerID() == 9 then
-    key = "player_9"
-  end
-  ]]
+  
   local current_XP = hero:GetCurrentXP()-XP_PER_LEVEL_TABLE[hero:GetLevel()-1]
 
   if hero.equipement.weapon ~= nil then  
-    CustomNetTables:SetTableValue( "info",key, {LVL = hero:GetLevel() ,WName = hero.equipement.weapon.Name, WLVL = hero.equipement.weapon.level ,HP = hero:GetHealth(),MAXHP = hero:GetMaxHealth(),MP = hero:GetMana(),MAXMP = hero:GetMaxMana(),HXP =current_XP,MAXHXP = REAL_XP_TABLE[hero:GetLevel()],WXP = hero.equipement.weapon.XP,MAXWXP = hero.equipement.weapon.XP_Table[hero.equipement.weapon.level]  } )
+    CustomNetTables:SetTableValue( "info",key, {Name = hero:GetUnitName(),inshop = hero.Isinshop,LVL = hero:GetLevel() ,WName = hero.equipement.weapon.Name, WLVL = hero.equipement.weapon.level ,HP = hero:GetHealth(),MAXHP = hero:GetMaxHealth(),MP = hero:GetMana(),MAXMP = hero:GetMaxMana(),HXP =current_XP,MAXHXP = REAL_XP_TABLE[hero:GetLevel()],WXP = hero.equipement.weapon.XP,MAXWXP = hero.equipement.weapon.Next_Level_XP  } )
   else
-    CustomNetTables:SetTableValue( "info",key, {LVL = hero:GetLevel() ,WName = "Fist", WLVL = 0 ,HP = hero:GetHealth(),MAXHP = hero:GetMaxHealth(),MP = hero:GetMana(),MAXMP = hero:GetMaxMana(),HXP = current_XP,MAXHXP = REAL_XP_TABLE[hero:GetLevel()],WXP = 0,MAXWXP = 0  } )
+    CustomNetTables:SetTableValue( "info",key, {Name = hero:GetUnitName(),inshop = hero.Isinshop,LVL = hero:GetLevel() ,WName = "Fist", WLVL = 0 ,HP = hero:GetHealth(),MAXHP = hero:GetMaxHealth(),MP = hero:GetMana(),MAXMP = hero:GetMaxMana(),HXP = current_XP,MAXHXP = REAL_XP_TABLE[hero:GetLevel()],WXP = 0,MAXWXP = 0  } )
   end
 end

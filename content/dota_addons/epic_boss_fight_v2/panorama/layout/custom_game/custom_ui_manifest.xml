@@ -2,5 +2,6 @@
     <Panel>
 		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/Hero_Selection.xml"/>
         <CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/hud.xml"/>
+		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/inventory.xml"/>
 	</Panel>
 </root>

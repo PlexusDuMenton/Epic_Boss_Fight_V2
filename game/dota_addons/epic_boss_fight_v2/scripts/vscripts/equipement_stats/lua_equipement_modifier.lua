@@ -31,7 +31,7 @@ function lua_equipement_modifier:OnAttackLanded(event)
 
 			if hero.equipement.weapon ~= nil then
 				local digits = #tostring( damage )
-				hero.equipement.weapon.XP = ((math.random(0,2)+digits)*0.25) + hero.equipement.weapon.XP
+				hero.equipement.weapon.XP = ((math.random(0,2)+(digits*4))*0.25) + hero.equipement.weapon.XP
 				inv_manager:weapon_checklevelup(hero)
 			end
 		end

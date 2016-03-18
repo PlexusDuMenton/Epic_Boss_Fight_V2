@@ -15,19 +15,16 @@
 		</Panel>
 		<Panel id="menu" hittest="false">
 			<Label hittest="false" id="question" text="Create a new Hero or Load ?"/>
-			<Button id="New_Hero" onactivate='NC()'>
-				<Image id="nhb" src="file://{images}/custom_game/hero/button.png"/>
+			<Button id="New_Hero" class="menuButton" onactivate='NC()'>
 				<Label hittest="false" id="nht" text="New Hero"/>
 			</Button>
-			<Button id="Load_hero" onactivate='load()'>
-				<Image id="ldb" src="file://{images}/custom_game/hero/button.png"/>
+			<Button id="Load_hero" class="menuButton" onactivate='load()'>
 				<Label hittest="false" id="ldt" text="Load Hero"/>
 			</Button>
 		</Panel>
 		<Panel id="new" hittest="false">
 			<Label hittest="false" id="question" text="Which Hero?"/>
-			<Button id="hero_1" onactivate='new_character("npc_dota_hero_legion_commander")'>
-				<Image id="ch1" src="file://{images}/custom_game/hero/button.png"/>
+			<Button id="hero_1" class="menuButton" onactivate='new_character("npc_dota_hero_legion_commander")'>
 				<Label hittest="false" id="c1t" text="legionary"/>
 			</Button>
 			<!--<Button id="hero_2" onactivate='new_character("npc_dota_hero_wind_ranger")'>
@@ -36,27 +33,22 @@
 			<Button id="hero_3" onactivate='new_character("npc_dota_hero_kotl")'>
 				<Image id="ldb" src="file://{images}/custom_game/hero/button.png"/>
 			</Button> -->
-			<Button id="back" onactivate='back()'>
-				<Image id="bbi" src="file://{images}/custom_game/hero/button.png"/>
+			<Button id="back" class="menuButton" onactivate='back()'>
 				<Label hittest="false" id="bbt" text="BACK"/>
 			</Button>
 		</Panel>
 		<Panel id="load" hittest="false">
 			<Label hittest="false" id="question" text="Which Save Slot?"/>
-			<Button id="slot_1" onactivate='load_character("1")'>
-				<Image id="sl1" src="file://{images}/custom_game/hero/button.png"/>
+			<Button id="slot_1" class="menuButton" onactivate='load_character("1")'>
 				<Label hittest="false" id="st1" text="slot 1"/>
 			</Button>
-			<Button id="slot_2" onactivate='load_character("2")'>
-				<Image id="sl2" src="file://{images}/custom_game/hero/button.png"/>
+			<Button id="slot_2" class="menuButton" onactivate='load_character("2")'>
 				<Label hittest="false" id="st2" text="slot 2"/>
 			</Button>
-			<Button id="hero_3" onactivate='load_character("3")'>
-				<Image id="sl3" src="file://{images}/custom_game/hero/button.png"/>
+			<Button id="hero_3" class="menuButton" onactivate='load_character("3")'>
 				<Label hittest="false" id="st3" text="slot 3"/>
 			</Button> 
-			<Button id="back" onactivate='back()'>
-				<Image id="bbi" src="file://{images}/custom_game/hero/button.png"/>
+			<Button id="back" class="menuButton" onactivate='back()'>
 				<Label hittest="false" id="bbt" text="BACK"/>
 			</Button>
 		</Panel>

@@ -120,78 +120,78 @@
  
  #hp_bar_current
 {
-	margin-right: 420px;
+	margin-right: 320px;
 	font-size: 25px;
-	margin-top: 40px;
+	margin-top: 220px;
     font-weight: bold;
 	color: #FFFFFF;
 	horizontal-align: right;
  }
   #hp_bar_slash
 {
-	margin-left: 600px;
+	margin-left: 700px;
 	font-size: 25px;
-	margin-top: 40px;
+	margin-top: 220px;
     font-weight: bold;
 	color: #FFFFFF;
  }
   #hp_bar_total
 {
-	margin-left: 620px;
+	margin-left: 720px;
 	font-size: 25px;
-	margin-top: 40px;
+	margin-top: 220px;
     font-weight: bold;
 	color: #FFFFFF;
  }
 
   #mp_bar_current
 {
-	margin-right: 470px;
+	margin-right: 320px;
 	font-size: 25px;
-	margin-top: 82px;
+	margin-top: 175px;
     font-weight: bold;
 	color: #FFFFFF;
 	horizontal-align: right;
  }
   #mp_bar_slash
 {
-	margin-left: 550px;
+	margin-left: 700px;
 	font-size: 25px;
-	margin-top: 82px;
+	margin-top: 175px;
     font-weight: bold;
 	color: #FFFFFF;
  }
   #mp_bar_total
 {
-	margin-left: 570px;
+	margin-left: 720px;
 	font-size: 25px;
-	margin-top: 82px;
+	margin-top: 175px;
     font-weight: bold;
 	color: #FFFFFF;
  }
  
    #hxp_bar_current
 {
-	margin-right: 420px;
+	margin-right: 320px;
 	font-size: 25px;
-	margin-top: 123px;
+	margin-top: 137px;
     font-weight: bold;
 	color: #FFFFFF;
 	horizontal-align: right;
  }
   #hxp_bar_slash
 {
-	margin-left: 600px;
+	margin-left: 700px;
 	font-size: 25px;
-	margin-top: 123px;
+	margin-top: 137px;
     font-weight: bold;
 	color: #FFFFFF;
  }
   #hxp_bar_total
 {
-	margin-left: 620px;
+	margin-left: 720px;
 	font-size: 25px;
-	margin-top: 123px;
+	margin-top: 137px;
     font-weight: bold;
 	color: #FFFFFF;
  }
@@ -200,7 +200,7 @@
 {
 	margin-right: 320px;
 	font-size: 25px;
-	margin-top: 154px;
+	margin-top: 107px;
     font-weight: bold;
 	color: #FFFFFF;
 	horizontal-align: right;
@@ -209,7 +209,7 @@
 {
 	margin-left: 700px;
 	font-size: 25px;
-	margin-top: 154px;
+	margin-top: 107px;
     font-weight: bold;
 	color: #FFFFFF;
  }
@@ -217,7 +217,7 @@
 {
 	margin-left: 720px;
 	font-size: 25px;
-	margin-top: 154px;
+	margin-top: 107px;
     font-weight: bold;
 	color: #FFFFFF;
  }
@@ -226,7 +226,7 @@
 {
 	margin-left: 720px;
 	font-size: 25px;
-	margin-top: 180px;
+	margin-top: 80px;
     font-weight: bold;
 	color: #FFFFFF;
  }
@@ -234,7 +234,7 @@
 {
 	margin-left: 620px;
 	font-size: 25px;
-	margin-top: 180px;
+	margin-top: 80px;
     font-weight: bold;
 	color: #FFFFFF;
  }
@@ -242,7 +242,7 @@
 {
 	margin-right: 400px;
 	font-size: 20px;
-	margin-top: 180px;
+	margin-top: 80px;
     font-weight: bold;
 	color: #FFFFFF;
 	horizontal-align: right;
@@ -251,7 +251,7 @@
    #name
 {
 	margin-right: 690px;
-	font-size: 40px;
+	font-size: 20px;
 	margin-top: 160px;
     font-weight: bold;
 	color: #FFFFFF;

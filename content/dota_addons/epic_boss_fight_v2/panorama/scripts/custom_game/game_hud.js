@@ -24,7 +24,18 @@ GameUI.SetDefaultUIEnabled(DotaDefaultUIElement_t.DOTA_DEFAULT_UI_TOP_TIMEOFDAY,
 		GameUI.SetRenderTopInsetOverride(0);
 		
 UpdateUI()
+UpdateUIrare()
 GameEvents.Subscribe( "Display_Bar", display_bar)
+function UpdateUIrare(){
+$.Schedule(1, UpdateUIrare);
+CustomNetTables.SubscribeNetTableListener
+	key = "player_" + ID.toString()
+	data = CustomNetTables.GetTableValue( "info", key)
+	if (typeof data != 'undefined') {
+	update_rare(data)
+	}
+}
+
 function UpdateUI(){
 $.Schedule(0.025, UpdateUI);
 	CustomNetTables.SubscribeNetTableListener
@@ -42,10 +53,14 @@ $("#bar_general").visible = false;
 $("#no_mana").style.clip = "rect( 0% ,0%, 100% ,0% )";
 $("#no_weapon").style.clip = "rect( 0% ,0%, 100% ,0% )";
 
+function update_rare(arg){
+	$("#name").text = $.Localize("#"+arg.Name);
+	$("#icon").SetImage("file://{images}/custom_game/HUD/hero_icon/"+arg.Name+ ".png")
+}
 function update_bar(arg)
 	{
 		$("#hp_bar_parent").style.clip = "rect( 0% ," + ((arg.HP/arg.MAXHP)*77.3+22.7) + "%" + ", 100% ,0% )";
-		$("#hp_bar_current").text = numberWithCommas(arg.HP);
+		$("#hp_bar_current").text = "Health : " + numberWithCommas(arg.HP);
 		$("#hp_bar_total").text = numberWithCommas(arg.MAXHP);
 		
 		if (arg.MAXMP != 0){
@@ -55,11 +70,11 @@ function update_bar(arg)
 		$("#mp_bar_parent").style.clip = "rect( 0% ,100%, 100% ,0% )";
 		$("#no_mana").style.clip = "rect( 0% ,100%, 100% ,0% )";
 		}
-		$("#mp_bar_current").text = numberWithCommas(arg.MP);
+		$("#mp_bar_current").text = "Mana : " + numberWithCommas(arg.MP);
 		$("#mp_bar_total").text = numberWithCommas(arg.MAXMP);
 		
 		$("#hxp_bar_parent").style.clip = "rect( 0% ," + ((arg.HXP/arg.MAXHXP)*70.22+29.78) + "%" + ", 100% ,0% )";
-		$("#hxp_bar_current").text = numberWithCommas(arg.HXP);
+		$("#hxp_bar_current").text = "XP : " + numberWithCommas(arg.HXP);
 		$("#hxp_bar_total").text = numberWithCommas(arg.MAXHXP);
 		if (arg.MAXWXP != 0){
 		$("#no_weapon").style.clip = "rect( 0% ,0%, 100% ,0% )";
@@ -68,11 +83,11 @@ function update_bar(arg)
 		$("#wxp_bar_parent").style.clip = "rect( 0% ,100%, 100% ,0% )";
 		$("#no_weapon").style.clip = "rect( 0% ,100%, 100% ,0% )";
 		}
-		$("#wxp_bar_current").text = numberWithCommas(arg.WXP);
+		$("#wxp_bar_current").text = "Weapon XP : " + numberWithCommas(arg.WXP);
 		$("#wxp_bar_total").text = numberWithCommas(arg.MAXWXP);
 		$("#wname").text = arg.WName;
 		$("#wlevel").text = arg.WLVL;
-		
+
 		
 		$("#level").text = "Level "+ arg.LVL.toString()
 	}

@@ -9,6 +9,17 @@
     overflow: clip;
 }
 
+.menuButton{
+	background-image: url("file://{images}/custom_game/hero/button.png");
+	height: 100px;
+  width: 600px;
+  background-size: 600px 100px; // image is drawn 300px wide, 200px tall
+}
+
+.menuButton:hover{
+	background-image: url("file://{images}/custom_game/hero/button_over.png");
+}
+
 #Title
 {
   margin-left: -1200px;

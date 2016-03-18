@@ -1,0 +1,27 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/custom_game/inventory.css" />
+	</styles>
+	<scripts>
+		<include src="file://{resources}/scripts/custom_game/inventory.js" />
+	</scripts>
+	<Panel class="Main" hittest="false">
+		<Panel id = "inv_panel" class="InventoryPanel">
+			<Button class="Close" onactivate='close_inventory()'/>
+			<Image hittest="false" id="Inventory_BG" src="file://{images}/custom_game/inventory/BG.png" />
+			<Panel id="Items">
+				
+			</Panel>
+			<Panel id="Menu" hittest="false">
+				
+			</Panel>
+		</Panel>
+		<Panel id="Info" hittest="false">
+				
+		</Panel>
+		<Button id="inventory_button" onactivate='Open_Inventory()' class ="inv_but">
+			<Label hittest="false" id="inv_but_label" class="Inventory_Label_v_small"  text="Inventory"/>
+		</Button>
+
+	</Panel>
+</root>
