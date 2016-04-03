@@ -1,4 +1,4 @@
-MAX_LEVEL = 99 --level higger than 99 seam to bug a bit
+MAX_LEVEL = 500 --level higger than 99 seam to bug a bit
 
 --FOR NOW ITS STILL BAREBONE , I FOCUSED ON INVENTORY MANAGER FOR NOW
 BAREBONES_DEBUG_SPEW = false 
@@ -85,41 +85,52 @@ function epic_boss_fight:OnGameInProgress()
     end)
 end
 
-function epic_boss_fight:OnHeroLevelUp(event)
+function epic_boss_fight:Check_Hero_lvlup(hero)
+  while hero.XP >= REAL_XP_TABLE[hero.Level] do
+    hero.XP = hero.XP-REAL_XP_TABLE[hero.Level]
+    hero.Level = hero.Level + 1
+    epic_boss_fight:OnHeroLevelUp(hero)
+  end
+end
+
+function epic_boss_fight:OnHeroLevelUp(hero)
   print ("LEVEL UP !")
-  local player = PlayerResource:GetPlayer(event.player - 1) 
-  local hero = player:GetAssignedHero()
-  local level = hero:GetLevel()
+  local level = hero.Level
   local Primary = hero:GetPrimaryAttribute()
+  local lvlup_effect = ParticleManager:CreateParticle("particles/generic_hero_status/hero_levelup.vpcf", PATTACH_ABSORIGIN  , hero)
+  hero:EmitSound("sounds/ui/levelup_female.vsnd")
+  Timers:CreateTimer(1,function()
+    ParticleManager:DestroyParticle(lvlup_effect, false)
+  end)
   hero:SetAbilityPoints(0) 
   hero.stats_points = hero.stats_points + 1
   if Primary == 0 then
-      hero.hero_stats.hp = hero.hero_stats.hp + math.ceil((level^0.75)*5)
-      hero.hero_stats.str = hero.hero_stats.str + math.ceil((level^0.75))
+      hero.hero_stats.hp = hero.hero_stats.hp + math.ceil(100*(level^0.75)*5)/100
+      hero.hero_stats.str = hero.hero_stats.str + math.ceil(100*(level^0.75))/100
+      hero.hero_stats.agi = hero.hero_stats.agi +  math.ceil(100*(0.2*level^0.05))/100
       hero.hero_stats.hp_regen = hero.hero_stats.hp_regen + math.ceil(100*(level^0.2)*0.15)/100
   else
-      hero.hero_stats.hp = hero.hero_stats.hp + math.ceil((level^0.7)*3.5)
-      hero.hero_stats.str = hero.hero_stats.str + math.ceil((level^0.5))
+      hero.hero_stats.hp = hero.hero_stats.hp + math.ceil(100*(level^0.7)*3.5)/100
+      hero.hero_stats.str = hero.hero_stats.str + math.ceil(100*(level^0.5))/100
       hero.hero_stats.hp_regen = hero.hero_stats.hp_regen + math.ceil(100*(level^0.1)*0.10)/100
   end
   if Primary == 2 then
-      hero.hero_stats.mp = hero.hero_stats.mp + math.ceil((level^0.75)*5)
-      hero.hero_stats.int = hero.hero_stats.int + math.ceil((level^0.75))
+      hero.hero_stats.mp = hero.hero_stats.mp + math.ceil(100*(level^0.75)*5)/100
+      hero.hero_stats.int = hero.hero_stats.int + math.ceil(100*(level^0.75))/100
       hero.hero_stats.mp_regen = hero.hero_stats.mp_regen + math.ceil(100*(level^0.25)*0.03)/100
   else
-      hero.hero_stats.mp = hero.hero_stats.mp + math.ceil((hero:GetLevel()^0.7)*2)
-      hero.hero_stats.int = hero.hero_stats.int + math.ceil((level^0.5))
+      hero.hero_stats.mp = hero.hero_stats.mp + math.ceil(100*(level^0.7)*2)/100
+      hero.hero_stats.int = hero.hero_stats.int + math.ceil(100*(level^0.5))/100
       hero.hero_stats.mp_regen = hero.hero_stats.mp_regen + math.ceil(100*(level^0.15)*0.15)/100
   end
   if Primary == 1 then
-      hero.hero_stats.armor = hero.hero_stats.armor + math.ceil((level^0.5))
-      hero.hero_stats.agi = hero.hero_stats.agi + math.ceil((level^0.75))
+      hero.hero_stats.armor = hero.hero_stats.armor + math.ceil(100*(level^0.5))/100
+      hero.hero_stats.agi = hero.hero_stats.agi + math.ceil(100*(level^0.75))/100
   else
-      hero.hero_stats.armor = hero.hero_stats.armor + math.ceil((level^0.25))
-      hero.hero_stats.agi = hero.hero_stats.agi + math.ceil((level^0.5))
+      hero.hero_stats.armor = hero.hero_stats.armor + math.ceil(100*(level^0.25))/100
+      hero.hero_stats.agi = hero.hero_stats.agi + math.ceil(100*(level^0.5))/100
   end
-  print (hero.hero_stats.hp_regen)
-
+  inv_manager:Calculate_stats(hero)
 
 end
 
@@ -128,6 +139,7 @@ function epic_boss_fight:InitGameMode()
   DebugPrint('[BAREBONES] Starting to load Barebones gamemode...')
   print ("TEST")
   GameRules.items = LoadKeyValues("scripts/kv/items.kv")
+  print (GameRules.items)
   GameRules.difficulty = 1
   GameRules.cheats = false
   GameRules.loot_multiplier = 1
@@ -140,11 +152,10 @@ function epic_boss_fight:InitGameMode()
   GameMode:SetBuybackEnabled(false)
   --GameMode:SetCameraDistanceOverride(2300)  
   GameMode:SetRecommendedItemsDisabled(true)
-  GameMode:SetCustomXPRequiredToReachNextLevel( XP_PER_LEVEL_TABLE )
-  DeepPrintTable (REAL_XP_TABLE)
+  GameMode:SetCustomHeroMaxLevel(MAX_LEVEL) 
+  GameMode:SetCustomXPRequiredToReachNextLevel(XP_PER_LEVEL_TABLE) 
   GameMode:SetCustomGameForceHero( "npc_dota_hero_legion_commander" )
   GameMode:SetUseCustomHeroLevels ( true )
-  GameMode:SetCustomHeroMaxLevel( MAX_LEVEL )
 
   GameMode:SetMaximumAttackSpeed(1000)
   GameMode:SetMinimumAttackSpeed(-100)
@@ -154,29 +165,30 @@ function epic_boss_fight:InitGameMode()
   GameRules:SetGoldPerTick( 0 ) 
   GameRules:SetCustomGameTeamMaxPlayers( DOTA_TEAM_GOODGUYS, 10 )
   GameRules:SetCustomGameTeamMaxPlayers( DOTA_TEAM_BADGUYS, 0 )
+  ebf_boss_manager:Start()
 
   ListenToGameEvent("dota_item_picked_up", Dynamic_Wrap(epic_boss_fight, "OnItemPickUp"), self)
-  ListenToGameEvent("dota_player_gained_level", Dynamic_Wrap( epic_boss_fight, "OnHeroLevelUp"), self )
+
 
   HeroSelection:Start()
-  Timers:CreateTimer(0.2,function()
+
+  Timers:CreateTimer(0.05,function()
     for i=0,PlayerResource:GetPlayerCount()-1 do
-      local player = PlayerResource:GetPlayer(i)
-      local hero = player:GetAssignedHero()
-      if hero~=nil and hero.equipement~=nil then
+      local hero = PlayerResource:GetSelectedHeroEntity(i) 
+      if hero~=nil then
         epic_boss_fight:update_net_table(hero)
-      else
       end
     end
     return 0.025
   end)
-
 
   CustomGameEventManager:RegisterListener( "Use_Item", Dynamic_Wrap(epic_boss_fight, 'Use_Item'))
   CustomGameEventManager:RegisterListener( "Unequip_Item", Dynamic_Wrap(epic_boss_fight, 'Unequip_Item'))
   CustomGameEventManager:RegisterListener( "Drop_Item", Dynamic_Wrap(epic_boss_fight, 'Drop_Item'))
   CustomGameEventManager:RegisterListener( "Sell_Item", Dynamic_Wrap(epic_boss_fight, 'Sell_Item'))
   CustomGameEventManager:RegisterListener( "load_player_data", Dynamic_Wrap(epic_boss_fight, 'load_player_data'))
+  CustomGameEventManager:RegisterListener( "to_item_bar", Dynamic_Wrap(epic_boss_fight, 'inv_to_bar'))
+  CustomGameEventManager:RegisterListener( "to_inventory", Dynamic_Wrap(epic_boss_fight, 'bar_to_inv'))
 
   DebugPrint('[BAREBONES] Done loading Barebones gamemode!\n\n')
 
@@ -191,6 +203,19 @@ function epic_boss_fight:InitGameMode()
   Convars:RegisterCommand("ebf_save", function(...) return self:save( ... ) end, "save your current character to a slot", FCVAR_CHEAT )
 end
 
+function epic_boss_fight:inv_to_bar (data)
+  local slot = tonumber( data.Slot )
+  local bar_slot = tonumber( data.Bar_Slot )
+  local hero = PlayerResource:GetSelectedHeroEntity( data.PlayerID )
+  inv_manager:to_item_bar(hero,slot,bar_slot)
+end
+
+function epic_boss_fight:bar_to_inv (data)
+  local slot = tonumber( data.Slot )
+  local hero = PlayerResource:GetSelectedHeroEntity( data.PlayerID )
+  inv_manager:to_inv(hero,slot)
+end
+
 function epic_boss_fight:save(com_name,save_slot)
   local slot = save_slot
   local hero = PlayerResource:GetSelectedHeroEntity( 0 )
@@ -200,6 +225,18 @@ end
 
 function epic_boss_fight:print_inv_info()
   local hero = PlayerResource:GetSelectedHeroEntity( 0 )
+  for i=1,4 do
+    print ("slot bar:" ,i)
+    if hero.item_bar[i] ~= nil then
+      if hero.item_bar[i].level ~= nil then
+        print("       ",hero.item_bar[i].Name," Level : ",hero.item_bar[i].level)
+      else
+        print("       ",hero.item_bar[i].Name)
+      end
+    else 
+      print ('       Empty')
+    end
+  end
   for i=1,20 do
     print ("slot :" ,i)
     if hero.inventory[i] ~= nil then
@@ -267,7 +304,7 @@ end
 function epic_boss_fight:Use_Item(data)
   local slot = tonumber( data.Slot )
   local hero = PlayerResource:GetSelectedHeroEntity( data.PlayerID )
-  inv_manager:Use_Item(hero,slot)
+  inv_manager:Use_Item(hero,slot,data.item_bar)
 end
 
 function epic_boss_fight:Drop_Item(data)
@@ -277,9 +314,9 @@ function epic_boss_fight:Drop_Item(data)
 end
 
 function epic_boss_fight:Unequip_Item(data)
-  local slot = tonumber( data.Slot )
   local hero = PlayerResource:GetSelectedHeroEntity( data.PlayerID )
-  inv_manager:Unequip(hero,slot)
+
+  inv_manager:Unequip(hero,data.Slot)
 end
 
 function epic_boss_fight:ebf_upgrade(com_name,stat)
@@ -351,11 +388,12 @@ end
 function epic_boss_fight:update_net_table(hero)
   local key = "player_"..hero:GetPlayerID()
   
-  local current_XP = hero:GetCurrentXP()-XP_PER_LEVEL_TABLE[hero:GetLevel()-1]
-
-  if hero.equipement.weapon ~= nil then  
-    CustomNetTables:SetTableValue( "info",key, {Name = hero:GetUnitName(),inshop = hero.Isinshop,LVL = hero:GetLevel() ,WName = hero.equipement.weapon.Name, WLVL = hero.equipement.weapon.level ,HP = hero:GetHealth(),MAXHP = hero:GetMaxHealth(),MP = hero:GetMana(),MAXMP = hero:GetMaxMana(),HXP =current_XP,MAXHXP = REAL_XP_TABLE[hero:GetLevel()],WXP = hero.equipement.weapon.XP,MAXWXP = hero.equipement.weapon.Next_Level_XP  } )
-  else
-    CustomNetTables:SetTableValue( "info",key, {Name = hero:GetUnitName(),inshop = hero.Isinshop,LVL = hero:GetLevel() ,WName = "Fist", WLVL = 0 ,HP = hero:GetHealth(),MAXHP = hero:GetMaxHealth(),MP = hero:GetMana(),MAXMP = hero:GetMaxMana(),HXP = current_XP,MAXHXP = REAL_XP_TABLE[hero:GetLevel()],WXP = 0,MAXWXP = 0  } )
+  local current_XP = hero.XP
+  if hero.equipement~=nil then
+    if hero.equipement.weapon ~= nil then  
+      CustomNetTables:SetTableValue( "info",key, {CD = hero.CD,Name = hero:GetUnitName(),inshop = hero.Isinshop,LVL = hero.Level ,WName = hero.equipement.weapon.Name, WLVL = hero.equipement.weapon.level ,HP = hero:GetHealth(),MAXHP = hero:GetMaxHealth(),MP = hero:GetMana(),MAXMP = hero:GetMaxMana(),HXP =current_XP,MAXHXP = REAL_XP_TABLE[hero.Level],WXP = hero.equipement.weapon.XP,MAXWXP = hero.equipement.weapon.Next_Level_XP  } )
+    else
+      CustomNetTables:SetTableValue( "info",key, {CD = hero.CD,Name = hero:GetUnitName(),inshop = hero.Isinshop,LVL = hero.Level ,WName = "Fist", WLVL = 0 ,HP = hero:GetHealth(),MAXHP = hero:GetMaxHealth(),MP = hero:GetMana(),MAXMP = hero:GetMaxMana(),HXP = current_XP,MAXHXP = REAL_XP_TABLE[hero.Level],WXP = 0,MAXWXP = 0  } )
+    end
   end
 end

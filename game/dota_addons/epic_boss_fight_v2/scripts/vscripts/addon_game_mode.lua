@@ -2,9 +2,11 @@
 
 require('internal/util')
 require("inventory_manager")
+require("skill_manager")
 require('libraries/notifications')
 require('storageapi/storage')
 require("selecthero")
+require("ebf_boss_manager")
 require('gamemode')
 require('save')
 

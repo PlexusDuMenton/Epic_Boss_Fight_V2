@@ -57,7 +57,8 @@ function HeroSelection:load_hero(table,PID)
 	local hero = PlayerResource:ReplaceHeroWith( PID, Hero_Name, 0, 0 )
 	hero.inventory = table.inventory
 	hero.equipement = table.equipement
-	hero:AddExperience(table.XP,0, false,false) 
+	hero.XP = table.XP
+	hero.Level = table.Level
 	PlayerResource:SetGold(PID, table.gold, true)
 	hero.stats_points = table.stats_points
 end

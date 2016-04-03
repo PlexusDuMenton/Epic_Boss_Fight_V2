@@ -13,7 +13,7 @@
 
 
     "ArmorPhysical"       "0"                 // Physical protection.
-    "MagicalResistance"       "0"                 // Magical protection (percentage).
+    "MagicalResistance"       "5"                 // Magical protection (percentage).
 
     "AttackDamageMin"     "1"                   // Damage range min.
     "AttackDamageMax"     "3"                   // Damage range max.

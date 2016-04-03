@@ -27,6 +27,7 @@ end
 
 function inv_manager:save_inventory(hero)
     local inventory = {}
+    local equipement = hero.equipement
     if PlayerResource:HasCustomGameTicketForPlayerID( hero:GetPlayerID() ) == true then local size = INVENTORY_PASS_SIZE else size = INVENTORY_SIZE end
     for i=1,size do
         inventory[i]=hero.inventory[i]
@@ -36,9 +37,110 @@ function inv_manager:save_inventory(hero)
             inventory[i].range_upgrade = nil
         end
     end
-    CustomNetTables:SetTableValue( "inventory","player_"..hero:GetPlayerID(), {inventory = inventory,size = size} )
-    DeepPrintTable(inventory)
+
+    if equipement.weapon ~= nil then 
+        equipement.weapon.as_upgrade = nil
+        equipement.weapon.damage_upgrade = nil
+        equipement.weapon.range_upgrade = nil
+    end
+    CustomNetTables:SetTableValue( "inventory","player_"..hero:GetPlayerID(), {inventory = inventory,size = size,equipement=hero.equipement,item_bar = hero.item_bar} )
 end
+
+function inv_manager:to_inv(hero,inv_slot)
+    local size = 0
+    local inventory = hero.inventory
+    if PlayerResource:HasCustomGameTicketForPlayerID( hero:GetPlayerID() ) == true then size = INVENTORY_PASS_SIZE else size = INVENTORY_SIZE end
+    local item_bar = hero.item_bar
+    local item = item_bar[inv_slot]
+    for i=1,size do
+            if item.stackable == true then
+                if inventory[i]~= nil and inventory[i].Name== item.name then
+                    print ("item was stacked with item bar")
+                    hero.inventory[i].ammount = inventory[i].ammount + item.ammount
+                    hero.item_bar[inv_slot] = nil
+                    inv_manager:sort( hero )
+                    inv_manager:save_inventory(hero)
+                    return
+                elseif i==size and #inventory<size+1 then 
+                    print ("item added to inventory")
+                    table.insert(hero.inventory,item)
+                    hero.item_bar[inv_slot] = nil
+                    inv_manager:sort( hero )
+                    inv_manager:save_inventory(hero)
+                    return
+                elseif i==size and #inventory>=size+1 then 
+                    print ("item bar is full")
+                    Notifications:Bottom(hero:GetPlayerOwner(), {text="#NOSLOT_BAR",duration=2,style={color="red"}})
+                    return
+                end
+            else
+                if i==size and #inventory<size+1 then 
+                    print ("item added to inventory")
+                    table.insert(hero.inventory,item)
+                    hero.item_bar[inv_slot] = nil
+                    inv_manager:sort( hero )
+                    inv_manager:save_inventory(hero)
+                    return
+                elseif i==size and #inventory>=size+1 then 
+                    print ("item bar is full")
+                    Notifications:Bottom(hero:GetPlayerOwner(), {text="#NOSLOT_BAR",duration=2,style={color="red"}})
+                    return
+                end
+            end
+    end
+end
+
+function inv_manager:to_item_bar(hero,inv_slot,bar_slot)
+    local size = 4
+    local item_bar = hero.item_bar
+    local item = hero.inventory[inv_slot]
+    if bar_slot ~= nil then
+        print (bar_slot)
+        DeepPrintTable (item)
+        hero.inventory[inv_slot] = item_bar[bar_slot]
+        hero.item_bar[bar_slot] = item
+        inv_manager:save_inventory(hero)
+    else
+        for i=1,size do
+                if item.stackable == true then
+                    if item_bar[i]~= nil and item_bar[i].Name== item.Name then
+                        print ("item was stacked with item bar")
+                        hero.item_bar[i].ammount = item_bar[i].ammount + item.ammount
+                        hero.inventory[inv_slot] = nil
+                        inv_manager:sort( hero )
+                        inv_manager:save_inventory(hero)
+                        return
+                    elseif i==size and #item_bar<size+1 then 
+                        print ("item added to item_bar")
+                        table.insert(hero.item_bar,item)
+                        hero.inventory[inv_slot] = nil
+                        inv_manager:sort( hero )
+                        inv_manager:save_inventory(hero)
+                        return
+                    elseif i==size and #item_bar>=size+1 then 
+                        print ("item bar is full")
+                        Notifications:Bottom(hero:GetPlayerOwner(), {text="#NOSLOT_BAR",duration=2,style={color="red"}})
+                        return
+                    end
+                else
+                    if i==size and #item_bar<size+1 then 
+                        print ("item added to item_bar")
+                        table.insert(hero.item_bar,item)
+                        hero.inventory[inv_slot] = nil
+                        inv_manager:sort( hero )
+                        inv_manager:save_inventory(hero)
+                        return
+                    elseif i==size and #item_bar>=size+1 then 
+                        print ("item bar is full")
+                        Notifications:Bottom(hero:GetPlayerOwner(), {text="#NOSLOT_BAR",duration=2,style={color="red"}})
+                        return
+                    end
+                end
+            
+        end
+    end
+end
+
 
 function inv_manager:Create_Item(Item)
     local item = Item
@@ -50,12 +152,13 @@ function inv_manager:Create_Item(Item)
     end
     item = item_info
     item.item_name = Item:GetName()
-    if item.stack == 1 then item.stack = true end
-    if item.stack == true then
+    if item.effect == nil then item.effect = "" end
+    if item.stackable == 1 then item.stackable = true end
+    if item.stackable == true then
         item.ammount = 1
     end
     if item.Equipement == 1 then item.Equipement = true end
-    if item.Equipement == 0 then item.Equipement = false else item.Equipement = true end
+    if item.Equipement == 0 then item.Equipement = false end
     if item.Equipement == true then
         if item.cat == "weapon" then
             item.durability = item.max_dur
@@ -126,7 +229,7 @@ function inv_manager:calc_stat_item(equipement,stats)
     --Armor/magic ress
     
     stats.armor = stats.armor + eq_slot.armor
-    stats.m_ress = stats.m_ress + eq_slot.m_ress
+    stats.m_ress = 100*(1-((1 - 0.01*stats.m_ress) * (1 - 0.01*eq_slot.m_ress)))
     stats.dodge = stats.dodge + eq_slot.dodge
     --casual HP/MP
     stats.hp = stats.hp + eq_slot.hp
@@ -201,9 +304,8 @@ function inv_manager:Calculate_stats(hero) -- call this when equipement is modif
     --to add : a function that add hero side stats (levels...) and apply them
     local key = "player_"..hero:GetPlayerID()
     inv_manager:save_inventory(hero)
-    CustomNetTables:SetTableValue( "stats",key, {equip_stats = hero.equip_stats--[[,hero_stats = hero.hero_stats,stats = hero.stats]]} )
+    CustomNetTables:SetTableValue( "stats",key, {equip_stats = hero.equip_stats,hero_stats = hero.hero_stats,Name = hero:GetUnitName(),LVL = hero.Level,stats_points = hero.stats_points } )
     CreateItem("item_void", hero, hero) 
-    DeepPrintTable(CustomNetTables:GetTableValue("stats",key))
     
 end
 
@@ -232,7 +334,12 @@ end
 function inv_manager:Create_Inventory(hero) -- call this when the hero entity is created
     hero.inventory = {}
     hero.equipement = {}
+    hero.item_bar = {}
+    hero.Level = 1
     hero.stats_points = 0
+    hero.XP = 0
+    hero.CD = 0
+    inv_manager:Calculate_stats(hero)
     hero.hero_stats = inv_manager:Init_Hero_Stat()
     inv_manager:Calculate_stats(hero)
     inv_manager:save_inventory(hero)
@@ -254,16 +361,22 @@ function inv_manager:Add_Item(hero,item) --will be called when a item is purshas
                 if inventory[i]~= nil and inventory[i].Name== item_name then
                     print ("item is stacked")
                     hero.inventory[i].ammount = inventory[i].ammount + item.ammount
+                    inv_manager:save_inventory(hero)
+                    return
                 elseif i==size and #inventory<size+1 then 
                     print ("item_added to inventory")
                     inv_manager:sort( hero )
                     table.insert(hero.inventory,item)
                     hero:RemoveItem(item)
+                    inv_manager:save_inventory(hero)
+                    return
                 elseif i==size and #inventory>=size+1 then 
                     print ("inventory is full")
                     inv_manager:drop(item,hero:GetOrigin())
                     hero:RemoveItem(item)
                     Notifications:Bottom(hero:GetPlayerOwner(), {text="#NOSLOT",duration=2,style={color="red"}})
+                    inv_manager:save_inventory(hero)
+                    return
                 end
             end
         else
@@ -272,14 +385,18 @@ function inv_manager:Add_Item(hero,item) --will be called when a item is purshas
                 inv_manager:drop(item,hero:GetOrigin())
                 hero:RemoveItem(item)
                 Notifications:Bottom(hero:GetPlayerOwner(), {text="#NOSLOT",duration=2,style={color="red"}})
+                inv_manager:save_inventory(hero)
+                    return
             else
                 print ("item_added to inventory")
                 table.insert(hero.inventory,item)
                 inv_manager:sort( hero )
                 hero:RemoveItem(item)
+                inv_manager:save_inventory(hero)
+                    return
             end
         end
-        inv_manager:save_inventory(hero)
+        
     else
         if item == nil then print ("item is nil")
         else print ("error , item not item (LOGIC BITCH)")
@@ -375,12 +492,17 @@ function inv_manager:Unequip(hero,slot_name) --also equip item
         print ("Your inventory is full")
     end
 end
-function inv_manager:Use_Item(hero,inv_slot) --also equip item
-    local inventory = hero.inventory
-     if PlayerResource:HasCustomGameTicketForPlayerID( hero:GetPlayerID() ) == true then local size = INVENTORY_PASS_SIZE else size = INVENTORY_SIZE end
+function inv_manager:Use_Item(hero,inv_slot,IB) --also equip item
+    if PlayerResource:HasCustomGameTicketForPlayerID( hero:GetPlayerID() ) == true then local size = INVENTORY_PASS_SIZE else size = INVENTORY_SIZE end
     if inv_slot == nil then return end
+    local item = nil
+    if IB == 1 then
+        print ("ok")
+        item = hero.item_bar[inv_slot]
+    else
+        item = hero.inventory[inv_slot] 
+    end
     if inv_slot > 0 and inv_slot <= size then
-        local item = inventory[inv_slot]
         if item ~= nil then
             print ("equip/use item")
             print (item.Equipement)
@@ -443,13 +565,26 @@ function inv_manager:Use_Item(hero,inv_slot) --also equip item
                     end
                 end
                 inv_manager:sort( hero )
-            elseif item.consommable == true then
+            elseif item.cat == "consumable" then
+                print ('item is consumable')
+                if hero.CD > 0 then
+                    print (hero.CD)
+                    return
+                end
                 if item.ammount > 1 then
-                    item:use(hero)
-                    hero.inventory[inv_slot].ammount = item.ammount - 1
+                    inv_manager:Use_consumable(hero,item)
+                    if IB == 1 then
+                        hero.item_bar[inv_slot].ammount = item.ammount - 1
+                    else
+                        hero.inventory[inv_slot].ammount = item.ammount - 1
+                    end
                 else
-                    item:use(hero)
-                    hero.inventory[inv_slot] = nil
+                    inv_manager:Use_consumable(hero,item)
+                    if IB == 1 then
+                        hero.item_bar[inv_slot] = nil
+                    else
+                        hero.inventory[inv_slot] = nil
+                    end
                     inv_manager:sort( hero )
                 end
             end
@@ -461,6 +596,33 @@ function inv_manager:Use_Item(hero,inv_slot) --also equip item
     else
         print ("Slot number is invalid or inventory don't exist")
     end
+end
+
+function inv_manager:Use_consumable(hero,item)   
+    print ("TEST")
+    local time = 0
+    hero.CD = 15
+    Timers:CreateTimer(0.25,function()
+            if hero.CD > 0 then
+                hero.CD = hero.CD -0.25
+                return 0.25
+            end
+        end)
+    if item.duration == 0 or item.duration == nil then item.duration = 0.2 end
+    Timers:CreateTimer(0.2,function()
+        if time <= item.duration then
+            time = time + 0.2
+            if item.heal ~= nil then
+                hero:SetHealth((hero:GetHealth() + (item.heal/(5*item.duration)) ))
+            end
+            if item.heal_mana ~= nil then
+                hero:SetMana((hero:GetMana() + (item.heal_mana/(5*item.duration)) ))
+            end
+            return 0.2
+        else
+
+        end
+    end)
 end
 
   --TBD : SUPPORT ITEM STACK
@@ -544,6 +706,7 @@ function inv_manager:upgrade_weapon(hero,stat) --will be called when a weapon is
             else
                 print ("invalid upgrade name , valud one are :'damage','attack_speed','range','durability'")
             end
+            inv_manager:save_inventory(hero)
         else
             print ("No points to upgrade a stat")
         end
@@ -558,6 +721,8 @@ function inv_manager:weapon_checklevelup(hero)
         hero.equipement.weapon.attack_speed = hero.equipement.weapon.attack_speed + hero.equipement.weapon.as_grow
         hero.equipement.weapon.range = hero.equipement.weapon.range + hero.equipement.weapon.range_grow
         hero.equipement.weapon.Next_Level_XP = inv_manager.XP_Table[hero.equipement.weapon.level]
+        inv_manager:Calculate_stats(hero)
+        inv_manager:save_inventory(hero)
         print ("Weapon Level up!")
         --up stats
     end

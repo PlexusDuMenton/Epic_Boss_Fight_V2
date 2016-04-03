@@ -12,16 +12,31 @@
 			<Panel id="Items">
 				
 			</Panel>
-			<Panel id="Menu" hittest="false">
+		</Panel>
+		<Panel id = "hero_panel" class="HeroPanel">
+			<Button class="Close" onactivate='close_hero()'/>
+			<Panel id="equipement">
 				
 			</Panel>
 		</Panel>
+		
+		<Panel id = "item_main_bar" class="item_bar_main">
+			<Panel id="item_bar" class="item_bar">
+				
+			</Panel>
+		</Panel>
+		
 		<Panel id="Info" hittest="false">
 				
 		</Panel>
 		<Button id="inventory_button" onactivate='Open_Inventory()' class ="inv_but">
 			<Label hittest="false" id="inv_but_label" class="Inventory_Label_v_small"  text="Inventory"/>
 		</Button>
+		<Button id="hero_button" onactivate='Open_Hero_Panel()' class ="hero_but">
+			<Label hittest="false" id="hero_but_label" class="Inventory_Label_v_small"  text="Hero"/>
+		</Button>
 
+		<Panel id="Menu" hittest="false"/>
+		<Panel id="Menu_h" hittest="false"/>
 	</Panel>
 </root>

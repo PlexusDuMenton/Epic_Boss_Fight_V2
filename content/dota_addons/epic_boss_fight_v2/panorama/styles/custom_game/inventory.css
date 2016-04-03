@@ -60,9 +60,28 @@
 	color: #FFFFFF;
 }
 
+.Inventory_CD
+{
+  font-size: 20px;
+  margin-top: 40px;
+  	margin-left: 10px;
+
+    font-weight: bold;
+	color: #FFFFFF;
+}
+
 .Inventory_Label_small
 {
 	text-align: center;
+	text-overflow: clip;
+	font-weight: thin;
+  font-size: 20px;
+	margin-left: 10px;
+	color: #FFFFFF;
+}
+.Inventory_Label_small2
+{
+	text-align: left;
 	text-overflow: clip;
 	font-weight: thin;
   font-size: 20px;
@@ -90,6 +109,37 @@
 	color: #FFFFFF;
 }
 
+.item_bar
+{
+background-image: url("file://{images}/custom_game/inventory/item_bar_panel.png");
+  height: 75px;
+  width: 364px;
+}
+.item_bar_main
+{
+  margin-left: 850px;
+  margin-top: 980px;
+  height: 100px;
+  width: 400px;
+}
+
+.Keys_image
+{
+background-image: url("file://{images}/custom_game/inventory/Item_bar_keys.png");
+  height: 75px;
+  margin-top: 25px;
+  width: 364px;
+}
+
+.HeroPanel
+{
+background-image: url("file://{images}/custom_game/inventory/hero_panel_base.png");
+  margin-left: 1150px;
+  margin-top: 150px;
+  height: 751px;
+  width: 678px;
+}
+
 .InventoryPanel
 {
 background-image: url("file://{images}/custom_game/inventory/inventory_Panel.png");
@@ -103,7 +153,7 @@ background-image: url("file://{images}/custom_game/inventory/inventory_Panel.png
   background-image: url("file://{images}/custom_game/inventory/open_inv.png");
   horizontal-align: left;
     vertical-align: bottom;
-	margin-left: 310px;
+	margin-left: 240px;
 	margin-bottom: 170px;
   height: 35px;
  width: 90px;
@@ -112,6 +162,22 @@ background-image: url("file://{images}/custom_game/inventory/inventory_Panel.png
 {
   background-image: url("file://{images}/custom_game/inventory/open_inv_hover.png");
 }
+
+.hero_but
+{
+  background-image: url("file://{images}/custom_game/inventory/open_inv.png");
+  horizontal-align: left;
+    vertical-align: bottom;
+	margin-left: 240px;
+	margin-bottom: 130px;
+  height: 35px;
+ width: 90px;
+}
+.hero_but:hover
+{
+  background-image: url("file://{images}/custom_game/inventory/open_inv_hover.png");
+}
+
 #Inventory_BG
 {
   margin-top: 100px;
@@ -122,7 +188,7 @@ background-image: url("file://{images}/custom_game/inventory/inventory_Panel.png
 {
  background-image: url("file://{images}/custom_game/inventory/Info_BG.png");
   height: 400px;
- width: 274px;
+ width: 278px;
 }
 
 
@@ -136,16 +202,20 @@ background-image: url("file://{images}/custom_game/inventory/inventory_Panel.png
 
 .menu_Items
 {
-height: 256px;
- width: 640px;
+width: 100%;
+    height: 100%;
+}
+
+#Menu_h
+{
+  width: 100%;
+    height: 100%;
 }
 
 #Menu
 {
-height: 256px;
- width: 640px;
-  margin-top: 100px;
-  margin-left: 5px;
+width: 100%;
+    height: 100%;
 }
 #Items
 {

@@ -16,8 +16,8 @@ function save(hero,slot,automatic)
 						data_table["2"] = { hero_name = hero:GetClassname(),
 									inventory = hero.inventory,
 									equipement = hero.equipement,
-									level = hero:GetLevel(),
-									XP = hero:GetCurrentXP(),
+									Level = hero.Level,
+									XP = hero.XP,
 									stats_points = hero.stats_points,
 									gold = hero:GetGold() 
 								}
@@ -26,8 +26,8 @@ function save(hero,slot,automatic)
 						data_table["3"] = { hero_name = hero:GetClassname(),
 								inventory = hero.inventory,
 								equipement = hero.equipement,
-								level = hero:GetLevel(),
-								XP = hero:GetCurrentXP(),
+								Level = hero.Level,
+								XP = hero.XP,
 								stats_points = hero.stats_points,
 								gold = hero:GetGold() 
 							}
@@ -36,8 +36,8 @@ function save(hero,slot,automatic)
 						data_table["1"] = { hero_name = hero:GetClassname(),
 								inventory = hero.inventory,
 								equipement = hero.equipement,
-								level = hero:GetLevel(),
-								XP = hero:GetCurrentXP(),
+								level = hero.Level,
+								XP = hero.XP,
 								stats_points = hero.stats_points,
 								gold = hero:GetGold() 
 							}

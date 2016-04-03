@@ -5,6 +5,8 @@
   <Panel class="AddonLoadingRoot">
     <Panel id="CustomBg" >
       <Image id="gamemode" class="SeqImg" src="file://{images}/custom_game/loading_screen/gamemode.jpg" />
+	  <!-- <Image id="gamemode1" class="SeqImg" src="file://{images}/custom_game/itemhud/item_red_potion.png" /> -->
+	  
     </Panel>
 	<Panel id="Title" >
       <Image id="titlea" class="SeqImg" src="file://{images}/custom_game/loading_screen/Boss_Rising.png" />
