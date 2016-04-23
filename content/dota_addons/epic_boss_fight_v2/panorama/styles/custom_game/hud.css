@@ -4,6 +4,27 @@
     height: 100%;
     overflow: clip;
 }
+#PortaitImage_cut {
+	vertical-align: center;
+	vertical-align: center;
+
+	width: 198px;
+  height: 195px;
+  
+  margin-left: 26px;
+  margin-top: -1px;
+  border-radius: 50%;
+
+
+}
+
+#PortaitImage {
+	vertical-align: center;
+	vertical-align: center;
+
+
+}
+
 #Bar_BG
 {
 	horizontal-align: left;

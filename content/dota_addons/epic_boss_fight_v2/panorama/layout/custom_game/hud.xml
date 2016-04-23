@@ -7,9 +7,6 @@
 	</styles>
 	<Panel class="bar_panel" hittest="false">
 		<Panel id="bar_general" hittest="false">
-			<Panel id="hero_icon" hittest="false">
-				<Image hittest="false" id="icon" src="file://{images}/custom_game/HUD/hero_icon/unknow.png"/>
-			</Panel>
 			<Panel id="Bar_BG" hittest="false">
 				<Image hittest="false" id="bar_bg" src="file://{images}/custom_game/HUD/background_info.png"/>
 			</Panel>
@@ -26,6 +23,11 @@
 			<Panel id="wxp_bar_parent" hittest="false">
 				<Image hittest="false" id="wxp_bar" src="file://{images}/custom_game/HUD/WXP_bar.png"/>
 				<Image hittest="false" id="no_weapon" src="file://{images}/custom_game/HUD/no_weapon.png"/>
+			</Panel>
+			<Panel id="hero_icon" hittest="false">
+				<Panel id="PortaitImage_cut" hittest="true" onactivate='center_camera_on_hero()' >
+					<DOTAHeroMovie id="PortaitImage"/>
+				</Panel>
 			</Panel>
 			<Panel id="label_bar_parent" hittest="false">
 				<Label hittest="false" id="hp_bar_current" text="0.00"/>

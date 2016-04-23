@@ -86,15 +86,15 @@ function epic_boss_fight:OnGameInProgress()
 end
 
 function epic_boss_fight:Check_Hero_lvlup(hero)
-  while hero.XP >= REAL_XP_TABLE[hero.Level] do
+  while hero.XP >= REAL_XP_TABLE[hero.Level] and hero.Level < MAX_LEVEL do
     hero.XP = hero.XP-REAL_XP_TABLE[hero.Level]
-    hero.Level = hero.Level + 1
     epic_boss_fight:OnHeroLevelUp(hero)
   end
 end
 
 function epic_boss_fight:OnHeroLevelUp(hero)
   print ("LEVEL UP !")
+  hero.Level = hero.Level + 1
   local level = hero.Level
   local Primary = hero:GetPrimaryAttribute()
   local lvlup_effect = ParticleManager:CreateParticle("particles/generic_hero_status/hero_levelup.vpcf", PATTACH_ABSORIGIN  , hero)
@@ -106,29 +106,29 @@ function epic_boss_fight:OnHeroLevelUp(hero)
   hero.stats_points = hero.stats_points + 1
   if Primary == 0 then
       hero.hero_stats.hp = hero.hero_stats.hp + math.ceil(100*(level^0.75)*5)/100
-      hero.hero_stats.str = hero.hero_stats.str + math.ceil(100*(level^0.75))/100
-      hero.hero_stats.agi = hero.hero_stats.agi +  math.ceil(100*(0.2*level^0.05))/100
+      hero.hero_stats.str = hero.hero_stats.str + math.ceil(100*(level^0.4))/100
+      hero.hero_stats.agi = hero.hero_stats.agi +  math.ceil(100*(0.2*level^0.025))/100
       hero.hero_stats.hp_regen = hero.hero_stats.hp_regen + math.ceil(100*(level^0.2)*0.15)/100
   else
       hero.hero_stats.hp = hero.hero_stats.hp + math.ceil(100*(level^0.7)*3.5)/100
-      hero.hero_stats.str = hero.hero_stats.str + math.ceil(100*(level^0.5))/100
+      hero.hero_stats.str = hero.hero_stats.str + math.ceil(100*(level^0.3))/100
       hero.hero_stats.hp_regen = hero.hero_stats.hp_regen + math.ceil(100*(level^0.1)*0.10)/100
   end
   if Primary == 2 then
       hero.hero_stats.mp = hero.hero_stats.mp + math.ceil(100*(level^0.75)*5)/100
-      hero.hero_stats.int = hero.hero_stats.int + math.ceil(100*(level^0.75))/100
+      hero.hero_stats.int = hero.hero_stats.int + math.ceil(100*(level^0.4))/100
       hero.hero_stats.mp_regen = hero.hero_stats.mp_regen + math.ceil(100*(level^0.25)*0.03)/100
   else
       hero.hero_stats.mp = hero.hero_stats.mp + math.ceil(100*(level^0.7)*2)/100
-      hero.hero_stats.int = hero.hero_stats.int + math.ceil(100*(level^0.5))/100
+      hero.hero_stats.int = hero.hero_stats.int + math.ceil(100*(level^0.3))/100
       hero.hero_stats.mp_regen = hero.hero_stats.mp_regen + math.ceil(100*(level^0.15)*0.15)/100
   end
   if Primary == 1 then
-      hero.hero_stats.armor = hero.hero_stats.armor + math.ceil(100*(level^0.5))/100
-      hero.hero_stats.agi = hero.hero_stats.agi + math.ceil(100*(level^0.75))/100
+      hero.hero_stats.armor = hero.hero_stats.armor + math.ceil(100*(level^0.2))/100
+      hero.hero_stats.agi = hero.hero_stats.agi + math.ceil(100*(level^0.4))/100
   else
-      hero.hero_stats.armor = hero.hero_stats.armor + math.ceil(100*(level^0.25))/100
-      hero.hero_stats.agi = hero.hero_stats.agi + math.ceil(100*(level^0.5))/100
+      hero.hero_stats.armor = hero.hero_stats.armor + math.ceil(100*(level^0.1))/100
+      hero.hero_stats.agi = hero.hero_stats.agi + math.ceil(100*(level^0.3))/100
   end
   inv_manager:Calculate_stats(hero)
 
@@ -138,6 +138,12 @@ end
 function epic_boss_fight:InitGameMode()
   DebugPrint('[BAREBONES] Starting to load Barebones gamemode...')
   print ("TEST")
+  print(GameRules:GetMatchID() )
+
+  --math.randomseed( GameRules:GetMatchID() )
+  --math.random(); math.random(); math.random()
+
+
   GameRules.items = LoadKeyValues("scripts/kv/items.kv")
   print (GameRules.items)
   GameRules.difficulty = 1
@@ -190,6 +196,13 @@ function epic_boss_fight:InitGameMode()
   CustomGameEventManager:RegisterListener( "to_item_bar", Dynamic_Wrap(epic_boss_fight, 'inv_to_bar'))
   CustomGameEventManager:RegisterListener( "to_inventory", Dynamic_Wrap(epic_boss_fight, 'bar_to_inv'))
 
+  CustomGameEventManager:RegisterListener( "skill_bar", Dynamic_Wrap(epic_boss_fight, 'open_skill_bar'))
+
+  CustomGameEventManager:RegisterListener( "Upgrade_skill", Dynamic_Wrap(epic_boss_fight, 'Upgrade_skill'))
+  CustomGameEventManager:RegisterListener( "Unequip_skill", Dynamic_Wrap(epic_boss_fight, 'unset_skill'))
+  CustomGameEventManager:RegisterListener( "add_skill", Dynamic_Wrap(epic_boss_fight, 'add_skill'))
+
+
   DebugPrint('[BAREBONES] Done loading Barebones gamemode!\n\n')
 
   Convars:RegisterCommand("ebf_give_item", function(...) return self:ebf_give_item( ... ) end, "send an item directly to inventory", FCVAR_CHEAT )
@@ -198,10 +211,95 @@ function epic_boss_fight:InitGameMode()
   Convars:RegisterCommand("ebf_use_item", function(...) return self:ebf_use_item( ... ) end, "Equip/Use an item", FCVAR_CHEAT )
   Convars:RegisterCommand("ebf_upgrade", function(...) return self:ebf_upgrade( ... ) end, "Upgrade your equiped weapon", FCVAR_CHEAT )
   Convars:RegisterCommand("ebf_unequip", function(...) return self:ebf_unequip( ... ) end, "Unequip an item", FCVAR_CHEAT )
+
+  Convars:RegisterCommand("ebf_up_skill", function(...) return self:up_skill( ... ) end, "upgrade a skill", FCVAR_CHEAT )
+  Convars:RegisterCommand("ebf_equip_skill", function(...) return self:equip_skill( ... ) end, "equip a skill", FCVAR_CHEAT )
+  Convars:RegisterCommand("ebf_unequip_skill", function(...) return self:unequip_skill( ... ) end, "unequip a skill", FCVAR_CHEAT )
+
+  Convars:RegisterCommand("ebf_Level_up", function(...) return self:Level_UP( ... ) end, "Level up", FCVAR_CHEAT )
+
+  Convars:RegisterCommand("ebf_skills", function(...) return self:ebf_skills( ... ) end, "Display Skills", FCVAR_CHEAT )
+  Convars:RegisterCommand("ebf_skill_list", function(...) return self:ebf_skill_list( ... ) end, "Display Skills", FCVAR_CHEAT )
   Convars:RegisterCommand("ebf_inventory", function(...) return self:print_inv_info( ... ) end, "display inventory slots", FCVAR_CHEAT )
 
-  Convars:RegisterCommand("ebf_save", function(...) return self:save( ... ) end, "save your current character to a slot", FCVAR_CHEAT )
+  Convars:RegisterCommand("ebf_info", function(...) return self:print_info( ... ) end, "display inventory slots", FCVAR_CHEAT )
+
+  Convars:RegisterCommand("ebf_save", function(...) return self:save( ... ) end, "save your current character to a slot", 0)
 end
+
+
+function epic_boss_fight:up_skill (com_name,ID)
+  local hero = Convars:GetCommandClient():GetAssignedHero()
+  hero.stats_points = hero.stats_points + 1
+  ID = tonumber(ID)
+  skill_manager:upgrade(hero,ID)
+end
+function epic_boss_fight:equip_skill (com_name,ID,slot)
+  local hero = Convars:GetCommandClient():GetAssignedHero()
+  ID = tonumber(ID)
+  if slot ~= nil then slot = tonumber(slot) end
+  skill_manager:equip_skill(hero,ID,slot)
+end
+
+function epic_boss_fight:unequip_skill (com_name,slot)
+  local hero = Convars:GetCommandClient():GetAssignedHero()
+  slot = tonumber(slot)
+  skill_manager:unequip_skill (hero,slot)
+end
+
+function epic_boss_fight:Level_UP (com_name,level)
+  if level == nil then level = 1 end
+  local hero = Convars:GetCommandClient():GetAssignedHero()
+  for i=1,level do
+    print (hero.Level,MAX_LEVEL)
+    if hero.Level < MAX_LEVEL then
+      epic_boss_fight:OnHeroLevelUp(hero)
+    else 
+      return
+    end
+  end
+end
+
+
+function epic_boss_fight:ebf_skills()
+  local hero = Convars:GetCommandClient():GetAssignedHero()
+  DeepPrintTable(hero.skill_tree)
+  DeepPrintTable(hero.skill_bonus)
+end
+
+function epic_boss_fight:ebf_skill_list()
+  local hero = Convars:GetCommandClient():GetAssignedHero()
+  DeepPrintTable(hero.active_list)
+end
+
+function epic_boss_fight:open_skill_bar (data)
+  local player = PlayerResource:GetPlayer(data.PlayerID) 
+  CustomGameEventManager:Send_ServerToPlayer(player,"open_skill_bar", {}) 
+end
+
+
+
+function epic_boss_fight:add_skill (data)
+  local ID = tonumber( data.skillid )
+  local hero = PlayerResource:GetSelectedHeroEntity( data.PlayerID )
+  local slot = tonumber( data.slot )
+  skill_manager:equip_skill(hero,ID,slot)
+end
+
+function epic_boss_fight:unset_skill (data)
+  local hero = PlayerResource:GetSelectedHeroEntity( data.PlayerID )
+  local slot = tonumber( data.slot )
+  skill_manager:unequip_skill (hero,slot)
+end
+
+function epic_boss_fight:Upgrade_skill (data)
+  local skill_id = tonumber( data.skillid )
+  local hero = PlayerResource:GetSelectedHeroEntity( data.PlayerID )
+  skill_manager:upgrade(hero,skill_id)
+end
+
+
+
 
 function epic_boss_fight:inv_to_bar (data)
   local slot = tonumber( data.Slot )
@@ -218,13 +316,18 @@ end
 
 function epic_boss_fight:save(com_name,save_slot)
   local slot = save_slot
-  local hero = PlayerResource:GetSelectedHeroEntity( 0 )
+  local hero = Convars:GetCommandClient():GetAssignedHero()
   save(hero,slot,false)
+end
+
+function epic_boss_fight:print_info()
+  local hero = Convars:GetCommandClient():GetAssignedHero()
+  DeepPrintTable (hero)
 end
 
 
 function epic_boss_fight:print_inv_info()
-  local hero = PlayerResource:GetSelectedHeroEntity( 0 )
+  local hero = Convars:GetCommandClient():GetAssignedHero()
   for i=1,4 do
     print ("slot bar:" ,i)
     if hero.item_bar[i] ~= nil then
@@ -283,7 +386,7 @@ function epic_boss_fight:print_inv_info()
 end
 
 function epic_boss_fight:ebf_give_item(com_name,item_name)
-  local hero = PlayerResource:GetSelectedHeroEntity( 0 )
+  local hero = Convars:GetCommandClient():GetAssignedHero()
   Item = epic_boss_fight:_CreateItem(item_name,hero)
   for k,v in pairs(Item) do print(k,v) end
   inv_manager:Add_Item(hero,Item)
@@ -291,7 +394,7 @@ end
 
 function epic_boss_fight:ebf_use_item(com_name,slot_num)
   local slot = tonumber( slot_num )
-  local hero = PlayerResource:GetSelectedHeroEntity( 0 )
+  local hero = Convars:GetCommandClient():GetAssignedHero()
   inv_manager:Use_Item(hero,slot)
 end
 
@@ -320,25 +423,25 @@ function epic_boss_fight:Unequip_Item(data)
 end
 
 function epic_boss_fight:ebf_upgrade(com_name,stat)
-  local hero = PlayerResource:GetSelectedHeroEntity( 0 )
+  local hero = Convars:GetCommandClient():GetAssignedHero()
   inv_manager:upgrade_weapon(hero,stat)
 end
 
 function epic_boss_fight:ebf_unequip(com_name,slot_name)
   local slot = slot_name
-  local hero = PlayerResource:GetSelectedHeroEntity( 0 )
+  local hero = Convars:GetCommandClient():GetAssignedHero()
   inv_manager:Unequip(hero,slot)
 end
 
 function epic_boss_fight:ebf_drop_item(com_name,slot_num)
   local slot = tonumber( slot_num )
-  local hero = PlayerResource:GetSelectedHeroEntity( 0 )
+  local hero = Convars:GetCommandClient():GetAssignedHero()
   inv_manager:drop_Item(hero,slot)
 end
 
 function epic_boss_fight:ebf_sell_item(com_name,slot_num)
   local slot = tonumber( slot_num )
-  local hero = PlayerResource:GetSelectedHeroEntity( 0 )
+  local hero = Convars:GetCommandClient():GetAssignedHero()
   inv_manager:Sell_Item(hero,slot)
 end
 
@@ -397,3 +500,6 @@ function epic_boss_fight:update_net_table(hero)
     end
   end
 end
+
+
+

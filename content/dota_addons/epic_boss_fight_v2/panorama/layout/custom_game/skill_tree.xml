@@ -1,0 +1,25 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/custom_game/skill_tree.css" />
+	</styles>
+	<scripts>
+		<include src="file://{resources}/scripts/custom_game/skill_tree.js" />
+	</scripts>
+	<Panel class="Main" hittest="false">
+		<Panel id = "main_panel">
+			<Panel id = "skill_tree_main">
+				<Panel id = "skill_tree_panel" >
+			
+				</Panel>
+				<Panel id = "tooltip_panel" hittest = "false">
+			
+				</Panel>
+			</Panel>
+			<Panel id = "skill_info_main">
+				<Panel id = "skill_tree_info">
+
+				</Panel>
+			</Panel>
+		</Panel>
+	</Panel>
+</root>

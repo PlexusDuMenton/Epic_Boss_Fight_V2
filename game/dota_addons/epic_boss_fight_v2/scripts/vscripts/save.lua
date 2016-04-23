@@ -15,31 +15,40 @@ function save(hero,slot,automatic)
 						print ("slot 2")
 						data_table["2"] = { hero_name = hero:GetClassname(),
 									inventory = hero.inventory,
+									item_bar = hero.item_bar,
+									active_list = hero.active_list,
 									equipement = hero.equipement,
-									Level = hero.Level,
-									XP = hero.XP,
+									level = hero.Level,
+									xp = hero.XP,
 									stats_points = hero.stats_points,
-									gold = hero:GetGold() 
+									gold = hero:GetGold(),
+									skill_tree = hero.skill_tree
 								}
 					elseif slot == "3" then
 						print ("slot 3")
 						data_table["3"] = { hero_name = hero:GetClassname(),
-								inventory = hero.inventory,
-								equipement = hero.equipement,
-								Level = hero.Level,
-								XP = hero.XP,
-								stats_points = hero.stats_points,
-								gold = hero:GetGold() 
+									inventory = hero.inventory,
+									item_bar = hero.item_bar,
+									active_list = hero.active_list,
+									equipement = hero.equipement,
+									level = hero.Level,
+									xp = hero.XP,
+									stats_points = hero.stats_points,
+									gold = hero:GetGold(),
+									skill_tree = hero.skill_tree
 							}
 					else
 						print ("slot 1")
 						data_table["1"] = { hero_name = hero:GetClassname(),
-								inventory = hero.inventory,
-								equipement = hero.equipement,
-								level = hero.Level,
-								XP = hero.XP,
-								stats_points = hero.stats_points,
-								gold = hero:GetGold() 
+									inventory = hero.inventory,
+									item_bar = hero.item_bar,
+									active_list = hero.active_list,
+									equipement = hero.equipement,
+									level = hero.Level,
+									xp = hero.XP,
+									stats_points = hero.stats_points,
+									gold = hero:GetGold(),
+									skill_tree = hero.skill_tree
 							}
 					end
 					print("data table under")
@@ -48,13 +57,13 @@ function save(hero,slot,automatic)
 						if successBool then
 							--Notification
 							print("Save completed")
-							Notifications:Bottom(hero:GetPlayerOwner(), {text="Saved",duration=2,style={color="green",fontSize="65"}})
+							Notifications:Bottom(hero:GetPlayerID(), {text="Saved",duration=2,style={color="green",fontSize="65"}})
 						elseif successBool == false then
 							--Notification
 							if automatic == false then
-								Notifications:Bottom(hero:GetPlayerOwner(), {text="Save Failed, try again later",duration=2,style={color="red"}})
+								Notifications:Bottom(hero:GetPlayerID(), {text="Save Failed, try again later",duration=2,style={color="red"}})
 							else
-								Notifications:Bottom(hero:GetPlayerOwner(), {text="AutoSave Failed",duration=2,style={color="red"}})
+								Notifications:Bottom(hero:GetPlayerID(), {text="AutoSave Failed",duration=2,style={color="red"}})
 							end
 						end
 					end)
@@ -62,9 +71,9 @@ function save(hero,slot,automatic)
 					print ("step 1 failed")
 					--Notification
 					if automatic == false then
-						Notifications:Bottom(hero:GetPlayerOwner(), {text="Save Failed, try again later",duration=2,style={color="red"}})
+						Notifications:Bottom(hero:GetPlayerID(), {text="Save Failed, try again later",duration=3,style={color="red"}})
 					else
-						Notifications:Bottom(hero:GetPlayerOwner(), {text="AutoSave Failed",duration=2,style={color="red"}})
+						Notifications:Bottom(hero:GetPlayerID(), {text="AutoSave Failed",duration=2,style={color="red"}})
 					end
 				end
 			end)
@@ -100,7 +109,7 @@ local data_table = {}
     	end
     elseif successBool == false then
       --Notification
-      Notifications:Bottom(player:GetAssignedHero(), {text="acess to server failed, try again later",duration=2,style={color="red"}})
+      Notifications:Bottom(pID, {text="acess to server failed, try again later",duration=3,style={color="red"}})
     end
 
     HeroSelection:load_hero(data_table,pID)

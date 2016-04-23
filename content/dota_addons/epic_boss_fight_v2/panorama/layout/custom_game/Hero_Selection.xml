@@ -7,10 +7,10 @@
     </scripts>
 	<Panel class="character_selection" hittest="false">
 		<Image id="BG" src="file://{images}/custom_game/loading_screen/gamemode.jpg" hittest="true"/>
-		<Panel id="Title" >
+		<Panel id="Title" hittest="false" >
 		  <Image id="titlea" class="SeqImg" src="file://{images}/custom_game/loading_screen/Boss_Rising.png" hittest="false" />
 		</Panel>
-		<Panel id="made" >
+		<Panel id="made" hittest="false" >
 		  <Image id="madea" class="SeqImg" src="file://{images}/custom_game/loading_screen/frenchdeath.png" hittest="false" />
 		</Panel>
 		<Panel id="menu" hittest="false">

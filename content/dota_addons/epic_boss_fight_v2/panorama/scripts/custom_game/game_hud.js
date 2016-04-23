@@ -1,4 +1,7 @@
 var ID = Players.GetLocalPlayer()
+var high = 750
+GameUI.SetCameraPitchMin( 0 )
+GameUI.SetCameraPitchMax( 0 )
 
 GameUI.SetDefaultUIEnabled(DotaDefaultUIElement_t.DOTA_DEFAULT_UI_TOP_TIMEOFDAY, false);
 		GameUI.SetDefaultUIEnabled(DotaDefaultUIElement_t.DOTA_DEFAULT_UI_TOP_HEROES, false);
@@ -25,7 +28,7 @@ GameUI.SetDefaultUIEnabled(DotaDefaultUIElement_t.DOTA_DEFAULT_UI_TOP_TIMEOFDAY,
 		
 UpdateUI()
 UpdateUIrare()
-GameEvents.Subscribe( "Display_Bar", display_bar)
+
 function UpdateUIrare(){
 $.Schedule(1, UpdateUIrare);
 CustomNetTables.SubscribeNetTableListener
@@ -45,17 +48,60 @@ $.Schedule(0.025, UpdateUI);
 	update_bar(data)
 	}
 }
+GameEvents.Subscribe( "Display_Bar", display_bar)
 function display_bar()
 {
 $("#bar_general").visible = true;
+GameUI.SetCameraDistance( 1300 + high )
 }
+
+function MouseFilter( event, arg )
+{
+    if ( event == 'wheeled' ){
+		if ( arg > 0 ) {
+			if (high > 50){
+				high = high - 50
+			}
+		}
+		else{
+			if (high < 1500){
+				high = high + 50
+				}	
+		}
+		GameUI.SetCameraDistance( 1300 + high )
+        return true;
+		}
+	if (arg <5){
+		return false;
+	}
+	else {
+	return true 
+	}
+	
+}
+
+
+( function() {
+    GameUI.SetMouseCallback( MouseFilter );
+} )();  
+
+
 $("#bar_general").visible = false;
 $("#no_mana").style.clip = "rect( 0% ,0%, 100% ,0% )";
 $("#no_weapon").style.clip = "rect( 0% ,0%, 100% ,0% )";
 
+function center_camera_on_hero(){
+	GameUI.SetCameraTarget(Players.GetPlayerHeroEntityIndex( ID ))
+	$.Schedule(0.025,free_camera);
+	
+	function free_camera(){
+	GameUI.SetCameraTarget(-1)
+	}
+}
+
 function update_rare(arg){
 	$("#name").text = $.Localize("#"+arg.Name);
-	$("#icon").SetImage("file://{images}/custom_game/HUD/hero_icon/"+arg.Name+ ".png")
+	$("#PortaitImage").heroname = arg.Name
 }
 function update_bar(arg)
 	{

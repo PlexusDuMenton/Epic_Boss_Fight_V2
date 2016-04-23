@@ -27,23 +27,29 @@
             "Command"   "+item_1"
             "Name"      "Use Item 1"
         }
-        "03"
+        "04"
         {
             "Key"       "2"
             "Command"   "+item_2"
             "Name"      "Use Item 2"
         }
-        "03"
+        "05"
         {
             "Key"       "3"
             "Command"   "+item_3"
             "Name"      "Use Item 3"
         }
-        "03"
+        "06"
         {
             "Key"       "4"
             "Command"   "+item_4"
             "Name"      "Use Item 4"
+        }
+        "06"
+        {
+            "Key"       "J"
+            "Command"   "+Open_ST"
+            "Name"      "Open Skill Tree"
         }
     }
 }

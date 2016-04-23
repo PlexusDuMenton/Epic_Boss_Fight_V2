@@ -281,7 +281,7 @@
     }
   }
   
-  "barebones_empty1"
+  "empty1"
   {
     // General
     //-------------------------------------------------------------------------------------------------------------
@@ -292,7 +292,7 @@
     "AbilityTextureName"            "rubick_empty1"
   }
   
-  "barebones_empty2"
+  "empty2"
   {
     // General
     //-------------------------------------------------------------------------------------------------------------
@@ -303,7 +303,7 @@
     "AbilityTextureName"            "rubick_empty1"
   }
   
-  "barebones_empty3"
+  "empty3"
   {
     // General
     //-------------------------------------------------------------------------------------------------------------
@@ -314,7 +314,7 @@
     "AbilityTextureName"            "rubick_empty1"
   }
   
-  "barebones_empty4"
+  "empty4"
   {
     // General
     //-------------------------------------------------------------------------------------------------------------
@@ -325,23 +325,13 @@
     "AbilityTextureName"            "rubick_empty1"
   }
   
-  "barebones_empty5"
+  "empty5"
   {
     // General
     //-------------------------------------------------------------------------------------------------------------
     //"ID"              "5343"                            // unique ID number for this ability.  Do not change this once established or it will invalidate collected stats.
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_PASSIVE | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE"
-    "MaxLevel"            "0"
-    "BaseClass"           "ability_datadriven"
-    "AbilityTextureName"            "rubick_empty1"
-  }
-  
-  "barebones_empty6"
-  {
-    // General
-    //-------------------------------------------------------------------------------------------------------------
-    //"ID"              "5343"                            // unique ID number for this ability.  Do not change this once established or it will invalidate collected stats.
-    "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_PASSIVE | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE"
+    "AbilityType"         "DOTA_ABILITY_TYPE_ULTIMATE"
     "MaxLevel"            "0"
     "BaseClass"           "ability_datadriven"
     "AbilityTextureName"            "rubick_empty1"

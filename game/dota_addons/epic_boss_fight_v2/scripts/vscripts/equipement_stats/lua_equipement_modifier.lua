@@ -52,71 +52,93 @@ end
 
 function lua_equipement_modifier:GetModifierBaseAttack_BonusDamage()
 	if IsServer() then
-		return self:GetCaster().equip_stats.damage
+		if self:GetCaster().equip_stats ~= nil then
+			return self:GetCaster().equip_stats.damage
+		end
 	end
 end
 
 function lua_equipement_modifier:GetModifierAttackSpeedBonus_Constant()
 	if IsServer() then
+		if self:GetCaster().equip_stats ~= nil then
 		return self:GetCaster().equip_stats.attack_speed
+		end
 	end
 end
 
 function lua_equipement_modifier:GetModifierAttackRangeBonus()
 	if IsServer() then
+		if self:GetCaster().equip_stats ~= nil then
 		return self:GetCaster().equip_stats.range
+		end
 	end
 end
 
 function lua_equipement_modifier:GetModifierPhysicalArmorBonus()
 	if IsServer() then
+		if self:GetCaster().equip_stats ~= nil then
 		return self:GetCaster().equip_stats.armor
+		end
 	end
 end
 
 function lua_equipement_modifier:GetModifierMagicalResistanceBonus()
 	if IsServer() then
+		if self:GetCaster().equip_stats ~= nil then
 		return self:GetCaster().equip_stats.m_ress
+		end
 	end
 end
 
 function lua_equipement_modifier:GetModifierHealthBonus()
 	if IsServer() then
+		if self:GetCaster().equip_stats ~= nil then
 		return self:GetCaster().equip_stats.hp
+		end
 	end
 end
 
 function lua_equipement_modifier:GetModifierConstantHealthRegen()
 	if IsServer() then
+		if self:GetCaster().equip_stats ~= nil then
 		return self:GetCaster().equip_stats.hp_regen
+		end
 	end
 end
 
 function lua_equipement_modifier:GetModifierManaBonus()
 	if IsServer() then
+		if self:GetCaster().equip_stats ~= nil then
 		return self:GetCaster().equip_stats.mp
+		end
 	end
 end
 
 function lua_equipement_modifier:GetModifierConstantManaRegen()
 	if IsServer() then
+		if self:GetCaster().equip_stats ~= nil then
 		return self:GetCaster().equip_stats.mp_regen
+		end
 	end
 end
 
 function lua_equipement_modifier:GetModifierMoveSpeedBonus_Constant()
 	if IsServer() then
+		if self:GetCaster().equip_stats ~= nil then
 		return self:GetCaster().equip_stats.movespeed
+		end
 	end
 end
 
 function lua_equipement_modifier:GetModifierEvasion_Constant()
 	if IsServer() then
+		if self:GetCaster().equip_stats ~= nil then
 		return self:GetCaster().equip_stats.dodge
+		end
 	end
 end
 
---to do : Life On Hit (Hp regen on each hit) and Life Steal (% of damage) , Also effects
+--to do : effects (i'll make modifier)
 
 --[[
 everything which get modified by items

@@ -3,5 +3,7 @@
 		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/Hero_Selection.xml"/>
         <CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/hud.xml"/>
 		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/inventory.xml"/>
+		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/skill_bar.xml"/>
+		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/skill_tree.xml"/>
 	</Panel>
 </root>

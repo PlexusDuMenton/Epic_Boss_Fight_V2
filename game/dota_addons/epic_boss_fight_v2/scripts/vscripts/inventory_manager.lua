@@ -70,7 +70,7 @@ function inv_manager:to_inv(hero,inv_slot)
                     return
                 elseif i==size and #inventory>=size+1 then 
                     print ("item bar is full")
-                    Notifications:Bottom(hero:GetPlayerOwner(), {text="#NOSLOT_BAR",duration=2,style={color="red"}})
+                    Notifications:Bottom(hero:GetPlayerID(), {text="#NOSLOT_BAR",duration=2,style={color="red"}})
                     return
                 end
             else
@@ -83,7 +83,7 @@ function inv_manager:to_inv(hero,inv_slot)
                     return
                 elseif i==size and #inventory>=size+1 then 
                     print ("item bar is full")
-                    Notifications:Bottom(hero:GetPlayerOwner(), {text="#NOSLOT_BAR",duration=2,style={color="red"}})
+                    Notifications:Bottom(hero:GetPlayerID(), {text="#NOSLOT_BAR",duration=2,style={color="red"}})
                     return
                 end
             end
@@ -119,7 +119,7 @@ function inv_manager:to_item_bar(hero,inv_slot,bar_slot)
                         return
                     elseif i==size and #item_bar>=size+1 then 
                         print ("item bar is full")
-                        Notifications:Bottom(hero:GetPlayerOwner(), {text="#NOSLOT_BAR",duration=2,style={color="red"}})
+                        Notifications:Bottom(hero:GetPlayerID(), {text="#NOSLOT_BAR",duration=2,style={color="red"}})
                         return
                     end
                 else
@@ -132,7 +132,7 @@ function inv_manager:to_item_bar(hero,inv_slot,bar_slot)
                         return
                     elseif i==size and #item_bar>=size+1 then 
                         print ("item bar is full")
-                        Notifications:Bottom(hero:GetPlayerOwner(), {text="#NOSLOT_BAR",duration=2,style={color="red"}})
+                        Notifications:Bottom(hero:GetPlayerID(), {text="#NOSLOT_BAR",duration=2,style={color="red"}})
                         return
                     end
                 end
@@ -150,9 +150,9 @@ function inv_manager:Create_Item(Item)
         print ("WHAT THE FUCK ARE YOU DOING KID , THERE IS NO KV FILE FOR THIS ITEM ARE YOU AN FUCKING LAZYBOY ?")
         return Item
     end
-    item = item_info
+    item = copy(item_info)
     item.item_name = Item:GetName()
-    if item.effect == nil then item.effect = "" end
+    if item.effect == nil then item.effect = {} end
     if item.stackable == 1 then item.stackable = true end
     if item.stackable == true then
         item.ammount = 1
@@ -160,6 +160,18 @@ function inv_manager:Create_Item(Item)
     if item.Equipement == 1 then item.Equipement = true end
     if item.Equipement == 0 then item.Equipement = false end
     if item.Equipement == true then
+
+        if item.damage ~= nil then item.damage = math.ceil(item_info.damage + math.random(0,item_info.damage*0.2)) end
+        if item.range ~= nil then item.range = math.ceil(item_info.range + math.random(0,item_info.range*0.2)) end
+        if item.loh ~= nil then item.loh = math.ceil(item_info.loh + math.random(0,item_info.loh*0.2)) end
+        if item.attack_speed ~= nil then item.attack_speed = math.ceil(item_info.attack_speed + math.random(0,item_info.attack_speed*0.2)) end
+        if item.armor ~= nil then item.armor = math.ceil(item_info.armor + math.random(0,item_info.armor*0.2)) end
+        if item.hp ~= nil then item.hp = math.ceil(item_info.hp + math.random(0,item_info.hp*0.2)) end
+        if item.movespeed ~= nil then item.movespeed = math.ceil(item_info.movespeed + math.random(0,item_info.movespeed*0.2)) end
+        if item.hp_regen ~= nil then item.hp_regen = math.ceil(item_info.hp_regen + math.random(0,item_info.hp_regen*0.2)) end
+        if item.mp ~= nil then item.mp = math.ceil(item_info.mp + math.random(0,item_info.mp*0.2)) end
+        if item.mp_regen ~= nil then item.mp_regen = math.ceil(item_info.mp_regen + math.random(0,item_info.mp_regen*0.2)) end
+
         if item.cat == "weapon" then
             item.durability = item.max_dur
             item.level = 1
@@ -241,10 +253,61 @@ function inv_manager:calc_stat_item(equipement,stats)
     stats.ls = stats.ls + eq_slot.ls --Life Steal (a percent of your current damage)
     stats.loh = stats.loh + eq_slot.loh --Life On Hit , each time you hit , you regain this ammount of Health
     --Merge effect of all object
-    --stats.effect = tableMerge(stats.effect,eq_slot.effect)
-
+    stats.effect = tableMerge(stats.effect,eq_slot.effect)
 
     return stats
+end
+
+function have_effect (tab, val)
+    for index, value in pairs (tab) do
+        if value == val then
+            return true
+        end
+    end
+
+    return false
+end
+
+
+function inv_manager:update_effect (hero)
+    Timers:CreateTimer(1, function()
+        hero.total_effect = {}
+        local order = 0
+        --self:GetCaster().equip_stats.effect
+        --self:GetCaster().skill_bonus.effect
+        if hero.equip_stats.effect ~= nil then
+            for k,v in pairs(hero.equip_stats.effect) do
+                hero.total_effect[order] = v
+                order = order + 1
+            end
+        end
+        if hero.skill_bonus.effect ~= nil then
+            for k,v in pairs(hero.skill_bonus.effect) do
+                hero.total_effect[order] = v
+                order = order + 1
+            end
+        end 
+
+        for k,v in pairs(hero.total_effect) do
+            LinkLuaModifier( "lua_hero_effect_"..v, "effect/"..v..".lua", LUA_MODIFIER_MOTION_NONE )
+            if hero:HasModifier("lua_hero_effect_"..v) == false then
+                hero:AddNewModifier(hero, nil, "lua_hero_effect_"..v, nil)
+                Timers:CreateTimer(1, function()
+                    if have_effect(hero.total_effect,v) == false then
+                        hero:RemoveModifierByName("lua_hero_effect_"..v) 
+                    else
+                        return 1.0 -- Rerun this timer every 30 game-time seconds 
+                    end
+                end)
+            end
+        end
+
+        --then add modifier for each effect
+
+        return 1.0 -- Rerun this timer every 30 game-time seconds 
+    end)
+
+
 end
 
 function merge_item (item,item_info)
@@ -263,6 +326,7 @@ function tableMerge(t2, t1)
                 t1[k] = v
             end
         else
+            print (t1)
             t1[k] = v
         end
     end
@@ -304,7 +368,7 @@ function inv_manager:Calculate_stats(hero) -- call this when equipement is modif
     --to add : a function that add hero side stats (levels...) and apply them
     local key = "player_"..hero:GetPlayerID()
     inv_manager:save_inventory(hero)
-    CustomNetTables:SetTableValue( "stats",key, {equip_stats = hero.equip_stats,hero_stats = hero.hero_stats,Name = hero:GetUnitName(),LVL = hero.Level,stats_points = hero.stats_points } )
+    CustomNetTables:SetTableValue( "stats",key, {equip_stats = hero.equip_stats,skill_stats = hero.skill_bonus,hero_stats = hero.hero_stats,Name = hero:GetUnitName(),LVL = hero.Level,stats_points = hero.stats_points } )
     CreateItem("item_void", hero, hero) 
     
 end
@@ -339,6 +403,7 @@ function inv_manager:Create_Inventory(hero) -- call this when the hero entity is
     hero.stats_points = 0
     hero.XP = 0
     hero.CD = 0
+    inv_manager:update_effect (hero)
     inv_manager:Calculate_stats(hero)
     hero.hero_stats = inv_manager:Init_Hero_Stat()
     inv_manager:Calculate_stats(hero)
@@ -374,7 +439,7 @@ function inv_manager:Add_Item(hero,item) --will be called when a item is purshas
                     print ("inventory is full")
                     inv_manager:drop(item,hero:GetOrigin())
                     hero:RemoveItem(item)
-                    Notifications:Bottom(hero:GetPlayerOwner(), {text="#NOSLOT",duration=2,style={color="red"}})
+                    Notifications:Bottom(hero:GetPlayerID(), {text="#NOSLOT",duration=2,style={color="red"}})
                     inv_manager:save_inventory(hero)
                     return
                 end
@@ -384,7 +449,7 @@ function inv_manager:Add_Item(hero,item) --will be called when a item is purshas
                 print ("inventory is full")
                 inv_manager:drop(item,hero:GetOrigin())
                 hero:RemoveItem(item)
-                Notifications:Bottom(hero:GetPlayerOwner(), {text="#NOSLOT",duration=2,style={color="red"}})
+                Notifications:Bottom(hero:GetPlayerID(), {text="#NOSLOT",duration=2,style={color="red"}})
                 inv_manager:save_inventory(hero)
                     return
             else
@@ -432,12 +497,17 @@ function inv_manager:drop_Item(hero,inv_slot) --will be called when player want 
     if inv_slot > 0 and inv_slot <= size then
         local item = inventory[inv_slot]
         if item ~= nil then
-            inv_manager:drop(item,hero:GetOrigin())
+            if item.Equipement ~= true then
+                inv_manager:drop(item,hero:GetOrigin())
+            end
+            if item.ammount ~= nil and item.ammount > 1 then
+                hero.inventory[inv_slot].ammount = item.ammount - 1
+            end
             hero.inventory[inv_slot] = nil
             inv_manager:sort( hero )
             inv_manager:save_inventory(hero)
         else
-            Notifications:Bottom(hero:GetPlayerOwner(), {text="#EMPTY_SLOT",duration=2,style={color="red"}})
+            Notifications:Bottom(hero:GetPlayerID(), {text="#EMPTY_SLOT",duration=2,style={color="red"}})
         end
     else
         print ("Slot number is invalid or inventory don't exist")
@@ -496,6 +566,7 @@ function inv_manager:Use_Item(hero,inv_slot,IB) --also equip item
     if PlayerResource:HasCustomGameTicketForPlayerID( hero:GetPlayerID() ) == true then local size = INVENTORY_PASS_SIZE else size = INVENTORY_SIZE end
     if inv_slot == nil then return end
     local item = nil
+    if hero.CD == nil then hero.CD = 0 end
     if IB == 1 then
         print ("ok")
         item = hero.item_bar[inv_slot]
@@ -591,7 +662,7 @@ function inv_manager:Use_Item(hero,inv_slot,IB) --also equip item
             inv_manager:save_inventory(hero)
             inv_manager:Calculate_stats(hero)
         else
-            Notifications:Bottom(hero:GetPlayerOwner(), {text="#EMPTY_SLOT",duration=2,style={color="red"}})
+            Notifications:Bottom(hero:GetPlayerID(), {text="#EMPTY_SLOT",duration=2,style={color="red"}})
         end
     else
         print ("Slot number is invalid or inventory don't exist")
@@ -650,10 +721,10 @@ function inv_manager:Sell_Item(hero,inv_slot,ammount) --sell item if the player 
                 inv_manager:sort( hero )
                 inv_manager:save_inventory(hero)
             else
-                Notifications:Bottom(hero:GetPlayerOwner(), {text="#NOSHOP",duration=2,style={color="red"}})
+                Notifications:Bottom(hero:GetPlayerID(), {text="#NOSHOP",duration=2,style={color="red"}})
             end
         else
-            Notifications:Bottom(hero:GetPlayerOwner(), {text="#EMPTY_SLOT",duration=2,style={color="red"}})
+            Notifications:Bottom(hero:GetPlayerID(), {text="#EMPTY_SLOT",duration=2,style={color="red"}})
         end
     else
         print ("Slot number is invalid or inventory don't exist")
@@ -678,7 +749,7 @@ function inv_manager:upgrade_weapon(hero,stat) --will be called when a weapon is
                     hero.equipement.weapon.dmg_lvl = weapon.dmg_lvl + 1
                     hero.equipement.weapon.upgrade_point = weapon.upgrade_point - 1
                 else
-                    Notifications:Bottom(hero:GetPlayerOwner(), {text="#CANT_UPGRADE",duration=2,style={color="red"}})
+                    Notifications:Bottom(hero:GetPlayerID(), {text="#CANT_UPGRADE",duration=2,style={color="red"}})
                 end
             elseif stat == "attack_speed" then
                 if weapon.as_upgrade[weapon.as_lvl] > 0 and weapon.as_lvl < 51 then
@@ -686,7 +757,7 @@ function inv_manager:upgrade_weapon(hero,stat) --will be called when a weapon is
                     hero.equipement.weapon.as_lvl = weapon.as_lvl + 1
                     hero.equipement.weapon.upgrade_point = weapon.upgrade_point - 1
                 else
-                    Notifications:Bottom(hero:GetPlayerOwner(), {text="#CANT_UPGRADE",duration=2,style={color="red"}})
+                    Notifications:Bottom(hero:GetPlayerID(), {text="#CANT_UPGRADE",duration=2,style={color="red"}})
                 end
             elseif stat == "range" then
                 if weapon.range_upgrade[weapon.range_lvl] > 0 and weapon.range_lvl < 51 then
@@ -694,14 +765,14 @@ function inv_manager:upgrade_weapon(hero,stat) --will be called when a weapon is
                     hero.equipement.weapon.range_lvl = weapon.range_lvl + 1
                     hero.equipement.weapon.upgrade_point = weapon.upgrade_point - 1
                 else
-                    Notifications:Bottom(hero:GetPlayerOwner(), {text="#CANT_UPGRADE",duration=2,style={color="red"}})
+                    Notifications:Bottom(hero:GetPlayerID(), {text="#CANT_UPGRADE",duration=2,style={color="red"}})
                 end
             elseif stat == "durability" then
                 if weapon.range_upgrade > 0 then
                     hero.equipement.weapon.max_dur = weapon.max_dur + weapon.dur_upgrade
                     hero.equipement.weapon.upgrade_point = weapon.upgrade_point - 1
                 else
-                    Notifications:Bottom(hero:GetPlayerOwner(), {text="#CANT_UPGRADE",duration=2,style={color="red"}})
+                    Notifications:Bottom(hero:GetPlayerID(), {text="#CANT_UPGRADE",duration=2,style={color="red"}})
                 end
             else
                 print ("invalid upgrade name , valud one are :'damage','attack_speed','range','durability'")
@@ -741,14 +812,14 @@ function inv_manager:transmute_weapon(hero,inv_slot) --will be called when a wea
                 inventory[inv_slot] = nil
                 inv_manager:sort( hero )
             else
-                Notifications:Bottom(hero:GetPlayerOwner(), {text="IS_NOT_WEAPON",duration=2,style={color="red"}})
+                Notifications:Bottom(hero:GetPlayerID(), {text="IS_NOT_WEAPON",duration=2,style={color="red"}})
             end
         else
             print ("Slot number is invalid or inventory don't exist")
         end
         inv_manager:save_inventory(hero)
     else
-        Notifications:Bottom(hero:GetPlayerOwner(), {text="#NO_WEAPON",duration=2,style={color="red"}})
+        Notifications:Bottom(hero:GetPlayerID(), {text="#NO_WEAPON",duration=2,style={color="red"}})
     end
 end
 
@@ -762,7 +833,8 @@ end
         attack_speed = 100
         loh = 0
         ls = 0
-        effect = {"effect1","effect2"} 
+        effect = {
+        "1" "effect1"} 
         effect will be read , i'll make a function that add a modifier depend on effect name 
         
         hp = 0

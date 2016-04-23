@@ -1,0 +1,13 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/custom_game/skill_bar.css" />
+	</styles>
+	<scripts>
+		<include src="file://{resources}/scripts/custom_game/skill_bar.js" />
+	</scripts>
+	<Panel class="Main" hittest="false">
+		<Panel id = "main_skill_bar">
+
+		</Panel>
+	</Panel>
+</root>

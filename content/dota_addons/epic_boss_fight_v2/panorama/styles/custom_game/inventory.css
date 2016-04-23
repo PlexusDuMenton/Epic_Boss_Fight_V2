@@ -52,6 +52,27 @@
 {
   background-image: url("file://{images}/custom_game/inventory/button_hover.png");
 }
+
+.Skill_tree
+{
+	background-image: url("file://{images}/custom_game/inventory/button.png");
+	horizontal-align: left;
+    vertical-align: bottom;
+	margin-left: 15px;
+  margin-bottom: 15px;
+  height: 30px;
+  width: 100px;
+  
+}
+.Skill_tree:hover
+{
+  background-image: url("file://{images}/custom_game/inventory/button_hover.png");
+  height: 30px;
+  width: 100px;
+  
+}
+
+
 .Inventory_Label
 {
   font-size: 25px;
@@ -117,8 +138,10 @@ background-image: url("file://{images}/custom_game/inventory/item_bar_panel.png"
 }
 .item_bar_main
 {
-  margin-left: 850px;
-  margin-top: 980px;
+horizontal-align: left;
+    vertical-align: bottom;
+  margin-left: 1300px;
+  margin-bottom: 30px;
   height: 100px;
   width: 400px;
 }

@@ -5,5 +5,8 @@
     "inventory",
     "stats",
     "info",
+    "skill",
+    "skill_tree",
+    "skill_table",
   ]
 }
