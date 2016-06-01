@@ -18,10 +18,17 @@ Object.size = function(obj) {
     return size;
 };
 
+function open_with_command(){
+	if ($("#main_panel").visible == true){
+		close_skill_tree()
+	}else{
+		create_tree()
+	}
+}
 
 GameEvents.Subscribe( "Display_Bar", Update)
 	function Update(){
-		Game.AddCommand( "+Open_ST", create_tree, "", 0 );
+		Game.AddCommand( "+Open_ST", open_with_command, "", 0 );
 		$.Schedule(0.2, Updateskill_tree);
 	}
 	
@@ -41,14 +48,13 @@ GameEvents.Subscribe( "Display_Bar", Update)
 		}
 	}
 	
-
-
-GameEvents.Subscribe( "open_skill_bar", create_tree)
+GameUI.CustomUIConfig().Events.SubscribeEvent( "open_skill_bar", create_tree)
 
 $("#main_panel").visible = false
 
 
 function close_skill_tree(){
+
 selected_skill = null
 $("#main_panel").visible = false
 $("#skill_tree_panel").RemoveAndDeleteChildren()
@@ -59,11 +65,14 @@ $("#skill_tree_info").RemoveAndDeleteChildren()
 
 function create_tree() {
 	close_skill_tree()
+	
 	$("#main_panel").visible = true
 	var SP_label = $.CreatePanel( "Label", $("#skill_tree_panel"), "Info_skill" )
 		SP_label.SetHasClass( "title", true );
 		SP_label.style.position = "500px 50px 1px";
 	var table_size = (Object.size(table))
+	$("#skill_tree_panel").style.width = ((table_size+1) *(node_space_x + node_size) + init_pos_x) + "px"
+	$("#tooltip_panel").style.width = ((table_size+1) *(node_space_x + node_size) + init_pos_x) + "px"
 	for (i = 0; i < table_size; i++){
 		var coord_x = i*(node_space_x + node_size) + init_pos_x
 		var node_ammount = Object.size(table[i])
@@ -80,7 +89,8 @@ function create_tree() {
 		Close.SetPanelEvent("onactivate", function(){
 			close_skill_tree()
 		})	
-		
+	
+
 }
  
 function create_node(skillID,i,j,coord_x,coord_y){
@@ -153,7 +163,7 @@ var Name = $.CreatePanel( "Label", tooltip_panel , "Name" );
 	if (skill.lvl < skill.max_lvl){
 		var req = $.CreatePanel( "Label", tooltip_panel , "lvl_requirement" );
 		req.SetHasClass( "text", true );
-		req.text = "Required level : " + (skill.min_lvl + (skill.lvl)*skill.lvl_gap);
+		req.text = $.Localize("#I_level")+" : " + (skill.min_lvl + (skill.lvl)*skill.lvl_gap);
 		if ((skill.min_lvl + (skill.lvl)*skill.lvl_gap) > hero_level ) {
 			req.style.color = "#FF0000"
 		}
@@ -164,7 +174,7 @@ var Name = $.CreatePanel( "Label", tooltip_panel , "Name" );
 		Unlockedby = skill_tree[skill.unloked_by]
 		var req_skill = $.CreatePanel( "Label", tooltip_panel , "skill_requirement" );
 		req_skill.SetHasClass( "text", true );
-		req_skill.text = "Required ability : " + $.Localize("#"+Unlockedby.file_name);
+		req_skill.text = $.Localize("#Req_ability")+" : " + $.Localize("#"+Unlockedby.file_name);
 		req_skill.style.position = "10px "+pos_y +"px 0px";
 		if (skill.unlocked != 1) {
 			req_skill.style.color = "#FF0000"
@@ -191,10 +201,13 @@ var Name = $.CreatePanel( "Label", tooltip_panel , "Name" );
 		pos_y = create_label(skill.range,pos_y,$.Localize("#Bonus_Range"))
 		pos_y = create_label(skill.move_speed,pos_y,$.Localize("#Bonus_Move_Speed"))
 		pos_y = create_label(skill.armor,pos_y,$.Localize("#Bonus_Armor"))
-		pos_y = create_label(skill.damage,pos_y,$.Localize("#Bonus_Damage"))
+		pos_y = create_label(skill.damage_mult,pos_y,$.Localize("#Bonus_Damage")," %")
 		
-		function create_label(stat,pos_y,stat_name){
+		$("#tooltip_panel").style.height = (pos_y + 100) + "px"
+		
+		function create_label(stat,pos_y,stat_name,other){
 			if (typeof stat != 'undefined') {
+				if (typeof other == 'undefined') {other = ""}
 				var stats_size = (Object.size(stat))
 				var mom = $.CreatePanel( "Label", tooltip_panel, "Info_skill_name" )
 				mom.SetHasClass( "text", true );
@@ -207,7 +220,7 @@ var Name = $.CreatePanel( "Label", tooltip_panel , "Name" );
 					Label.SetHasClass( "small_text", true );
 					Label.style.position = "10px "+ pos_y+"px 1px";
 					pos_y = pos_y + 20
-					Label.text = $.Localize("#Level")+" " + i + " : " + Number((stat[i]).toFixed(2))
+					Label.text = $.Localize("#Level")+" " + i + " : " + Number((stat[i]).toFixed(2)) + other
 					if (skill.lvl+1 == i && hero_level >= (skill.min_lvl + (i-1)*skill.lvl_gap) && skill.unlocked == 1 )
 					{
 						Label.style.color = "#FFFF33"
@@ -299,6 +312,7 @@ function create_fast_tool_tip(Panel,skillID){
 	Name.SetHasClass( "title", true );
 	Name.text = $.Localize("#"+skill.file_name);
 	Name.style.position = "10px 20px 0px";
+	Name.hittest = false
 	if (skill.unlocked != 1) {
 		Name.style.color = "#AAAAAA"
 	}
@@ -312,16 +326,19 @@ function create_fast_tool_tip(Panel,skillID){
 	type.SetHasClass( "text", true );
 	type.text = $.Localize("#"+skill.type);
 	type.style.position = "10px 50px 0px";
+	type.hittest = false
 	
 	var lvl = $.CreatePanel( "Label", tooltip_panel , "Name" );
 	lvl.SetHasClass( "text", true );
 	lvl.text = "Level : " + skill.lvl + " / " + skill.max_lvl;
 	lvl.style.position = "10px 80px 0px";
+	lvl.hittest = false
 	var pos_y = 110
 	if (skill.lvl < skill.max_lvl){
 		var req = $.CreatePanel( "Label", tooltip_panel , "Name" );
 		req.SetHasClass( "text", true );
 		req.text = $.Localize("#Required_level") + " : " + (skill.min_lvl + (skill.lvl)*skill.lvl_gap);
+		req.hittest = false
 		if ((skill.min_lvl + (skill.lvl)*skill.lvl_gap) > hero_level ) {
 			req.style.color = "#FF0000"
 		}
@@ -334,6 +351,7 @@ function create_fast_tool_tip(Panel,skillID){
 		req_skill.SetHasClass( "text", true );
 		req_skill.text = $.Localize("#Required_Ability") + " : " + $.Localize("#"+Unlockedby.file_name);
 		req_skill.style.position = "10px "+pos_y +"px 0px";
+		req_skill.hittest = false
 		if (skill.unlocked != 1) {
 			req_skill.style.color = "#FF0000"
 		}

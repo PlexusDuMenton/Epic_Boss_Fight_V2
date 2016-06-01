@@ -25,7 +25,7 @@
 		<Panel id="new" hittest="false">
 			<Label hittest="false" id="question" text="Which Hero?"/>
 			<Button id="hero_1" class="menuButton" onactivate='new_character("npc_dota_hero_legion_commander")'>
-				<Label hittest="false" id="c1t" text="legionary"/>
+				<Label hittest="false" id="c1t" text=""/>
 			</Button>
 			<!--<Button id="hero_2" onactivate='new_character("npc_dota_hero_wind_ranger")'>
 				<Image id="#ch1" src="file://{images}/custom_game/hero/button.png"/>

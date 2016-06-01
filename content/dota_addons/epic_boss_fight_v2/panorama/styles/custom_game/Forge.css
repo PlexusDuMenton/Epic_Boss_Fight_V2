@@ -1,0 +1,201 @@
+.Main
+{
+    width: 100%;
+    height: 100%;
+    overflow: clip;
+}
+
+#main_panel
+{
+margin-right: 60px;
+  margin-top: 50px;
+background-image: url("file://{images}/custom_game/inventory/forge_panel_base.png");
+ horizontal-align: right;
+  height: 500px;
+  width: 680px;
+  
+}
+
+#windows_tabs
+{
+  height: 42px;
+  width: 680px;
+  
+}
+#display
+{
+	margin-top: 42px;
+  height: 708px;
+  width: 680px;
+  
+}
+
+.normal_label
+ {
+	width: 500px;
+	text-align: center;
+	text-overflow: clip;
+	font-weight: thin;
+	font-size: 18px;
+	margin-left: 5px;
+	color: #AACCFF;
+}
+
+
+.normal_label_2
+ {
+	text-overflow: clip;
+	font-weight: thin;
+	font-size: 18px;
+	margin-left: 5px;
+	color: #AACCFF;
+}
+.normal_label_3
+ {
+	text-overflow: clip;
+	font-weight: thin;
+	font-size: 25px;
+	margin-left: 5px;
+	color: #AACCFF;
+}
+
+
+
+.tab_label
+ {
+	text-align: center;
+	text-overflow: clip;
+	font-weight: thin;
+	font-size: 20px;
+	margin-left: 5px;
+	color: #AACCFF;
+	opacity: 0.8;
+	brightness: 1.0;
+}
+
+.unselected_tab_label
+ {
+	text-align: center;
+	text-overflow: clip;
+	font-weight: thin;
+	font-size: 20px;
+	margin-left: 5px;
+	opacity: 0.8;
+	color: #5588AA;
+}
+
+.tab_label_hover
+ {
+	text-align: center;
+	text-overflow: clip;
+	font-weight: thin;
+	font-size: 20px;
+	margin-left: 5px;
+	color: #AACCFF;
+	brightness: 2.0;
+}
+
+.unselected_button_label
+ {
+	text-align: center;
+	text-overflow: clip;
+	font-weight: thin;
+	font-size: 30px;
+	margin-left: 5px;
+	opacity: 0.8;
+	color: #5588AA;
+}
+
+.deny_button_label
+ {
+	text-align: center;
+	text-overflow: clip;
+	font-weight: thin;
+	font-size: 30px;
+	margin-left: 5px;
+	opacity: 0.8;
+	color: #ff2211;
+}
+
+.deny_button_label_hover
+ {
+	text-align: center;
+	text-overflow: clip;
+	font-weight: thin;
+	font-size: 30px;
+	margin-left: 5px;
+	opacity: 0.8;
+	brightness: 10.0;
+	color: #FF2211;
+}
+
+.button_label_hover
+ {
+	text-align: center;
+	text-overflow: clip;
+	font-weight: thin;
+	font-size: 30px;
+	margin-left: 5px;
+	color: #AACCFF;
+	brightness: 2.0;
+}
+
+
+.slot
+{
+	background-image: url("file://{images}/custom_game/inventory/item_slot_inactive.png");
+	horizontal-align: left;
+    vertical-align: top;
+  height: 64px;
+  width: 64px;
+}
+
+
+.tab
+{
+	background-image: url("file://{images}/custom_game/inventory/tab_selected.png");
+	horizontal-align: left;
+    vertical-align: top;
+  height: 42px;
+  width: 165px;
+}
+
+.unselected_tab
+{
+	background-image: url("file://{images}/custom_game/inventory/tab_unselected.png");
+	horizontal-align: left;
+    vertical-align: top;
+  height: 42px;
+  width: 165px;
+}
+
+
+
+.unselected_tab:hover
+{
+	background-image: url("file://{images}/custom_game/inventory/tab_hover.png");
+	horizontal-align: left;
+    vertical-align: top;
+  height: 42px;
+  width: 165px;
+}
+
+.big_button
+{
+	background-image: url("file://{images}/custom_game/inventory/big_button.png");
+	horizontal-align: left;
+    vertical-align: top;
+  height: 75px;
+  width: 200px;
+}
+
+
+
+.big_button:hover
+{
+	background-image: url("file://{images}/custom_game/inventory/big_button_hover.png");
+	horizontal-align: left;
+    vertical-align: top;
+  height: 75px;
+  width: 200px;
+}

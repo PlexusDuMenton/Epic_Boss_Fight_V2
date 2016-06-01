@@ -4,6 +4,9 @@ $("#load").visible = false;
 
 GameEvents.Subscribe( "load_empty", display_back)
 
+$("#c1t").text = $.Localize('#npc_dota_hero_legion_commander_ebf')
+
+
 function display_back(){
 	$("#menu").visible = true;
 	$("#new").visible = false;

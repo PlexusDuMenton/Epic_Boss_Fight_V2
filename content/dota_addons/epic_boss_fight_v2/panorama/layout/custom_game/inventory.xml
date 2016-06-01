@@ -30,11 +30,16 @@
 				
 		</Panel>
 		<Button id="inventory_button" onactivate='Open_Inventory()' class ="inv_but">
-			<Label hittest="false" id="inv_but_label" class="Inventory_Label_v_small"  text="Inventory"/>
+			<Image hittest="false" id="inv_icon" src="file://{images}/custom_game/inventory/inventory_icon.psd"/>
 		</Button>
 		<Button id="hero_button" onactivate='Open_Hero_Panel()' class ="hero_but">
-			<Label hittest="false" id="hero_but_label" class="Inventory_Label_v_small"  text="Hero"/>
+			<Image hittest="false" id="hero_icon" src="file://{images}/custom_game/inventory/hero_icon.psd"/>
 		</Button>
+		<Button id="skill_button" onactivate='Open_Skill_Tree()' class ="skill_but">
+			<Image hittest="false" id="st_icon" src="file://{images}/custom_game/inventory/skill_icon.psd"/>
+		</Button>
+		
+		
 
 		<Panel id="Menu" hittest="false"/>
 		<Panel id="Menu_h" hittest="false"/>

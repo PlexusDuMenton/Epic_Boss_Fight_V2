@@ -1,0 +1,82 @@
+.Main
+{
+    width: 100%;
+    height: 100%;
+    overflow: clip;
+}
+
+#main_panel
+{
+margin-left: 600px;
+  margin-top: 0px;
+
+  height: 200px;
+  width: 1300px;
+  overflow: clip;
+}
+
+.BG
+{
+background-image: url("file://{images}/custom_game/boss_Health_Bar_base.png");
+
+  height: 200px;
+  width: 1300px;
+  overflow: clip;
+}
+
+.HB
+{
+background-image: url("file://{images}/custom_game/boss_Health_Bar.png");
+
+  height: 200px;
+  width: 1300px;
+  overflow: clip;
+}
+
+.overlay
+{
+
+  height: 200px;
+  width: 1300px;
+  overflow: clip;
+}
+
+.second
+{
+	background-image: url("file://{images}/custom_game/secondary.png");
+  height: 200px;
+  width: 1300px;
+  overflow: clip;
+}
+
+.main
+{
+	background-image: url("file://{images}/custom_game/Main.png");
+  height: 200px;
+  width: 1300px;
+  overflow: clip;
+}
+
+.name
+{
+	text-align: center;
+	text-overflow: clip;
+	font-weight: thin;
+	font-size: 30px;
+	color: #AACCFF;
+  height: 50px;
+  width: 550px;
+  overflow: clip;
+}
+
+.hp_text
+{
+	text-align: center;
+	text-overflow: clip;
+	font-weight: thin;
+	font-size: 30px;
+	color: #AACCFF;
+  height: 50px;
+  width: 550px;
+  overflow: clip;
+}

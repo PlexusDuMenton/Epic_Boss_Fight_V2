@@ -217,6 +217,35 @@
 	color: #FFFFFF;
  }
  
+	#gold_icon
+	{
+	height: 64px;
+ width: 64px;
+ horizontal-align: right;
+	margin-top: -25px;
+	margin-right: 0px;
+	}
+	
+	#gold_ammount
+	{
+	height: 40px;
+ horizontal-align: right;
+	margin-top: -10px;
+	margin-right: 80px;
+	text-align: right;
+	text-overflow: clip;
+	font-weight: thin;
+  font-size: 40px;
+	color: #FFEE55;
+	}
+
+	#Gold
+	{
+	margin-top: 40px;
+	height: 100%;
+	width: 100%;
+	}
+	
    #wxp_bar_current
 {
 	margin-right: 230px;

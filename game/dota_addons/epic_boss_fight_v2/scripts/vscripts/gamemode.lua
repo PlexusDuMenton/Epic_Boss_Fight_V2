@@ -1,14 +1,34 @@
-MAX_LEVEL = 500 --level higger than 99 seam to bug a bit
+MAX_LEVEL = 500
 
---FOR NOW ITS STILL BAREBONE , I FOCUSED ON INVENTORY MANAGER FOR NOW
-BAREBONES_DEBUG_SPEW = false 
 
 if epic_boss_fight == nil then
     DebugPrint( 'created epic_boss_fight class (main gamemode script)' )
     _G.epic_boss_fight = class({})
 end
 
+ISCHEATALLOWED = 0
+--ISCHEATALLOWED = FCVAR_CHEAT
 
+
+PRE_GAME_TIME = 30
+
+difficulty_multiplier = {}
+
+difficulty_multiplier[0] = 1
+difficulty_multiplier[1] = 1.5
+difficulty_multiplier[2] = 2.0
+difficulty_multiplier[3] = 3.0
+difficulty_multiplier[4] = 5.0
+difficulty_multiplier[5] = 10.0
+
+loot_difficulty = {}
+
+loot_difficulty[0] = 0.25
+loot_difficulty[1] = 0.75
+loot_difficulty[2] = 1.25
+loot_difficulty[3] = 1.75
+loot_difficulty[4] = 2.5
+loot_difficulty[5] = 4.0
 
 -- This library allow for easily delayed/timed actions
 require('libraries/timers')
@@ -51,7 +71,18 @@ for i=0,MAX_LEVEL do
 end
 REAL_XP_TABLE[0] = 0
 
-
+function epic_boss_fight:OnEntityKilled(event)
+  local killed_unit = EntIndexToHScript( event.entindex_killed )
+  if killed_unit:IsRealHero() and killed_unit:GetTeam()~=DOTA_TEAM_BADGUYS then
+    local newItem = CreateItem( "item_tombstone", killed_unit, killed_unit )
+    newItem:SetPurchaseTime( 0 )
+    newItem:SetPurchaser( killed_unit )
+    local tombstone = SpawnEntityFromTableSynchronous( "dota_item_tombstone_drop", {} )
+    tombstone:SetContainedItem( newItem )
+    tombstone:SetAngles( 0, RandomFloat( 0, 360 ), 0 )
+    FindClearSpaceForUnit( tombstone, killed_unit:GetAbsOrigin(), true )
+  end 
+end
 
 function epic_boss_fight:PostLoadPrecache()
   DebugPrint("[BAREBONES] Performing Post-Load precache")    
@@ -71,8 +102,6 @@ end
 
 function epic_boss_fight:OnHeroInGame(hero)
   DebugPrint("[BAREBONES] Hero spawned in game for first time -- " .. hero:GetUnitName())
-
-
 end
 
 function epic_boss_fight:OnGameInProgress()
@@ -133,48 +162,86 @@ function epic_boss_fight:OnHeroLevelUp(hero)
   inv_manager:Calculate_stats(hero)
 
 end
+-------------------------------------------------------------------  MULTIPLIER CALCULATOR
+function epic_boss_fight:Calculate_Multiplier() --Will calculate difficulty based on all player level and 
+  Timers:CreateTimer(5,function()
+    if GameRules:State_Get() >= DOTA_GAMERULES_STATE_GAME_IN_PROGRESS then
+      local difficulty = 1
+      local Actual_Max_Level = 0
+      for i=0,PlayerResource:GetPlayerCount()-1 do
+        local hero = PlayerResource:GetSelectedHeroEntity(i) 
+        if hero~=nil then
+          if hero.inventory ~= nil then
+            if PlayerResource:GetConnectionState(i) == 2 then
+              difficulty = math.floor(difficulty + hero.Level^1.6)*0.5
+              if hero.Level > Actual_Max_Level then
+                Actual_Max_Level = hero.Level
+              end
+            end
+          end
+        end
+      end
+      if type(difficulty) ~= "number" then difficulty = 1 end 
+      GameRules.Actual_Max_Level = Actual_Max_Level
+      GameRules.difficulty = difficulty * difficulty_multiplier[GameRules.player_difficulty]
+      GameRules.loot_multiplier = math.floor(GameRules.difficulty * round_manager.round^0.5) * loot_difficulty[GameRules.player_difficulty] + 1
+
+    end
+  return 5
+  end)
+
+end
 
 
 function epic_boss_fight:InitGameMode()
   DebugPrint('[BAREBONES] Starting to load Barebones gamemode...')
   print ("TEST")
-  print(GameRules:GetMatchID() )
 
-  --math.randomseed( GameRules:GetMatchID() )
-  --math.random(); math.random(); math.random()
-
-
+  math.randomseed( Time() )
+  math.random()
+  math.randomseed( math.random() )
+  math.random(); math.random(); math.random()
   GameRules.items = LoadKeyValues("scripts/kv/items.kv")
-  print (GameRules.items)
   GameRules.difficulty = 1
+  GameRules.player_difficulty = 0
   GameRules.cheats = false
   GameRules.loot_multiplier = 1
-  GameRules.round = 1
+  epic_boss_fight:Calculate_Multiplier()
+  GameRules.PlayerAmmount = 0
+  GameRules.STATES = 1
+  GameRules:SetPreGameTime(PRE_GAME_TIME)
   --ebf_boss_manager:Start()
   GameMode = GameRules:GetGameModeEntity()
   GameMode:SetThink( "OnThink", self, "GlobalThink", 2 )
+  GameRules.Actual_Max_Level = 0
 
+  GameMode:SetFogOfWarDisabled(true) 
   GameMode:SetLoseGoldOnDeath(false)
   GameMode:SetBuybackEnabled(false)
   --GameMode:SetCameraDistanceOverride(2300)  
   GameMode:SetRecommendedItemsDisabled(true)
   GameMode:SetCustomHeroMaxLevel(MAX_LEVEL) 
   GameMode:SetCustomXPRequiredToReachNextLevel(XP_PER_LEVEL_TABLE) 
-  GameMode:SetCustomGameForceHero( "npc_dota_hero_legion_commander" )
+  GameMode:SetCustomGameForceHero( "npc_dota_hero_wisp" )
   GameMode:SetUseCustomHeroLevels ( true )
 
   GameMode:SetMaximumAttackSpeed(1000)
   GameMode:SetMinimumAttackSpeed(-100)
   GameMode:SetAlwaysShowPlayerInventory(true)
 
+
   GameRules:SetSameHeroSelectionEnabled(true)
-  GameRules:SetGoldPerTick( 0 ) 
-  GameRules:SetCustomGameTeamMaxPlayers( DOTA_TEAM_GOODGUYS, 10 )
+  GameRules:SetCustomGameTeamMaxPlayers( DOTA_TEAM_GOODGUYS, 6 )
   GameRules:SetCustomGameTeamMaxPlayers( DOTA_TEAM_BADGUYS, 0 )
-  ebf_boss_manager:Start()
+  GameRules:SetHeroRespawnEnabled(false) 
+  GameRules:SetGoldPerTick(0)
+  GameRules:SetFirstBloodActive(false)  
+  GameRules:SetHideKillMessageHeaders(true) 
+  GameRules:SetStartingGold(0)
+  boss_manager:Start()
 
   ListenToGameEvent("dota_item_picked_up", Dynamic_Wrap(epic_boss_fight, "OnItemPickUp"), self)
-
+  ListenToGameEvent( "entity_killed", Dynamic_Wrap( epic_boss_fight, "OnEntityKilled" ), self )
 
   HeroSelection:Start()
 
@@ -187,14 +254,58 @@ function epic_boss_fight:InitGameMode()
     end
     return 0.025
   end)
+  local key = "init"
+  local weapon_list = {}
+  for k,v in pairs (LoadKeyValues("scripts/kv/items.kv")) do
+    if v.cat == "weapon" then
+      weapon_list[k] = v
+      weapon_list[k].item_name = k
+      weapon_list[k].upgrade_point = 0
+      weapon_list[k].level = 0
+      if weapon_list[k].effect == nil then weapon_list[k].effect = {} end
+     weapon_list[k].Equipement = true
+      if weapon_list[k].ranged == 1 then weapon_list[k].ranged = true else weapon_list[k].ranged = false end
+      if weapon_list[k].magical == 1 then weapon_list[k].magical = true else weapon_list[k].magical = false end
+      weapon_list[k].Soul = false
+      weapon_list[k].dmg_grow = nil
+      weapon_list[k].m_dmg_grow = nil
+      weapon_list[k].range_grow = nil
+      weapon_list[k].as_grow = nil
+      if weapon_list[k].damage == nil then weapon_list[k].damage = 0 end
+      if weapon_list[k].m_damage == nil then weapon_list[k].m_damage = 0 end
+      if weapon_list[k].range == nil then weapon_list[k].range = 0 end
+      if weapon_list[k].loh == nil then weapon_list[k].loh = 0 end
+      if weapon_list[k].attack_speed == nil then weapon_list[k].attack_speed = 0 end
+      if weapon_list[k].ls == nil then weapon_list[k].ls = 0 end
+      weapon_list[k].upgrade_damage = 0
+      weapon_list[k].upgrade_m_damage = 0
+      weapon_list[k].upgrade_range = 0
+      weapon_list[k].upgrade_loh = 0
+      weapon_list[k].upgrade_attack_speed = 0
+      weapon_list[k].upgrade_ls = 0
+      weapon_list[k].bonus_damage = 0
+      weapon_list[k].bonus_m_damage = 0
+      weapon_list[k].bonus_range = 0
+      weapon_list[k].bonus_loh = 0
+      weapon_list[k].bonus_attack_speed = 0
+      weapon_list[k].bonus_ls = 0
+    end
+  end
+  CustomNetTables:SetTableValue( "KVFILE",key, { weapon_evolution = LoadKeyValues("scripts/kv/w_evolution.kv") , weapon_list = weapon_list } )
 
   CustomGameEventManager:RegisterListener( "Use_Item", Dynamic_Wrap(epic_boss_fight, 'Use_Item'))
   CustomGameEventManager:RegisterListener( "Unequip_Item", Dynamic_Wrap(epic_boss_fight, 'Unequip_Item'))
   CustomGameEventManager:RegisterListener( "Drop_Item", Dynamic_Wrap(epic_boss_fight, 'Drop_Item'))
   CustomGameEventManager:RegisterListener( "Sell_Item", Dynamic_Wrap(epic_boss_fight, 'Sell_Item'))
+  CustomGameEventManager:RegisterListener( "Buy_Item", Dynamic_Wrap(epic_boss_fight, 'Buy_Item'))
   CustomGameEventManager:RegisterListener( "load_player_data", Dynamic_Wrap(epic_boss_fight, 'load_player_data'))
   CustomGameEventManager:RegisterListener( "to_item_bar", Dynamic_Wrap(epic_boss_fight, 'inv_to_bar'))
   CustomGameEventManager:RegisterListener( "to_inventory", Dynamic_Wrap(epic_boss_fight, 'bar_to_inv'))
+  CustomGameEventManager:RegisterListener( "Vote_Round", Dynamic_Wrap(epic_boss_fight, 'Get_Vote'))
+  CustomGameEventManager:RegisterListener( "infuse_soul", Dynamic_Wrap(epic_boss_fight, 'infuse_soul'))
+  CustomGameEventManager:RegisterListener( "transmute_weapon", Dynamic_Wrap(epic_boss_fight, 'transmute_weapon'))
+  CustomGameEventManager:RegisterListener( "crystalize_weapon", Dynamic_Wrap(epic_boss_fight, 'crystalize_weapon'))
+  CustomGameEventManager:RegisterListener( "evolve_weapon", Dynamic_Wrap(epic_boss_fight, 'evolve_weapon'))
 
   CustomGameEventManager:RegisterListener( "skill_bar", Dynamic_Wrap(epic_boss_fight, 'open_skill_bar'))
 
@@ -205,28 +316,123 @@ function epic_boss_fight:InitGameMode()
 
   DebugPrint('[BAREBONES] Done loading Barebones gamemode!\n\n')
 
-  Convars:RegisterCommand("ebf_give_item", function(...) return self:ebf_give_item( ... ) end, "send an item directly to inventory", FCVAR_CHEAT )
-  Convars:RegisterCommand("ebf_drop_item", function(...) return self:ebf_drop_item( ... ) end, "drop an item from inventory", FCVAR_CHEAT )
-  Convars:RegisterCommand("ebf_sell_item", function(...) return self:ebf_sell_item( ... ) end, "sell an item", FCVAR_CHEAT )
-  Convars:RegisterCommand("ebf_use_item", function(...) return self:ebf_use_item( ... ) end, "Equip/Use an item", FCVAR_CHEAT )
-  Convars:RegisterCommand("ebf_upgrade", function(...) return self:ebf_upgrade( ... ) end, "Upgrade your equiped weapon", FCVAR_CHEAT )
-  Convars:RegisterCommand("ebf_unequip", function(...) return self:ebf_unequip( ... ) end, "Unequip an item", FCVAR_CHEAT )
+  Convars:RegisterCommand("ebf_give_item", function(...) return self:ebf_give_item( ... ) end, "send an item directly to inventory", ISCHEATALLOWED )
+  Convars:RegisterCommand("ebf_drop_item", function(...) return self:ebf_drop_item( ... ) end, "drop an item from inventory", ISCHEATALLOWED )
+  Convars:RegisterCommand("ebf_sell_item", function(...) return self:ebf_sell_item( ... ) end, "sell an item", ISCHEATALLOWED )
+  Convars:RegisterCommand("ebf_use_item", function(...) return self:ebf_use_item( ... ) end, "Equip/Use an item", ISCHEATALLOWED )
+  Convars:RegisterCommand("ebf_set_loot_multiplier", function(...) return self:ebf_set_loot_multiplier( ... ) end, "Equip/Use an item", ISCHEATALLOWED )
 
-  Convars:RegisterCommand("ebf_up_skill", function(...) return self:up_skill( ... ) end, "upgrade a skill", FCVAR_CHEAT )
-  Convars:RegisterCommand("ebf_equip_skill", function(...) return self:equip_skill( ... ) end, "equip a skill", FCVAR_CHEAT )
-  Convars:RegisterCommand("ebf_unequip_skill", function(...) return self:unequip_skill( ... ) end, "unequip a skill", FCVAR_CHEAT )
 
-  Convars:RegisterCommand("ebf_Level_up", function(...) return self:Level_UP( ... ) end, "Level up", FCVAR_CHEAT )
+  Convars:RegisterCommand("ebf_upgrade", function(...) return self:ebf_upgrade( ... ) end, "Upgrade a weapon with a power soul", ISCHEATALLOWED )
+  Convars:RegisterCommand("ebf_transmute", function(...) return self:ebf_transmute_weapon( ... ) end, "Upgrade a weapon xp with another", ISCHEATALLOWED )
+  Convars:RegisterCommand("ebf_crystalize", function(...) return self:ebf_crystalize_weapon( ... ) end, "create a powersoul from a weapon", ISCHEATALLOWED )
+  Convars:RegisterCommand("ebf_evolve", function(...) return self:ebf_evolve_weapon( ... ) end, "evolve a weapon to another one", ISCHEATALLOWED )
 
-  Convars:RegisterCommand("ebf_skills", function(...) return self:ebf_skills( ... ) end, "Display Skills", FCVAR_CHEAT )
-  Convars:RegisterCommand("ebf_skill_list", function(...) return self:ebf_skill_list( ... ) end, "Display Skills", FCVAR_CHEAT )
-  Convars:RegisterCommand("ebf_inventory", function(...) return self:print_inv_info( ... ) end, "display inventory slots", FCVAR_CHEAT )
+  Convars:RegisterCommand("test_http",function(...) return self:httptest(...) end, "test an http request to local", ISCHEATALLOWED)
 
-  Convars:RegisterCommand("ebf_info", function(...) return self:print_info( ... ) end, "display inventory slots", FCVAR_CHEAT )
+  Convars:RegisterCommand("ebf_unequip", function(...) return self:ebf_unequip( ... ) end, "Unequip an item", ISCHEATALLOWED )
 
-  Convars:RegisterCommand("ebf_save", function(...) return self:save( ... ) end, "save your current character to a slot", 0)
+  Convars:RegisterCommand("ebf_up_skill", function(...) return self:up_skill( ... ) end, "upgrade a skill", ISCHEATALLOWED )
+  Convars:RegisterCommand("ebf_equip_skill", function(...) return self:equip_skill( ... ) end, "equip a skill", ISCHEATALLOWED )
+  Convars:RegisterCommand("ebf_unequip_skill", function(...) return self:unequip_skill( ... ) end, "unequip a skill", ISCHEATALLOWED )
+
+  Convars:RegisterCommand("ebf_Level_up", function(...) return self:Level_UP( ... ) end, "Level up", ISCHEATALLOWED )
+
+  Convars:RegisterCommand("ebf_skills", function(...) return self:ebf_skills( ... ) end, "Display Skills", ISCHEATALLOWED )
+  Convars:RegisterCommand("ebf_skill_list", function(...) return self:ebf_skill_list( ... ) end, "Display Skills", ISCHEATALLOWED )
+  Convars:RegisterCommand("ebf_inventory", function(...) return self:print_inv_info( ... ) end, "display inventory slots", ISCHEATALLOWED )
+
+  Convars:RegisterCommand("ebf_info", function(...) return self:print_info( ... ) end, "display inventory slots", ISCHEATALLOWED )
+
+  --Convars:RegisterCommand("ebf_save", function(...) return self:save( ... ) end, "save your current character to a slot", 0)
+  --disabled Save for now
+
+  Timers:CreateTimer(1,function()  
+    if GameRules:State_Get() >= DOTA_GAMERULES_STATE_GAME_IN_PROGRESS then
+      GameRules.PlayerAmmount = 0
+      for i=0,PlayerResource:GetPlayerCount()-1 do
+        local hero = PlayerResource:GetSelectedHeroEntity(i) 
+        if hero~=nil then
+          if hero.inventory ~= nil then
+            if PlayerResource:GetConnectionState(i) == 2 then
+              GameRules.PlayerAmmount = 1 + GameRules.PlayerAmmount 
+            end
+          end
+        end
+      end
+    end
+    return 1
+  end)
+
+  GameRules:GetGameModeEntity():SetThink( "OnThink", round_manager, 0.025 ) 
 end
 
+function epic_boss_fight:Get_Vote(param)
+  DeepPrintTable(param)
+  if param.context == "lobby" then
+    print ("get vote from lobby")
+    if round_manager.lobby_vote == false then
+      print ("Started a new vote")
+      round_manager.lobby_vote = true
+      if GameRules.PlayerAmmount>1 then
+        round_manager.vote_time = 60
+        CustomNetTables:SetTableValue( "KVFILE","time", { vote_time = round_manager.vote_time } )
+      else
+        round_manager.vote_time = 5 
+        CustomNetTables:SetTableValue( "KVFILE","time", { vote_time = round_manager.vote_time } )
+      end
+      Timers:CreateTimer(1.00,function()
+            round_manager.vote_time = round_manager.vote_time - 1
+            print(round_manager.vote_time)
+            CustomNetTables:SetTableValue( "KVFILE","time", { vote_time = round_manager.vote_time } )
+            if round_manager.vote_time <= 0 then
+              Timers:CreateTimer(1.00,function()
+                round_manager.lobby_vote = false
+              end)
+              round_manager.vote = false
+              CustomGameEventManager:Send_ServerToAllClients("Stop_Vote", {} )
+              for nPlayerID = 0, DOTA_MAX_TEAM_PLAYERS-1 do
+              if PlayerResource:GetTeam( nPlayerID ) == DOTA_TEAM_GOODGUYS then
+                if PlayerResource:HasSelectedHero( nPlayerID ) then
+                  local hero = PlayerResource:GetSelectedHeroEntity( nPlayerID )
+                  if hero~= nil then
+                    FindClearSpaceForUnit(hero,ARENA_VECTOR, true) 
+                    Timers:CreateTimer(0.1,function()
+                      CustomGameEventManager:Send_ServerToAllClients("center_on_hero", {} )
+                    end)
+                    PlayerResource:SetCameraTarget(nPlayerID, hero)
+                    PlayerResource:SetCameraTarget(nPlayerID, nil)
+                  end
+                end
+              end
+            end
+            CustomNetTables:SetTableValue( "KVFILE","time", { vote_time = nil } )
+            round_manager.countdown = DEFAULT_COUNTDOWN_TIME
+            print ("going to prepare time")
+            GameRules.STATES = GAME_STATE_PREPARE_TIME
+            return 
+            end
+          return 1
+      end)
+    else 
+      print ("reduced time from"..round_manager.vote_time .."to".. round_manager.vote_time - (round_manager.vote_time/(GameRules.PlayerAmmount-1) ) )
+      round_manager.vote_time = round_manager.vote_time - (round_manager.vote_time/(GameRules.PlayerAmmount-1) ) 
+    end
+  elseif param.context == "reward" then
+    print ("shoudl display")
+    if param.vote == "lobby" then round_manager.result_lobby = round_manager.result_lobby + 1 print ("vote for lobby") end
+    if param.vote == "next" then round_manager.result_next = round_manager.result_next + 1 print ("vote for next round") end
+
+  end
+end
+
+
+function epic_boss_fight:httptest(com_name)
+  local request = CreateHTTPRequest("POST","192.168.1.84")
+  request:Send( function(result)
+print("ok")
+end) 
+end
 
 function epic_boss_fight:up_skill (com_name,ID)
   local hero = Convars:GetCommandClient():GetAssignedHero()
@@ -260,6 +466,55 @@ function epic_boss_fight:Level_UP (com_name,level)
   end
 end
 
+function epic_boss_fight:ebf_set_loot_multiplier (com_name,loot_multiplier)
+  local loot_multiplier = tonumber(loot_multiplier)
+  GameRules.loot_multiplier = loot_multiplier
+end
+
+
+function epic_boss_fight:infuse_soul(data)
+  local hero = PlayerResource:GetSelectedHeroEntity( data.PlayerID )
+  weapon_slot = tonumber( data.main_slot ) 
+  soul_slot = tonumber( data.secondary_slot )
+  inv_manager:up_weapon(hero,soul_slot,weapon_slot)
+end
+
+function epic_boss_fight:transmute_weapon(data)
+  local hero = PlayerResource:GetSelectedHeroEntity( data.PlayerID )
+  weapon_slot = tonumber( data.main_slot ) 
+  transmuted_slot = tonumber( data.secondary_slot )
+  inv_manager:transmutation(hero,transmuted_slot,weapon_slot)
+end
+
+function epic_boss_fight:crystalize_weapon(data)
+  local hero = PlayerResource:GetSelectedHeroEntity( data.PlayerID )
+  weapon_slot = tonumber( data.main_slot ) 
+  print (weapon_slot)
+  inv_manager:crystalyze(hero,weapon_slot)
+end
+
+function epic_boss_fight:evolve_weapon(data)
+  local hero = PlayerResource:GetSelectedHeroEntity( data.PlayerID )
+  slot_weap = tonumber( data.main_slot ) 
+  evolution_way = tonumber( data.way ) 
+  inv_manager:make_evolution(hero,evolution_way,slot_weap)
+end
+
+
+
+
+function epic_boss_fight:ebf_transmute_weapon(com_name,transmuted_slot,weapon_slot)
+  local hero = Convars:GetCommandClient():GetAssignedHero()
+  inv_manager:transmutation(hero,tonumber( transmuted_slot),tonumber( weapon_slot))
+end
+function epic_boss_fight:ebf_crystalize_weapon(com_name,slot_weap)
+  local hero = Convars:GetCommandClient():GetAssignedHero()
+  inv_manager:crystalyze(hero,tonumber(slot_weap))
+end
+function epic_boss_fight:ebf_evolve_weapon(com_name,evolution_way,slot_weap)
+  local hero = Convars:GetCommandClient():GetAssignedHero()
+  inv_manager:make_evolution(hero,tonumber(evolution_way),tonumber(slot_weap))
+end
 
 function epic_boss_fight:ebf_skills()
   local hero = Convars:GetCommandClient():GetAssignedHero()
@@ -317,7 +572,7 @@ end
 function epic_boss_fight:save(com_name,save_slot)
   local slot = save_slot
   local hero = Convars:GetCommandClient():GetAssignedHero()
-  save(hero,slot,false)
+  save(hero,slot,true,false)
 end
 
 function epic_boss_fight:print_info()
@@ -404,6 +659,23 @@ function epic_boss_fight:Sell_Item(data)
   inv_manager:Sell_Item(hero,slot)
 end
 
+function epic_boss_fight:Buy_Item(data)
+  local hero = PlayerResource:GetSelectedHeroEntity( data.PlayerID )
+  Item = epic_boss_fight:_CreateItem(data.name,hero)
+  if PlayerResource:HasCustomGameTicketForPlayerID( hero:GetPlayerID() ) == true then local size = INVENTORY_PASS_SIZE else size = INVENTORY_SIZE end
+  if Item.stackable == false and #hero.inventory == size then
+    Notifications:Inventory(hero:GetPlayerID(), {text="#NOSLOT",duration=2,color="FFAAAA"})
+  else
+    if hero:GetGold()>= data.price then
+      PlayerResource:SpendGold(data.PlayerID,data.price, 4) 
+      inv_manager:Add_Item(hero,Item)
+    else
+      Notifications:Inventory(hero:GetPlayerID(), {text="#NOGOLD",duration=2,color="FFAAAA"})
+    end
+  end
+end
+
+
 function epic_boss_fight:Use_Item(data)
   local slot = tonumber( data.Slot )
   local hero = PlayerResource:GetSelectedHeroEntity( data.PlayerID )
@@ -422,9 +694,11 @@ function epic_boss_fight:Unequip_Item(data)
   inv_manager:Unequip(hero,data.Slot)
 end
 
-function epic_boss_fight:ebf_upgrade(com_name,stat)
+function epic_boss_fight:ebf_upgrade(com_name,soul_slot,weapon_slot)
   local hero = Convars:GetCommandClient():GetAssignedHero()
-  inv_manager:upgrade_weapon(hero,stat)
+  soul_slot = tonumber( soul_slot ) 
+  weapon_slot = tonumber( weapon_slot )
+  inv_manager:up_weapon(hero,soul_slot,weapon_slot)
 end
 
 function epic_boss_fight:ebf_unequip(com_name,slot_name)
@@ -444,9 +718,6 @@ function epic_boss_fight:ebf_sell_item(com_name,slot_num)
   local hero = Convars:GetCommandClient():GetAssignedHero()
   inv_manager:Sell_Item(hero,slot)
 end
-
-
-
 
 
 function epic_boss_fight:OnThink( )
@@ -494,9 +765,9 @@ function epic_boss_fight:update_net_table(hero)
   local current_XP = hero.XP
   if hero.equipement~=nil then
     if hero.equipement.weapon ~= nil then  
-      CustomNetTables:SetTableValue( "info",key, {CD = hero.CD,Name = hero:GetUnitName(),inshop = hero.Isinshop,LVL = hero.Level ,WName = hero.equipement.weapon.Name, WLVL = hero.equipement.weapon.level ,HP = hero:GetHealth(),MAXHP = hero:GetMaxHealth(),MP = hero:GetMana(),MAXMP = hero:GetMaxMana(),HXP =current_XP,MAXHXP = REAL_XP_TABLE[hero.Level],WXP = hero.equipement.weapon.XP,MAXWXP = hero.equipement.weapon.Next_Level_XP  } )
+      CustomNetTables:SetTableValue( "info",key, {gold = hero:GetGold() ,CD = hero.CD,Name = hero:GetUnitName(),inforge = hero.Isinforge,inshop = hero.Isinshop,LVL = hero.Level ,WName = hero.equipement.weapon.item_name, WLVL = hero.equipement.weapon.level ,HP = hero:GetHealth(),MAXHP = hero:GetMaxHealth(),MP = hero:GetMana(),MAXMP = hero:GetMaxMana(),HXP =current_XP,MAXHXP = REAL_XP_TABLE[hero.Level],WXP = hero.equipement.weapon.XP,MAXWXP = hero.equipement.weapon.Next_Level_XP  } )
     else
-      CustomNetTables:SetTableValue( "info",key, {CD = hero.CD,Name = hero:GetUnitName(),inshop = hero.Isinshop,LVL = hero.Level ,WName = "Fist", WLVL = 0 ,HP = hero:GetHealth(),MAXHP = hero:GetMaxHealth(),MP = hero:GetMana(),MAXMP = hero:GetMaxMana(),HXP = current_XP,MAXHXP = REAL_XP_TABLE[hero.Level],WXP = 0,MAXWXP = 0  } )
+      CustomNetTables:SetTableValue( "info",key, {gold = hero:GetGold() ,CD = hero.CD,Name = hero:GetUnitName(),inforge = hero.Isinforge,inshop = hero.Isinshop,LVL = hero.Level ,WName = "Fist", WLVL = 0 ,HP = hero:GetHealth(),MAXHP = hero:GetMaxHealth(),MP = hero:GetMana(),MAXMP = hero:GetMaxMana(),HXP = current_XP,MAXHXP = REAL_XP_TABLE[hero.Level],WXP = 0,MAXWXP = 0  } )
     end
   end
 end

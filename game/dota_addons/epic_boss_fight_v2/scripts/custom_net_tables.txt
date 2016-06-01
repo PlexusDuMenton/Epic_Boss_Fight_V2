@@ -2,11 +2,17 @@
 {
   custom_net_tables =
   [
-    "inventory",
+    "inventory_player_0",
+    "inventory_player_1",
+    "inventory_player_2",
+    "inventory_player_3",
+    "inventory_player_4",
+    "inventory_player_5",
     "stats",
     "info",
     "skill",
     "skill_tree",
     "skill_table",
+    "KVFILE",
   ]
 }

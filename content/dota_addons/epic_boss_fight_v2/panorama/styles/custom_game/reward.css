@@ -1,0 +1,34 @@
+.Main
+{
+    width: 100%;
+    height: 100%;
+    overflow: clip;
+}
+
+.Main_Panel
+{
+background-image: url("file://{images}/custom_game/reward_panel.psd");
+	height: 680px;
+  width: 680px;
+  horizontal-align: left;
+    vertical-align: bottom;
+  margin-left: 30%;
+  margin-bottom: 20%;
+
+}
+
+.Label
+{
+	text-align: center;
+	text-overflow: clip;
+	font-weight: thin;
+	font-size: 40px;
+	color: #AACCFF;
+}
+
+.Slot_Panel
+{
+background-image: url("file://{images}/custom_game/inventory/slot.psd");
+	height: 64px;
+  width: 64px;
+}

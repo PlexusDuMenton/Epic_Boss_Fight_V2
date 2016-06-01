@@ -1,13 +1,21 @@
 var inventory;
 var stats;
 var inshop = false;
+var inforge = false;
+var forge_panel;
 var ID = Players.GetLocalPlayer()
 $("#inv_panel").visible = false;
 $("#hero_panel").visible = false;
 $.Schedule(0.3,Updateinventory);
 $("#inventory_button").visible = false;
 $("#hero_button").visible = false;
+$("#skill_button").visible = false;
 $("#item_main_bar").visible = false;
+
+GameUI.CustomUIConfig().Events.SubscribeEvent( "update_forge_panel", (function(a){
+	forge_panel = a.selected_tab 
+	}))
+
 	function Updateinventory()
 	{
 		
@@ -15,16 +23,20 @@ $("#item_main_bar").visible = false;
 		$.Schedule(0.1, Updateinventory);
 		CustomNetTables.SubscribeNetTableListener
 		key = "player_" + ID.toString()
-		inventory = CustomNetTables.GetTableValue( "inventory", key)
+		inventory = CustomNetTables.GetTableValue( "inventory_player_"+ID,key)
 		stats = CustomNetTables.GetTableValue( "stats", key)
 		if (typeof CustomNetTables.GetTableValue( "info", key) != 'undefined')
 		{
 			inshop = CustomNetTables.GetTableValue( "info", key).inshop
+			inforge = CustomNetTables.GetTableValue( "info", key).inforge
 			if (inventory.size == 30){
 				$("#Inventory_BG").style.clip = "rect( 0% ,100%, 75% ,0% )";
 			}
 		}
 	}
+	
+GameUI.CustomUIConfig().Events.SubscribeEvent( "display_info", (function(arg){display_info(arg.item)}))
+GameUI.CustomUIConfig().Events.SubscribeEvent( "hide_info", (function(){$("#Info").RemoveAndDeleteChildren()}))
 function create_image (i){
 				if (typeof inventory != 'undefined'){
 					if (typeof inventory.inventory[i+1] != 'undefined')
@@ -33,24 +45,30 @@ function create_image (i){
 						var item_name = inventory.inventory[i+1].item_name
 						var Item_Image = $("#item_image_"+i.toString())
 						if (Item_Image != null) {
-							Item_Image.SetImage("file://{images}/custom_game/itemhud/"+item_name+ ".png")
+							if (inventory.inventory[i+1].Soul == 1){
+							Item_Image.SetImage("file://{images}/custom_game/itemhud/"+item_name+"_"+ inventory.inventory[i+1].quality + ".png")
+							}else{Item_Image.SetImage("file://{images}/custom_game/itemhud/"+item_name+".png")}
 							var Panel = Item_Image.GetParent()
 							var ammount = $("#label_item_inv_ammount_"+i.toString())
 							if (inventory.inventory[i+1].ammount > 1){
 								ammount.text = inventory.inventory[i+1].ammount
+								ammount.hittest=false
 							}else
 							{
 								ammount.text = ""
+								ammount.hittest=false
 							}
 							if (inventory.inventory[i+1].cat == "weapon"){
 							var label_level = $("#label_Level_"+i.toString())
 								label_level.SetHasClass( "Inventory_Label_ve_small", true );
 								label_level.text = $.Localize("#Level")+" : " + inventory.inventory[item_slot+1].level
 								label_level.style.position = "0px 32px 1px";
+								label_level.hittest=false
 							}else
 							{
 								var label_level = $("#label_Level_"+i.toString())
 								label_level.text = ""
+								label_level.hittest=false
 							}
 							Panel.SetPanelEvent("onmouseover", function(){display_info(inventory.inventory[i+1])});
 							Panel.SetPanelEvent("onmouseout", function(){$("#Info").RemoveAndDeleteChildren()});	
@@ -62,34 +80,73 @@ function create_image (i){
 							Panel.SetPanelEvent('onactivate', (function(){
 								var exit = $.CreatePanel("Button",$("#menu_Items"), "exit" );
 								exit.SetHasClass( "Main", true );
-								var Menu = $.CreatePanel( "Panel", Panel, "menu_"+item_slot.toString() );
+								var Menu = $.CreatePanel( "Panel", $("#menu_Items"), "menu_"+item_slot.toString() );
 								var pos_mouse = GameUI.GetCursorPosition()
 								Menu.style.position = (GameUI.GetCursorPosition()[0]) +"px "+(GameUI.GetCursorPosition()[1])+"px 0px";
 								Menu.SetHasClass( "Inventory_Menu", true );
-								Menu.SetParent($("#menu_Items"))
+
 
 								var Use = $.CreatePanel( "Button", Menu, "menu_use_"+item_slot.toString() );
 								var position_Y = 0
 								Use.style.position = "0px " +position_Y +"px 1px";
-								position_Y = position_Y + 30
+								position_Y = position_Y + 40
 								Use.SetHasClass( "Inventory_Button", true );
 								if (inventory.inventory[item_slot+1].cat == "consumable"){
 									var Bar = $.CreatePanel( "Button", Menu, "menu_info_"+item_slot.toString() );
 									Bar.SetHasClass( "Inventory_Button", true );
 									Bar.style.position = "0px " +position_Y +"px 1px";
-									position_Y = position_Y + 30
+									position_Y = position_Y + 40
 								}
 								if (inshop == true )
 								{
 									var Sell = $.CreatePanel( "Button", Menu, "menu_sell_"+item_slot.toString() );
 									Sell.style.position = "0px " +position_Y +"px 1px";
-									position_Y = position_Y + 30
+									position_Y = position_Y + 40
 									Sell.SetHasClass( "Inventory_Button", true );
 									
 									var label_Sell = $.CreatePanel( "Label", Sell, "label_sell_"+item_slot.toString() );
 									label_Sell.SetHasClass( "Inventory_Label", true );
 									label_Sell.text = "Sell" 
 								}
+								if (inforge == true )
+								{
+									if (inventory.inventory[item_slot+1].cat == "weapon"){
+										var to_forge = $.CreatePanel( "Button", Menu, "menu_sell_"+item_slot.toString() );
+										to_forge.style.position = "0px " +position_Y +"px 1px";
+										position_Y = position_Y + 40
+										to_forge.SetHasClass( "Inventory_Button", true );
+										
+										var label_to_forge = $.CreatePanel( "Label", to_forge, "label_sell_"+item_slot.toString() );
+										label_to_forge.SetHasClass( "Inventory_Label", true );
+										label_to_forge.text = $.Localize("#add_weapon_1")
+									}
+										
+									if (forge_panel == "infusion" ){
+										if (inventory.inventory[item_slot+1].Soul == 1){
+											var to_forge_2 = $.CreatePanel( "Button", Menu, "menu_sell_"+item_slot.toString() );
+											to_forge_2.style.position = "0px " +position_Y +"px 1px";
+											position_Y = position_Y + 40
+											to_forge_2.SetHasClass( "Inventory_Button", true );
+											
+											var label_to_forge_2 = $.CreatePanel( "Label", to_forge_2, "label_sell_"+item_slot.toString() );
+											label_to_forge_2.SetHasClass( "Inventory_Label", true );
+											label_to_forge_2.text = $.Localize("#add_soul")
+										}
+									}
+									if (forge_panel == "transmutation"){
+										if (inventory.inventory[item_slot+1].cat == "weapon"){
+											var to_forge_2 = $.CreatePanel( "Button", Menu, "menu_sell_"+item_slot.toString() );
+											to_forge_2.style.position = "0px " +position_Y +"px 1px";
+											position_Y = position_Y + 40
+											to_forge_2.SetHasClass( "Inventory_Button", true );
+												
+											var label_to_forge_2 = $.CreatePanel( "Label", to_forge_2, "label_sell_"+item_slot.toString() );
+											label_to_forge_2.SetHasClass( "Inventory_Label_small", true );
+											label_to_forge_2.text = $.Localize("#add_weapon_2")
+										}
+									}
+								}
+								
 								//var Unequip = $.CreatePanel( "Button", Menu, "menu_unequip_"+item_slot.toString() );
 								//Unequip.SetHasClass( "Inventory_Button", true );
 								//var label_Unequip = $.CreatePanel( "Label", Unequip, "label_unequip_"+item_slot.toString() );
@@ -99,7 +156,7 @@ function create_image (i){
 								var Drop = $.CreatePanel( "Button", Menu, "menu_Drop_"+item_slot.toString() );
 								Drop.SetHasClass( "Inventory_Button", true );
 								Drop.style.position = "0px " +position_Y +"px 1px";
-								position_Y = position_Y + 30
+								position_Y = position_Y + 40
 								Menu.height = position_Y 
 								
 								
@@ -108,22 +165,22 @@ function create_image (i){
 								if (typeof inventory.inventory[item_slot+1] != 'undefined')
 								{
 									if (inventory.inventory[item_slot+1].Equipement == true){
-										label_Use.text = "Equip"
+										label_Use.text = $.Localize("#Equip")
 									}else{
-										label_Use.text = "Use" 
+										label_Use.text = $.Localize("#Use") 
 									}
 								}
 								
 								var label_Drop = $.CreatePanel( "Label", Drop, "label_drop_"+item_slot.toString() );
 								label_Drop.SetHasClass( "Inventory_Label", true );
-								label_Drop.text= "Drop"
-								if (inventory.inventory[item_slot+1].Equipement == 1 ){
-									label_Drop.text= "Destroy"
+								label_Drop.text= $.Localize("#Drop")
+								if (inventory.inventory[item_slot+1].Equipement == 1 || inventory.inventory[item_slot+1].Soul == 1 ){
+									label_Drop.text=$.Localize("#Destroy")
 								}
 								if (inventory.inventory[item_slot+1].cat == "consumable"){
 									var label_Bar = $.CreatePanel( "Label", Bar, "label_info_"+item_slot.toString() );
 									label_Bar.SetHasClass( "Inventory_Label", true );
-									label_Bar.text= "To Skill Bar"
+									label_Bar.text=$.Localize("#to_item_bar")
 								}
 								exit.SetPanelEvent('onactivate', (function(){
 									$("#menu_Items").RemoveAndDeleteChildren()
@@ -141,6 +198,36 @@ function create_image (i){
 										$("#menu_Items").RemoveAndDeleteChildren()
 									}))
 								}
+								if (inforge == true){
+										if (inventory.inventory[item_slot+1].cat == "weapon"){
+											to_forge.SetPanelEvent('onactivate', (function(){
+											$("#Info").RemoveAndDeleteChildren()
+												$("#menu_Items").RemoveAndDeleteChildren()
+											GameUI.CustomUIConfig().Events.FireEvent( "to_forge_main", { Slot : item_slot + 1} );
+										}))
+										}
+											
+										if (forge_panel == "infusion" ){
+											if (inventory.inventory[item_slot+1].Soul == 1){
+												to_forge_2.SetPanelEvent('onactivate', (function(){
+												$("#Info").RemoveAndDeleteChildren()
+												$("#menu_Items").RemoveAndDeleteChildren()
+												GameUI.CustomUIConfig().Events.FireEvent( "to_forge_secondary", { Slot : item_slot + 1} );
+
+											}))
+											}
+										}
+										if (forge_panel == "transmutation"){
+											if (inventory.inventory[item_slot+1].cat == "weapon"){
+												to_forge_2.SetPanelEvent('onactivate', (function(){
+												$("#Info").RemoveAndDeleteChildren()
+												$("#menu_Items").RemoveAndDeleteChildren()
+												GameUI.CustomUIConfig().Events.FireEvent( "to_forge_secondary", { Slot : item_slot + 1} );
+												
+											}))
+											}
+										}
+								}
 								Drop.SetPanelEvent('onactivate', (function(){
 									label_Drop.text = "confirm"
 										Drop.SetPanelEvent('onactivate', (function(){
@@ -155,20 +242,20 @@ function create_image (i){
 								if (inventory.inventory[item_slot+1].cat == "consumable"){
 									Bar.SetPanelEvent('onmouseover', (function(){
 										if ($("#submenu_"+item_slot.toString()) == null ){
-										var SubMenu = $.CreatePanel( "Panel", Panel, "submenu_"+item_slot.toString() );
+										var SubMenu = $.CreatePanel( "Panel", $("#menu_Items"), "submenu_"+item_slot.toString() );
 											SubMenu.style.position = (pos_mouse[0]+100) +"px "+pos_mouse[1]+"px 0px";
 											SubMenu.SetHasClass( "Inventory_Menu", true );
-											SubMenu.SetParent($("#menu_Items"))
+
 											var sub_position_Y = 0
 										for (j = 0; j < 4; j++){
 											var Slot = $.CreatePanel( "Button", SubMenu, "menu_use_"+j );
 											Slot.style.position = "0px " +sub_position_Y +"px 1px";
-											sub_position_Y = sub_position_Y + 30
+											sub_position_Y = sub_position_Y + 100
 											Slot.SetHasClass( "Inventory_Button", true );
 											
 											var label_Slot = $.CreatePanel( "Label", Slot, "label_drop_"+j );
 											label_Slot.SetHasClass( "Inventory_Label", true );
-											label_Slot.text= "Slot "+ (j + 1)
+											label_Slot.text= $.Localize("#Slot")+ (j + 1)
 											var slot_number = j + 1
 											if (j == 0){ 
 												Slot.SetPanelEvent('onactivate', (function(){
@@ -235,7 +322,6 @@ function create_image (i){
 			
 function Open_Inventory(){
 	$("#inv_panel").visible = true;
-	$("#inv_but_label").text = "Close inv"
 	$("#inventory_button").SetPanelEvent('onactivate', close_inventory)
 	$.Schedule(0.055,Updateslot);
 	function Updateslot()
@@ -285,6 +371,7 @@ GameEvents.Subscribe( "Display_Bar", display_but)
 function display_but(){
 $("#item_main_bar").visible = true;
 $("#inventory_button").visible = true;
+$("#skill_button").visible = true;
 $("#hero_button").visible = true;
 Game.AddCommand( "+Open_Inventory", inv_key, "", 0 );
 Game.AddCommand( "+Open_Hero_Panel", hero_key, "", 0 );
@@ -339,7 +426,13 @@ function create_hero_panel_image(i){
 						var item_name = item.item_name
 						var Item_Image = $("#item_hero_image_"+i.toString())
 						if (Item_Image != null){
-							Item_Image.SetImage("file://{images}/custom_game/itemhud/"+item_name+ ".png")
+							if (item.Soul == 1){
+								Item_Image.SetImage("file://{images}/custom_game/itemhud/"+item_name+"_"+item.quality+".png")
+							}
+							else
+							{
+								Item_Image.SetImage("file://{images}/custom_game/itemhud/"+item_name+ ".png")
+							}
 							var Panel = Item_Image.GetParent()
 							var label_level = $("#label_hero_Level_"+i.toString())
 							if (item.cat == "weapon"){
@@ -373,18 +466,13 @@ function create_hero_panel_image(i){
 				}
 			}
 
+function Open_Skill_Tree(){
+		GameUI.CustomUIConfig().Events.FireEvent( "open_skill_bar", {} )
+}
+			
 function Open_Hero_Panel(){
 	$("#hero_panel").visible = true;
-	$("#hero_but_label").text = $.Localize("#Close")
 	$("#hero_button").SetPanelEvent('onactivate', close_hero)
-	var skill_tree_button = $.CreatePanel( "Panel", $("#hero_panel") , "close" );
-		skill_tree_button.SetHasClass( "Skill_tree", true );
-		skill_tree_button.SetPanelEvent("onactivate", function(){
-			GameEvents.SendCustomGameEventToServer( "skill_bar", {} );
-		})	
-	var label_st = $.CreatePanel( "Label", skill_tree_button , "close" );
-	label_st.SetHasClass( "Inventory_Label_small2", true );
-	label_st.text = $.Localize("#Skill_Tree")
 		
 	$.Schedule(0.055,Updateslot_panel);
 	function Updateslot_panel()
@@ -412,16 +500,16 @@ function Open_Hero_Panel(){
 				Panel.style.position = "55px 175px 1px";
 			}
 			if (i == 1 ){
-				Panel.style.position = "150px 134px 1px";
+				Panel.style.position = "152px 134px 1px";
 			}
 			if (i == 2 ){
-				Panel.style.position = "150px 235px 1px";
+				Panel.style.position = "152px 233px 1px";
 			}
 			if (i == 3 ){
-				Panel.style.position = "150px 47px 1px";
+				Panel.style.position = "152px 48px 1px";
 			}
 			if (i == 4 ){
-				Panel.style.position = "251px 190px 1px";
+				Panel.style.position = "254px 190px 1px";
 			}
 			if (i == 5 ){
 				Panel.style.position = "103px 323px 1px";
@@ -435,7 +523,7 @@ function Open_Hero_Panel(){
 		var H_menu = $.CreatePanel( "Label", $("#Menu_h"), "menu_info_h" )
 		H_menu.SetHasClass( "menu_Items", true );
 		H_menu.hittest = false 
-		H_menu.style.position = "1150px 150px 1px";
+		H_menu.style.position = "80px 50px 1px";
 		
 		refresh_hero_stat()
 
@@ -449,7 +537,7 @@ function Open_Hero_Panel(){
 			var H_name = $.CreatePanel( "Label", $("#menu_info_h"), "Hero_Info_Name" )
 			H_name.SetHasClass( "Inventory_Label", true );
 			H_name.style.position = "350px 30px 1px";
-			H_name.text =  $.Localize("#"+stats.Name);
+			H_name.text =  $.Localize("#"+stats.Name+"_ebf");
 			
 			var H_Lvl = $.CreatePanel( "Label", $("#menu_info_h"), "Hero_Info_Lvl" )
 			H_Lvl.SetHasClass( "Inventory_Label", true );
@@ -483,7 +571,7 @@ function Open_Hero_Panel(){
 			var attack_speed = ((100 + as) * 0.01) / (Entities.GetBaseAttackTime( Players.GetPlayerHeroEntityIndex( ID ) ))
 			var aps = Number((attack_speed).toFixed(2));
 			
-			var dmg = Number((stats.hero_stats.damage + stats.skill_stats.damage + stats.skill_stats.str*1.5 +stats.hero_stats.str*1.5 + stats.equip_stats.damage + 2).toFixed(2));
+			var dmg = Number((stats.equip_stats.damage + stats.skill_stats.str*1.5 +stats.hero_stats.str*1.5 + stats.equip_stats.damage + 2).toFixed(2));
 			var dps = Number((dmg*aps).toFixed(1));
 			H_dmg.text = $.Localize("#Damage") + " : "+ + dmg + "("+ dps + " " + $.Localize("#DPS") + ")";
 			
@@ -567,96 +655,214 @@ Object.size = function(obj) {
         if (obj.hasOwnProperty(key)) size++;
     }
     return size;
-};
+}
 
 function display_info(item) {
 	$("#Info").RemoveAndDeleteChildren()
 	var Info_Panel = $.CreatePanel( "Label", $("#Info"), "Info_panel" )
 	Info_Panel.SetHasClass( "Info_panel", true );
-	var Exit = $.CreatePanel( "Button", Info_Panel, "Info_Item_exit" )
-	Exit.SetHasClass( "Close", true );
-	Exit.SetPanelEvent('onactivate',close_info)
+	Info_Panel.hittest = false
 	var Image = $.CreatePanel( "Image", Info_Panel, "Info_Item_Image" )
 	Image.SetHasClass( "ItemImage", true );
 	Image.style.position = "20px 20px 1px";
-	Image.SetImage("file://{images}/custom_game/itemhud/"+item.item_name+ ".png")
+	Image.hittest = false
+	if (item.Soul == 1){
+		Image.SetImage("file://{images}/custom_game/itemhud/"+item.item_name+"_"+item.quality+".png")
+		}
+	else
+		{
+		Image.SetImage("file://{images}/custom_game/itemhud/"+item.item_name+ ".png")
+		}
 	
 	var Label_Name = $.CreatePanel( "Label", Info_Panel, "Info_Item_Name" )
 	Label_Name.SetHasClass( "Inventory_Label_small", true );
 	Label_Name.style.position = "80px 20px 1px";
-	Label_Name.text = $.Localize("#"+item.Name)
-	if (item.quality == "poor") {
-	Label_Name.color = "#AAAAAA"
+	if (typeof item.qualifier != "undefined"){
+		Label_Name.text =$.Localize("#"+item.qualifier) + " " + $.Localize("#"+item.item_name)
 	}
-	if (item.quality == "magic") {
-	Label_Name.color = "#AAFFAA"
+	else{
+		Label_Name.text = $.Localize("#"+item.item_name)
+	}
+	Label_Name.hittest = false
+	if (item.quality == "Poor") {
+		Label_Name.style.color = "#888888"
+	}
+	if (item.quality == "Normal") {
+		Label_Name.style.color = "#CCCCCC"
+	}
+	if (item.quality == "Superior") {
+		Label_Name.style.color = "#FFFFFF"
+	}
+	if (item.quality == "Magic") {
+	Label_Name.style.color = "#22ef00"
+	}
+	if (item.quality == "Rare") {
+	Label_Name.style.color = "#ffe400"
+	}
+	if (item.quality == "Unique") {
+	Label_Name.style.color = "#ff7800"
+	}
+	if (item.quality == "Epic") {
+	Label_Name.style.color = "#0084ff"
+	}
+	if (item.quality == "Mystical") {
+	Label_Name.style.color = "#0600ff"
+	}
+	if (item.quality == "Legendary") {
+	Label_Name.style.color = "#5a00ff"
+	}
+	if (item.quality == "Mythical") {
+	Label_Name.style.color = "#ff0000"
+	}
+	if (item.quality == "Godlike") {
+	Label_Name.style.color = "#00ffa2"
 	}
 	
 	var Label_cat = $.CreatePanel( "Label", Info_Panel, "Info_Item_cat" )
 	Label_cat.SetHasClass( "Inventory_Label_ve_small", true );
 	Label_cat.style.position = "110px 45px 1px";
 	Label_cat.text = $.Localize("#"+item.cat)
+	Label_cat.hittest = false
 	var Label_price = $.CreatePanel( "Label", Info_Panel, "Info_Item_cat" )
 	Label_price.SetHasClass( "Inventory_Label_ve_small", true );
 	Label_price.style.position = "20px 90px 1px";
 	Label_price.text =  item.price + " " + $.Localize("#Gold")
+	Label_price.hittest = false
 	if (item.cat == "weapon"){
 		var Label_level = $.CreatePanel( "Label", Info_Panel, "Info_Item_level" )
 		Label_level.SetHasClass( "Inventory_Label_small", true );
 		Label_level.style.position = "115px 80px 1px";
 		Label_level.text = $.Localize("#Level") + " : " + item.level
+		Label_level.hittest = false
 	}
 	var pos_y = 120
-	if (item.Equipement == true){
+	if (item.Equipement == true || item.Soul == 1){
+		if (typeof item.Ilevel != "undefined"){
+			var Label_I_level = $.CreatePanel( "Label", Info_Panel, "Info_Item_dmg" )
+				Label_I_level.SetHasClass( "Inventory_Label_small", true );
+				Label_I_level.style.position = "10px "+ pos_y+"px 1px";
+				pos_y = pos_y + 25
+				Label_I_level.text = $.Localize("#I_Level") + " : " + item.Ilevel
+				Label_I_level.hittest = false
+		}
 		if (item.cat == "weapon"){
-			var Label_xp = $.CreatePanel( "Label", Info_Panel, "Info_Item_xp" )
-			Label_xp.SetHasClass( "Inventory_Label_small", true );
-			Label_xp.style.position = "10px "+ pos_y+"px 1px";
-			pos_y = pos_y + 25
-			
-			Label_xp.text = "XP : " + item.XP + " / " + item.Next_Level_XP
+			if (item.level >0) {
+				var Label_xp = $.CreatePanel( "Label", Info_Panel, "Info_Item_xp" )
+				Label_xp.SetHasClass( "Inventory_Label_small", true );
+				Label_xp.style.position = "10px "+ pos_y+"px 1px";
+				pos_y = pos_y + 25
+				
+				Label_xp.text = "XP : " + item.XP + " / " + item.Next_Level_XP
+				Label_xp.hittest = false
+			}
 		}
 		if (typeof item.damage != 'undefined') {
-			if (item.damage != 0) {
+			if (item.damage != 0 || item.bonus_damage != 0 || item.upgrade_damage != 0 || item.bonus_damage != 'undefined'  || item.upgrade_damage != 'undefined' ) {
 				var Label_dmg = $.CreatePanel( "Label", Info_Panel, "Info_Item_dmg" )
 				Label_dmg.SetHasClass( "Inventory_Label_small", true );
 				Label_dmg.style.position = "10px "+ pos_y+"px 1px";
 				pos_y = pos_y + 25
-				if (item.cat == "weapon"){
-				Label_dmg.text = $.Localize("#Damage") + " : " + item.damage + " + ("+item.dmg_grow +")"
+				if (typeof item.bonus_damage == 'undefined'){item.bonus_damage = 0}
+				if (typeof item.damage == 'undefined'){item.damage = 0}
+				if (typeof item.upgrade_damage == 'undefined'){item.upgrade_damage = 0}
+				if (item.cat == "weapon"&& item.level >0){
+				Label_dmg.text = $.Localize("#Damage") + " : " + (item.bonus_damage+item.damage) + " + ("+item.upgrade_damage+")"
 				}else{
 				Label_dmg.text = $.Localize("#Damage") + " : " + item.damage
 				}
+				Label_dmg.hittest = false
+			}
+		}
+		if (typeof item.m_damage != 'undefined') {
+			if (item.m_damage != 0 || item.bonus_m_damage != 0 || item.upgrade_m_damage != 0 || item.bonus_m_damage != 'undefined'  || item.upgrade_m_damage != 'undefined' ) {
+				var Label_mdmg = $.CreatePanel( "Label", Info_Panel, "Info_Item_dmg" )
+				Label_mdmg.SetHasClass( "Inventory_Label_small", true );
+				Label_mdmg.style.position = "10px "+ pos_y+"px 1px";
+				pos_y = pos_y + 25
+				if (typeof item.bonus_m_damage == 'undefined'){item.bonus_m_damage = 0}
+				if (typeof item.m_damage == 'undefined'){item.m_damage = 0}
+				if (typeof item.upgrade_m_damage == 'undefined'){item.upgrade_m_damage = 0}
+				if (item.cat == "weapon"&& item.level >0){
+					Label_mdmg.text = $.Localize("#M_Damage") + " : " + (item.bonus_m_damage+item.m_damage) + " + ("+item.upgrade_m_damage+")"
+				}else{
+					Label_mdmg.text = $.Localize("#M_Damage") + " : " + item.m_damage
+				}
+				Label_mdmg.hittest = false
 			}
 		}
 		if (typeof item.attack_speed != 'undefined') {
-			if (item.attack_speed != 0) {
+			if (item.attack_speed != 0 || item.bonus_attack_speed != 0 || item.upgrade_attack_speed != 0 || item.bonus_attack_speed != 'undefined'  || item.upgrade_attack_speed != 'undefined' ) {
 				var Label_as = $.CreatePanel( "Label", Info_Panel, "Info_Item_as" )
 				Label_as.SetHasClass( "Inventory_Label_small", true );
 				Label_as.style.position = "10px "+ pos_y+"px 1px";
 				pos_y = pos_y + 25
-				if (item.cat == "weapon"){
-					Label_as.text = $.Localize("#Attack_Speed") + " : " + item.attack_speed + " + ("+item.as_grow +")"
+				if (typeof item.bonus_attack_speed == 'undefined'){item.bonus_attack_speed = 0}
+				if (typeof item.attack_speed == 'undefined'){item.attack_speed = 0}
+				if (typeof item.upgrade_attack_speed == 'undefined'){item.upgrade_attack_speed = 0}
+				if (item.cat == "weapon"&& item.level >0){
+					Label_as.text = $.Localize("#Attack_Speed") + " : " + (item.bonus_attack_speed+item.attack_speed) + " + ("+item.upgrade_attack_speed+")"
 				}else{
 					Label_as.text = $.Localize("#Attack_Speed") + " : " + item.attack_speed
 				}
+				Label_as.hittest = false
 			}
 		}
 		if (typeof item.range != 'undefined') {
-			if (item.range != 0) {
+			if (item.range != 0 || item.bonus_range != 0 || item.upgrade_range != 0 || item.upgrade_range != 'undefined'  || item.bonus_range != 'undefined' ) {
 				var Label_range = $.CreatePanel( "Label", Info_Panel, "Info_Item_range" )
 				Label_range.SetHasClass( "Inventory_Label_small", true );
 				Label_range.style.position = "10px "+ pos_y+"px 1px";
 				pos_y = pos_y + 25
-				if (item.cat == "weapon"){
-					Label_range.text = $.Localize("#Range") + " : " + item.range + " + ("+item.range_grow +")"
+				if (typeof item.bonus_range == 'undefined'){item.bonus_range = 0}
+				if (typeof item.range == 'undefined'){item.range = 0}
+				if (typeof item.upgrade_range == 'undefined'){item.upgrade_range = 0}
+				if (item.cat == "weapon"&& item.level >0){
+					Label_range.text = $.Localize("#Range") + " : " + (item.bonus_range+item.range) + " + ("+item.upgrade_range +")"
 				}else{
 					Label_range.text = $.Localize("#Range") + " : " + item.range
 				}
+				Label_range.hittest = false
 			}
 		}
-		create_label(item.loh,$.Localize("#Life_on_Hit"),"")
-		create_label(item.ls,$.Localize("#Life_Steal"),"%")
+		
+		if (typeof item.loh != 'undefined') {
+			if (item.loh != 0 || item.bonus_loh != 0 || item.bonus_loh != 'undefined' || item.upgrade_loh != 0 || item.upgrade_loh != 'undefined' ) {
+				var Label_loh = $.CreatePanel( "Label", Info_Panel, "Info_Item_range" )
+				Label_loh.SetHasClass( "Inventory_Label_small", true );
+				Label_loh.style.position = "10px "+ pos_y+"px 1px";
+				pos_y = pos_y + 25
+				if (typeof item.bonus_loh == 'undefined'){item.bonus_loh = 0}
+				if (typeof item.loh == 'undefined'){item.loh = 0}
+				if (typeof item.upgrade_loh == 'undefined'){item.upgrade_loh = 0}
+				if (item.cat == "weapon"&& item.level >0){
+					Label_loh.text = $.Localize("#Life_on_Hit") + " : " + (item.bonus_loh+item.loh) + " + ("+item.upgrade_loh +")"
+				}else{
+					Label_loh.text = $.Localize("#Life_on_Hit") + " : " + item.loh
+				}
+				Label_loh.hittest = false
+			}
+		}
+		
+		if (typeof item.ls != 'undefined') {
+			if (item.ls != 0 || item.bonus_ls != 0 || item.upgrade_ls != 0 || item.bonus_ls != 'undefined'  || item.upgrade_ls != 'undefined' ) {
+				var ls = $.CreatePanel( "Label", Info_Panel, "Info_Item_range" )
+				ls.SetHasClass( "Inventory_Label_small", true );
+				ls.style.position = "10px "+ pos_y+"px 1px";
+				pos_y = pos_y + 25
+				if (typeof item.bonus_ls == 'undefined'){item.bonus_ls = 0}
+				if (typeof item.ls == 'undefined'){item.ls = 0}
+				if (typeof item.upgrade_ls == 'undefined'){item.upgrade_ls = 0}
+				if (item.cat == "weapon"&& item.level >0){
+					ls.text = $.Localize("#Life_Steal") + " : " + Number((item.bonus_ls+item.ls).toFixed(2))  + "% + ("+Number((item.upgrade_ls).toFixed(2))+"% )"
+				}else{
+					ls.text = $.Localize("#Life_Steal") + " : " + Number((item.ls).toFixed(2)) + "%"
+				}
+				ls.hittest = false
+
+			}
+		}
+		
+
 		create_label(item.hp,$.Localize("#Bonus_Health"),"")
 		create_label(item.mp,$.Localize("#Bonus_Mana"),"")
 		create_label(item.hp_regen,$.Localize("#HP_per_sec"),"")
@@ -664,19 +870,16 @@ function display_info(item) {
 		create_label(item.armor,$.Localize("#Armor"),"")
 		create_label(item.m_ress,$.Localize("#Magic_Ress"),"%")
 		create_label(item.movespeed,$.Localize("#Move_Speed"),"")
-		create_label(item.upgrade_point,$.Localize("#Upgrade_slot"),$.Localize("#Available"))
-		
+		create_label(item.upgrade_point,$.Localize("#Upgrade_slot")," " + $.Localize("#Available"))
+		pos_y = pos_y + 50
 		if (typeof item.effect != 'undefined') {
-			if (item.effect != "") {
+			if ((Object.size(item.effect))>=1) {
 				var Label_effect = $.CreatePanel( "Label", Info_Panel, "Info_Item_effect" )
 				Label_effect.SetHasClass( "Inventory_Label_small", true );
-				Label_effect.style.position = "10px "+ pos_y+"px 1px";
-				pos_y = pos_y + 25
-				var effect = ""
-				for (i = 1; i < (Object.size(item.effect)+1); i++){
-					effect = effect + $.Localize(item.effect[i]) +" | "
-				}
-				Label_effect.text = $.Localize("#Effect")+ " : " + effect
+				Label_effect.style.position = "-10px "+ pos_y+"px 1px";
+				pos_y = pos_y + 75
+				Label_effect.hittest = false
+				Label_effect.text = $.Localize("#Effect")+ " : " + $.Localize("#" + item.effect[1]) +" | " + $.Localize("#" + item.effect[1] + "_desc")
 			}
 		}
 		
@@ -697,26 +900,36 @@ function display_info(item) {
 				Label.SetHasClass( "Inventory_Label_small", true );
 				Label.style.position = "10px "+ pos_y+"px 1px";
 				pos_y = pos_y + 25
-				Label.text = stat_name + " : " + Number((stat).toFixed(2)) + end
+				if (Players.HasCustomGameTicketForPlayerID( ID ) == true) {
+					Label.text = stat_name + " : " + Number((stat*1.1).toFixed(2)) + end
+				}
+				else{
+					Label.text = stat_name + " : " + Number((stat).toFixed(2)) + end
+				}
+				Label.hittest = false
 			}
 		}
 		
 	}
 	
 	function create_lore(item){
-		if (typeof item.lore != 'undefined') {
-			if (stat != 0) {
 				var Label = $.CreatePanel( "Label", Info_Panel, "Info_Item_lore" )
 				Label.SetHasClass( "Inventory_Label_small", true );
-				Label.style.position = "10px "+ pos_y+"px 1px";
+				Label.style.position = "-10px "+ pos_y+"px 1px";
 				pos_y = pos_y + 25
-				Label.text = $.Localize("#"+item.lore)
-			}
-		}
+				Label.text = $.Localize("#"+item.item_name+"_desc")
+				Label.hittest = false
 		
 	}
 }
 
+Object.size = function(obj) {
+    var size = 0, key;
+    for (key in obj) {
+        if (obj.hasOwnProperty(key)) size++;
+    }
+    return size;
+};
 
 function inv_key(){
  if ($("#item_panel_0") != null) {
@@ -746,7 +959,6 @@ function close_hero() {
 		$("#Info").RemoveAndDeleteChildren()
 	}
 	$("#hero_panel").visible = false;
-	$("#hero_but_label").text = "Hero"
 	$("#hero_button").SetPanelEvent('onactivate',Open_Hero_Panel)
 }
 
@@ -758,18 +970,19 @@ function close_inventory() {
 		$("#Info").RemoveAndDeleteChildren()
 	}
 	$("#inv_panel").visible = false;
-	$("#inv_but_label").text = "Inventory"
 	$("#inventory_button").SetPanelEvent('onactivate',Open_Inventory)
 }
 
 function create_image_skill_bar (i){
 				if (typeof inventory != 'undefined'){
-					var CD = CustomNetTables.GetTableValue( "info", key).CD
-					if (CD >0){
-						$("#item_CD"+i.toString()).text = CD
-					}else
-					{
-						$("#item_CD"+i.toString()).text = ""
+					if (typeof CustomNetTables.GetTableValue( "info", key) != 'undefined'){
+						var CD = CustomNetTables.GetTableValue( "info", key).CD
+						if (CD >0){
+							$("#item_CD"+i.toString()).text = CD
+						}else
+						{
+							$("#item_CD"+i.toString()).text = ""
+						}
 					}
 					if (typeof inventory.item_bar[i+1] != 'undefined')
 					{
@@ -784,7 +997,13 @@ function create_image_skill_bar (i){
 							ammount.text = ""
 						}
 						
-						Item_Image.SetImage("file://{images}/custom_game/itemhud/"+item_name+ ".png")
+						if (inventory.item_bar[i+1].Soul == 1){
+								Item_Image.SetImage("file://{images}/custom_game/itemhud/"+item_name+"_"+inventory.item_bar[i+1].quality+".png")
+							}
+							else
+							{
+								Item_Image.SetImage("file://{images}/custom_game/itemhud/"+item_name+ ".png")
+							}
 						var Panel = Item_Image.GetParent()
 						Panel.SetPanelEvent("onmouseover", function(){display_info(inventory.item_bar[i+1])});
 						Panel.SetPanelEvent("onmouseout", function(){$("#Info").RemoveAndDeleteChildren()});	
@@ -796,10 +1015,9 @@ function create_image_skill_bar (i){
 						Panel.SetPanelEvent('onactivate', (function(){
 							var exit = $.CreatePanel("Button",$("#menu_Items"), "exit" );
 							exit.SetHasClass( "Main", true );
-							var Menu = $.CreatePanel( "Panel", Panel, "menu_"+item_slot.toString() );
+							var Menu = $.CreatePanel( "Panel", $("#menu_Items"), "menu_"+item_slot.toString() );
 							Menu.style.position = (GameUI.GetCursorPosition()[0]) +"px "+((GameUI.GetCursorPosition()[1])- 75)+"px 0px";
 							Menu.SetHasClass( "Inventory_Menu", true );
-							Menu.SetParent($("#menu_Items"))
 
 							var Use = $.CreatePanel( "Button", Menu, "menu_use_"+item_slot.toString() );
 							var position_Y = 0
@@ -816,7 +1034,7 @@ function create_image_skill_bar (i){
 							
 							var label_Use = $.CreatePanel( "Label", Use, "label_use_"+item_slot.toString() );
 							label_Use.SetHasClass( "Inventory_Label", true );
-							label_Use.text = "Use" 
+							label_Use.text = $.Localize("#Use")
 
 							
 							var label_to_inv = $.CreatePanel( "Label", to_inv, "label_to_inv_"+item_slot.toString() );

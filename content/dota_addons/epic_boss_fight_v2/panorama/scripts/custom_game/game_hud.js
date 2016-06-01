@@ -1,7 +1,28 @@
 var ID = Players.GetLocalPlayer()
-var high = 750
+var high = 900
+var camera_free = true
 GameUI.SetCameraPitchMin( 0 )
 GameUI.SetCameraPitchMax( 0 )
+
+function free_camera(){
+	GameUI.SetCameraTarget(-1)
+	}
+function block_camera(){
+	GameUI.SetCameraTarget(Players.GetPlayerHeroEntityIndex( ID ))
+}
+
+GameEvents.Subscribe( "center_on_hero", center_camera_on_hero)
+	
+function center_camera_on_hero(){
+	if (camera_free == true){
+	$.Schedule(0.05,block_camera);
+	$.Schedule(0.1,free_camera);
+	}
+}
+
+
+
+
 
 GameUI.SetDefaultUIEnabled(DotaDefaultUIElement_t.DOTA_DEFAULT_UI_TOP_TIMEOFDAY, false);
 		GameUI.SetDefaultUIEnabled(DotaDefaultUIElement_t.DOTA_DEFAULT_UI_TOP_HEROES, false);
@@ -35,7 +56,7 @@ CustomNetTables.SubscribeNetTableListener
 	key = "player_" + ID.toString()
 	data = CustomNetTables.GetTableValue( "info", key)
 	if (typeof data != 'undefined') {
-	update_rare(data)
+		update_rare(data)
 	}
 }
 
@@ -51,21 +72,32 @@ $.Schedule(0.025, UpdateUI);
 GameEvents.Subscribe( "Display_Bar", display_bar)
 function display_bar()
 {
-$("#bar_general").visible = true;
-GameUI.SetCameraDistance( 1300 + high )
+	$("#bar_general").visible = true;
+	GameUI.SetCameraDistance( 1300 + high )
 }
+
+function right_on_hero(){
+	if (camera_free == true){
+			camera_free = false
+			block_camera()
+	}else{ 
+		camera_free = true
+		free_camera() 
+	}
+}
+
 
 function MouseFilter( event, arg )
 {
     if ( event == 'wheeled' ){
 		if ( arg > 0 ) {
-			if (high > 50){
-				high = high - 50
+			if (high > 100){
+				high = high - 100
 			}
 		}
 		else{
-			if (high < 1500){
-				high = high + 50
+			if (high < 3000){
+				high = high + 100
 				}	
 		}
 		GameUI.SetCameraDistance( 1300 + high )
@@ -90,17 +122,8 @@ $("#bar_general").visible = false;
 $("#no_mana").style.clip = "rect( 0% ,0%, 100% ,0% )";
 $("#no_weapon").style.clip = "rect( 0% ,0%, 100% ,0% )";
 
-function center_camera_on_hero(){
-	GameUI.SetCameraTarget(Players.GetPlayerHeroEntityIndex( ID ))
-	$.Schedule(0.025,free_camera);
-	
-	function free_camera(){
-	GameUI.SetCameraTarget(-1)
-	}
-}
-
 function update_rare(arg){
-	$("#name").text = $.Localize("#"+arg.Name);
+	$("#name").text = $.Localize("#"+arg.Name+"_ebf");
 	$("#PortaitImage").heroname = arg.Name
 }
 function update_bar(arg)
@@ -124,18 +147,20 @@ function update_bar(arg)
 		$("#hxp_bar_total").text = Number((arg.MAXHXP).toFixed(2));
 		if (arg.MAXWXP != 0){
 		$("#no_weapon").style.clip = "rect( 0% ,0%, 100% ,0% )";
-		$("#wxp_bar_parent").style.clip = "rect( 0% ," + ((arg.WXP/arg.MAXWXP)*56.17+41.93) + "%" + ", 100% ,0% )";
+		$("#wxp_bar_parent").style.clip = "rect( 0% ," + ((arg.WXP/arg.MAXWXP)*56.17+30) + "%" + ", 100% ,0% )";
 		}else{
 		$("#wxp_bar_parent").style.clip = "rect( 0% ,100%, 100% ,0% )";
 		$("#no_weapon").style.clip = "rect( 0% ,100%, 100% ,0% )";
 		}
 		$("#wxp_bar_current").text = "Weapon XP : " + Number((arg.WXP).toFixed(2));
 		$("#wxp_bar_total").text = Number((arg.MAXWXP).toFixed(2));
-		$("#wname").text = arg.WName;
+		$("#wname").text = $.Localize("#" + arg.WName);
 		$("#wlevel").text = arg.WLVL;
+		
+		$("#gold_ammount").text = arg.gold;
 
 		
-		$("#level").text = "Level "+ arg.LVL.toString()
+		$("#level").text = $.Localize("#Level")+" "+ arg.LVL.toString()
 	}
 	
 function numberWithCommas(x) {

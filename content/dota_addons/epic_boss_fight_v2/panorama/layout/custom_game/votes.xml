@@ -1,0 +1,14 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/custom_game/votes.css" />
+	</styles>
+	<scripts>
+		<include src="file://{resources}/scripts/custom_game/votes.js" />
+	</scripts>
+	<Panel class="Main" hittest="false">
+		
+		<Panel id = "Vote_Menu" hittest="false">
+
+		</Panel>
+	</Panel>
+</root>

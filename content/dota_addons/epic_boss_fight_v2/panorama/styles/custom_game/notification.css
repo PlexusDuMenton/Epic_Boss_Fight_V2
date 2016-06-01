@@ -1,0 +1,42 @@
+.Main
+{
+    width: 100%;
+    height: 100%;
+    overflow: clip;
+}
+
+.top_label
+ {
+	horizontal-align: middle;
+    vertical-align: top;
+	width: 1000px;
+	text-align: center;
+	text-overflow: clip;
+	font-weight: thin;
+	font-size: 40px;
+	color: #FFFFFF;
+}
+
+.bot_label
+ {
+	horizontal-align: middle;
+    vertical-align: bottom;
+	width: 1000px;
+	text-align: center;
+	text-overflow: clip;
+	font-weight: thin;
+	font-size: 40px;
+	color: #FFFFFF;
+}
+
+.custom_label
+ {
+	horizontal-align: right;
+    vertical-align: top;
+	width: 1000px;
+	text-align: center;
+	text-overflow: clip;
+	font-weight: thin;
+	font-size: 40px;
+	color: #FFFFFF;
+}

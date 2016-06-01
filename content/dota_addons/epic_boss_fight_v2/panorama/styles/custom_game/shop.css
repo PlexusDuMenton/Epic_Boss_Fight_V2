@@ -1,0 +1,86 @@
+.Main
+{
+    width: 100%;
+    height: 100%;
+    overflow: clip;
+}
+
+#main
+{
+margin-right: 60px;
+  margin-top: 50px;
+background-image: url("file://{images}/custom_game/inventory/shop_panel_base.png");
+ horizontal-align: right;
+  height: 500px;
+  width: 680px;
+}
+
+#tab
+{
+	background-image: url("file://{images}/custom_game/inventory/shop_panel_base.png");
+	width: 100%;
+    height: 42px;
+	margin-left: 0px;
+  margin-top: 0px;
+}
+
+#main_panel
+{
+	height: 500px;
+  width: 680px;
+  overflow: scroll scroll;
+}
+
+.free_space_under
+{
+	width: 100%;
+    height: 42px;
+}
+
+.title
+ {
+	text-align: center;
+	text-overflow: clip;
+	font-weight: thin;
+	font-size: 30px;
+	margin-left: 5px;
+	color: #AACCFF;
+}
+
+
+.slot
+{
+	background-image: url("file://{images}/custom_game/inventory/item_slot_inactive.png");
+	horizontal-align: left;
+    vertical-align: top;
+  height: 64px;
+  width: 64px;
+}
+
+
+.over_slot
+{
+	background-image: url("file://{images}/custom_game/inventory/item_slot_simple.png");
+	horizontal-align: left;
+    vertical-align: top;
+  height: 64px;
+  width: 64px;
+}
+
+.over_slot:hover
+{
+	background-image: url("file://{images}/custom_game/inventory/item_slot_hover.png");
+	horizontal-align: left;
+    vertical-align: top;
+  height: 64px;
+  width: 64px;
+}
+
+.over_slot_selected
+{
+	background-image: url("file://{images}/custom_game/inventory/item_slot_active.png");
+	horizontal-align: left;
+    vertical-align: top;
+  height: 64px;
+  width: 64px;
+}

@@ -201,43 +201,60 @@ background-image: url("file://{images}/custom_game/skill_tree/equip_button_4_hov
 
 #skill_tree_main
 {
- background-image: url("file://{images}/custom_game/skill_tree/panel.psd");
+ 
   margin-top: 20px;
   margin-left: 20px;
   
   height: 860px;
   width: 1260px;
+  overflow: scroll;
 }
 
 #tooltip_panel
 {
   height: 860px;
-  width: 99990px;
+  width: 1260px;
+  
 }
 
 #skill_tree_panel
 {
-background-image: url("file://{images}/custom_game/skill_tree/BG_effect.psd");
   height: 860px;
-  width: 99990px;
-  overflow: scroll;
+  width: 1260px;
+  
 }
 
 #skill_info_main
 {
- background-image: url("file://{images}/custom_game/skill_tree/info.psd");
+ 
   margin-top: 20px;
   margin-left: 1300px;
-  
   height: 860px;
   width: 500px;
+  overflow: scroll scroll;
+  
 }
 #skill_tree_info
 {
-background-image: url("file://{images}/custom_game/skill_tree/BG_effect.psd");
   height: 860px;
   width: 500px;
-  overflow: scroll;
+}
+
+#Back_ground_tree
+{
+margin-top: 20px;
+  margin-left: 1300px;
+background-image: url("file://{images}/custom_game/skill_tree/info.psd");
+  height: 860px;
+  width: 500px;
+}
+#Back_ground_info
+{
+ margin-top: 20px;
+  margin-left: 20px;
+background-image: url("file://{images}/custom_game/skill_tree/panel.psd");
+  height: 860px;
+  width: 1260px;
 }
 
 

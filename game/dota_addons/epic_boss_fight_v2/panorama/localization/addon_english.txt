@@ -1,0 +1,22 @@
+"addon"
+{
+	"Unassigned"      								"Unassigned Team"
+	"Spectator"       								"Spectator Team"
+	"Neutrals"        								"Neutral Team"
+	"NoTeam"          								"No Team"
+
+	"DOTA_GoodGuys"   								"The 'Hero'"
+	"DOTA_BadGuys"    								"There is a bug , don't panic , just report it , will be fixed soon"
+	
+	"addonname"										"Boss Rising"
+
+	"InstructionsTitle"								"Epic Boss Fight"
+	"InstructionsObjective"							"OBJECTIVE"
+	"InstructionsObjectiveText"						"."
+	"InstructionsHowToPlay"							"HOW TO PLAY"
+	"InstructionsLines"								"LISTEN TO YOUR TEAMMATE ! This game mode is based on teamplay.If there is no teamplay , there is no victory.<br>
+													-Think a way to kill boss , some boss can't be killed with just right click.<br>"
+
+	"Hero"			"Hero Panel"
+	"Skill"			"Skill Tree"
+}

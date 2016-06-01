@@ -29,21 +29,24 @@ function lua_hero_effect_poison_1:OnAttackLanded(event)
 		print ("test")
 		if event.attacker==self:GetParent() then
 			local target = event.target
-			local damage = event.damage*0.2
-			local duration = 5
+			local percent = 100
+			local duration = 3
+			local ticktime = 0.2
+			local tick = duration/ticktime
+			local damage = (event.damage * (percent/100) )/tick
 			local timer = 0
 
 			local damageTable = {
 				victim = target,
 				attacker = hero,
 				damage = damage,
-				damage_type = DAMAGE_TYPE_PURE,
+				damage_type = DAMAGE_TYPE_MAGICAL,
 			}
-			Timers:CreateTimer(0.4, function()
-				timer = timer + 0.4
+			Timers:CreateTimer(0.2, function()
+				timer = timer + 0.2
 				if timer <= duration then
 					ApplyDamage(damageTable) 
-					return 0.4
+					return 0.2
 				end
 		    end)
 		end

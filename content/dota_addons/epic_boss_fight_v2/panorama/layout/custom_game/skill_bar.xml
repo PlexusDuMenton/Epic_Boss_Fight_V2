@@ -6,6 +6,8 @@
 		<include src="file://{resources}/scripts/custom_game/skill_bar.js" />
 	</scripts>
 	<Panel class="Main" hittest="false">
+		 <!--<Image id="gamemode1" class="SeqImg" src="file://{images}/custom_game/itemhud/item_dagger.png" />  -->
+		
 		<Panel id = "main_skill_bar">
 
 		</Panel>

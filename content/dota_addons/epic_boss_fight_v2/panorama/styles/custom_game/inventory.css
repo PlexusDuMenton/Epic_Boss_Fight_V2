@@ -36,21 +36,23 @@
 .Close:hover
 {
 	background-image: url("file://{images}/custom_game/inventory/Close_button_hover.png");
+	brightness: 1.5;
 }
 .Inventory_Menu
 {
-  height: 120px;
-  width: 100px;
+  height: 160px;
+  width: 200px;
 }
 .Inventory_Button
 {
-  background-image: url("file://{images}/custom_game/inventory/button.png");
-  height: 30px;
-  width: 100px;
+  background-image: url("file://{images}/custom_game/inventory/button_menu.png");
+  height: 40px;
+  width: 200px;
 }
 .Inventory_Button:hover
 {
-  background-image: url("file://{images}/custom_game/inventory/button_hover.png");
+  background-image: url("file://{images}/custom_game/inventory/button_menu_hover.png");
+  brightness: 1.5;
 }
 
 .Skill_tree
@@ -157,8 +159,8 @@ background-image: url("file://{images}/custom_game/inventory/Item_bar_keys.png")
 .HeroPanel
 {
 background-image: url("file://{images}/custom_game/inventory/hero_panel_base.png");
-  margin-left: 1150px;
-  margin-top: 150px;
+  margin-left: 50px;
+  margin-top: 50px;
   height: 751px;
   width: 678px;
 }
@@ -166,40 +168,61 @@ background-image: url("file://{images}/custom_game/inventory/hero_panel_base.png
 .InventoryPanel
 {
 background-image: url("file://{images}/custom_game/inventory/inventory_Panel.png");
-  margin-left: 100px;
-  margin-top: 300px;
+  margin-right: 100px;
+  margin-bottom: 130px;
+  vertical-align: bottom;
+  horizontal-align: right;
   height: 400px;
   width: 640px;
 }
 .inv_but
 {
-  background-image: url("file://{images}/custom_game/inventory/open_inv.png");
+  background-image: url("file://{images}/custom_game/inventory/inventory_button.png");
   horizontal-align: left;
     vertical-align: bottom;
 	margin-left: 240px;
-	margin-bottom: 170px;
-  height: 35px;
- width: 90px;
+	margin-bottom: 180px;
+  height: 75px;
+ width: 75px;
 }
 .inv_but:hover
 {
-  background-image: url("file://{images}/custom_game/inventory/open_inv_hover.png");
+  background-image: url("file://{images}/custom_game/inventory/inventory_button_hover.png");
+  brightness: 1.8;
 }
 
 .hero_but
 {
-  background-image: url("file://{images}/custom_game/inventory/open_inv.png");
+  background-image: url("file://{images}/custom_game/inventory/inventory_button.png");
   horizontal-align: left;
     vertical-align: bottom;
-	margin-left: 240px;
-	margin-bottom: 130px;
-  height: 35px;
- width: 90px;
+	margin-left: 340px;
+	margin-bottom: 180px;
+  height: 75px;
+ width: 75px;
 }
 .hero_but:hover
 {
-  background-image: url("file://{images}/custom_game/inventory/open_inv_hover.png");
+  background-image: url("file://{images}/custom_game/inventory/inventory_button_hover.png");
+	brightness: 1.8;
+ }
+
+.skill_but
+{
+  background-image: url("file://{images}/custom_game/inventory/inventory_button.png");
+  horizontal-align: left;
+    vertical-align: bottom;
+	margin-left: 440px;
+	margin-bottom: 180px;
+  height: 75px;
+ width: 75px;
 }
+.skill_but:hover
+{
+  background-image: url("file://{images}/custom_game/inventory/inventory_button_hover.png");
+  brightness: 1.8;
+}
+
 
 #Inventory_BG
 {
@@ -210,17 +233,17 @@ background-image: url("file://{images}/custom_game/inventory/inventory_Panel.png
 .Info_panel
 {
  background-image: url("file://{images}/custom_game/inventory/Info_BG.png");
-  height: 400px;
- width: 278px;
+  height: 900px;
+ width: 400px;
 }
 
 
 #Info
 {
-  height: 400px;
- width: 274px;
- margin-left: 800px;
-  margin-top: 300px;
+  height: 900px;
+ width: 400px;
+ margin-left: 745px;
+  margin-top: 50px;
 }
 
 .menu_Items

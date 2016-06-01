@@ -1,0 +1,15 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/custom_game/forge.css" />
+		 <!-- <include src="s2r://panorama/styles/dotastyles.css" />  -->
+	</styles>
+	<scripts>
+		<include src="file://{resources}/scripts/custom_game/forge.js" />
+	</scripts>
+	<Panel class="Main" hittest="false">
+		<Panel id = "main_panel">
+			<Panel id = "windows_tabs"/>
+			<Panel id = "display"/>
+		</Panel>
+	</Panel>
+</root>

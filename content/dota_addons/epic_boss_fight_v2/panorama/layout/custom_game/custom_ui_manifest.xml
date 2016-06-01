@@ -1,9 +1,22 @@
 <root>
+	<scripts>
+	 <include src="file://{resources}/scripts/custom_game/custom_events.js" />
+	</scripts> 
     <Panel>
 		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/Hero_Selection.xml"/>
         <CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/hud.xml"/>
 		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/inventory.xml"/>
 		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/skill_bar.xml"/>
+		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/forge.xml"/>
+		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/shop.xml"/>
 		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/skill_tree.xml"/>
+		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/healthbar.xml"/>
+		
+		
+		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/reward.xml"/>
+		
+		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/votes.xml"/>
+		
+		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/notification.xml"/>
 	</Panel>
 </root>

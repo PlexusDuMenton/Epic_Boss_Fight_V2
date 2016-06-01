@@ -52,7 +52,7 @@ function skill_manager:calc_stat_skill(skill_stats,skill_bonus)
 
 
     if skill == nil then return stats end
-    if skill.damage ~= nil then skill_bonus.damage = skill_bonus.damage + skill.damage[tostring(skill.lvl)] end
+    if skill.damage_mult ~= nil then skill_bonus.damage_mult = skill_bonus.damage_mult + skill.damage_mult[tostring(skill.lvl)] end
     if skill.attack_speed ~= nil then skill_bonus.attack_speed = skill_bonus.attack_speed + skill.attack_speed[tostring(skill.lvl)] end
     if skill.range ~= nil then skill_bonus.range = skill_bonus.range + skill.range[tostring(skill.lvl)] end
     if skill.armor ~= nil then 
@@ -73,27 +73,6 @@ function skill_manager:calc_stat_skill(skill_stats,skill_bonus)
     if skill.int ~= nil then skill_bonus.int = skill_bonus.int + skill.int[tostring(skill.lvl)] end
     if skill.agi ~=nil then skill_bonus.agi = skill_bonus.agi + skill.agi[tostring(skill.lvl)] end
     if skill.effect == nil then skill.effect = {} end
-
-
-
-    
-    
-    
-    
-    
-    
-    
-
-    
-    
-   
-    
-
-   
-    
-
-    
-    
     
     --Merge effect of all skills
     skill_bonus.effect = tableMerge(skill_bonus.effect,skill.effect)
@@ -105,7 +84,7 @@ end
 function skill_manager:update_skill_bonus(hero)
 	local skill_bonus = {}
 	skill_bonus.effect = {}
-    skill_bonus.damage = 0
+    skill_bonus.damage_mult = 0
     skill_bonus.attack_speed = 0
     skill_bonus.range = 0
     skill_bonus.armor = 0
@@ -136,6 +115,7 @@ function skill_manager:update_skill_bonus(hero)
 	CustomNetTables:SetTableValue( "stats",key, {equip_stats = hero.equip_stats,skill_stats = hero.skill_bonus,hero_stats = hero.hero_stats,Name = hero:GetUnitName(),LVL = hero.Level,stats_points = hero.stats_points } )
 	CustomNetTables:SetTableValue( "skill",key, {active_skill = hero.active_list } )
 	CustomNetTables:SetTableValue( "skill_tree",key, {skill_tree = hero.skill_tree } )
+	inv_manager:Calculate_stats(hero)
 end
 
 
@@ -225,19 +205,19 @@ end
 
 function skill_manager:unequip_skill (hero,slot)
 	if slot ~= nil then 
-			hero.active_ability = hero.active_ability - 1 
-			local ID = hero.active_list[slot].ID
-			hero.skill_tree[ID].slot = nil
-			hero.skill_tree[ID].equip = false
-			hero.active_list[slot] = hero.skill_tree[-slot]
-			DeepPrintTable(hero.active_list)
-			for i = 1,4 do
-				hero:RemoveAbility(hero.active_list[i].name)
-				hero:AddAbility(hero.active_list[i].name)
-				local ability = hero:FindAbilityByName(hero.active_list[i].name)
-				ability:SetLevel(hero.active_list[i].lvl)
-			end
-			skill_manager:update_skill_bonus(hero)
+				hero.active_ability = hero.active_ability - 1 
+				local ID = hero.active_list[slot].ID
+				hero.skill_tree[ID].slot = nil
+				hero.skill_tree[ID].equip = false
+				hero.active_list[slot] = hero.skill_tree[-slot]
+				DeepPrintTable(hero.active_list)
+				for i = 1,4 do
+					hero:RemoveAbility(hero.active_list[i].name)
+					hero:AddAbility(hero.active_list[i].name)
+					local ability = hero:FindAbilityByName(hero.active_list[i].name)
+					ability:SetLevel(hero.active_list[i].lvl)
+				end
+				skill_manager:update_skill_bonus(hero)
 	end
 end
 
@@ -265,6 +245,8 @@ function skill_manager:equip_skill (hero,ID,slot)
 			print ("equip a skill")
 			if ID > 0 then
 				hero:RemoveAbility(hero.active_list[slot].name)
+				hero.skill_tree[hero.active_list[slot].ID].slot = nil
+				hero.skill_tree[hero.active_list[slot].ID].equip = false
 			end
 			hero.skill_tree[ID].equip = true
 			hero.active_ability = hero.active_ability + 1  

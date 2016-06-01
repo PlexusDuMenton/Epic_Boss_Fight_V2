@@ -25,10 +25,15 @@
 				<Image hittest="false" id="no_weapon" src="file://{images}/custom_game/HUD/no_weapon.png"/>
 			</Panel>
 			<Panel id="hero_icon" hittest="false">
-				<Panel id="PortaitImage_cut" hittest="true" onactivate='center_camera_on_hero()' >
+				<Panel id="PortaitImage_cut" hittest="true" onactivate='center_camera_on_hero()' oncontextmenu='right_on_hero()' >
 					<DOTAHeroMovie id="PortaitImage"/>
 				</Panel>
 			</Panel>
+			<Panel id="Gold" hittest="false">
+				<Image hittest="false" id="gold_icon" src="file://{images}/custom_game/itemhud/coins.png"/>
+				<Label hittest="false" id="gold_ammount" text="0"/>
+			</Panel>
+			
 			<Panel id="label_bar_parent" hittest="false">
 				<Label hittest="false" id="hp_bar_current" text="0.00"/>
 				<Label hittest="false" id="hp_bar_slash" text="/"/>

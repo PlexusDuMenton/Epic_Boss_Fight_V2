@@ -5,11 +5,9 @@
   <Panel class="AddonLoadingRoot">
     <Panel id="CustomBg" >
       <Image id="gamemode" class="SeqImg" src="file://{images}/custom_game/loading_screen/gamemode.jpg" />
-	  <!--  -->
+	  <!--<Image id="gamemode1" class="SeqImg" src="file://{images}/custom_game/itemhud/item_power_soul_Godlike.png" />  -->
 
-	  <Image id="gamemode1" class="SeqImg" src="file://{images}/custom_game/skill_tree/icon/armor_1.psd" />
-	   <Image id="gamemode1" class="SeqImg" src="file://{images}/custom_game/skill_tree/icon/damage_1.psd" />
-	   <Image id="gamemode1" class="SeqImg" src="file://{images}/custom_game/skill_tree/icon/attack_speed_1.psd" />
+	  
 	  
     </Panel>
 	<Panel id="Title" >

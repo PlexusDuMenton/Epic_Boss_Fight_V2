@@ -1,26 +1,74 @@
 "Items" 
 { 
+    "item_crowbar"
+    { 
+        "Ilevel" "333"
+        "damage" "33333"
+        "m_damage" "500"
+        "range" "33"
+        "ranged" "0"
+        "loh" "333333"
+        "ls" "33"
+        "attack_speed" "333"
+        "price" "333"
+        "Equipement" "1"
+        "cat"   "weapon"
+        //next are the bonus weapon get eachtime it level up 
+        "dmg_grow" "3333"
+        "m_dmg_grow" "500"
+        "range_grow" "33"
+        "as_grow" "33"
+        "quality" "Mythical"
+    }
     "item_rust_dagger"
     { 
+        "Ilevel" "0"
         "damage" "5"
         "range" "15"
-        "ranged" "0"
-        "loh" "0"
-        "ls" "0"
         "attack_speed" "50"
-        "Name"	"Rust Dagger"
         "price" "20"
         "Equipement" "1"
         "cat"	"weapon"
-        //as range and dmg mult are used when upgrading a weapon
-        "as_mult"	"1"
-        "range_mult"	"1"
-        "dmg_mult"	"1"
         //next are the bonus weapon get eachtime it level up 
         "dmg_grow" "2"
         "range_grow" "1"
         "as_grow" "5"
-        "quality" "poor"
+        "quality" "Poor"
+        "effect"{"1" "poison_1"} // rust is poisoneous
+    }
+    "item_dagger"
+    { 
+        "Ilevel" "3"
+        "damage" "15"
+        "range" "15"
+        "ranged" "0"
+        "magical" "0"
+        "attack_speed" "50"
+        "price" "120"
+        "Equipement" "1"
+        "cat"   "weapon"
+        //next are the bonus weapon get eachtime it level up 
+        "dmg_grow" "4"
+        "range_grow" "1"
+        "as_grow" "5"
+        "quality" "Normal"
+    }
+    "item_rust_sword"
+    { 
+        "Ilevel" "2"
+        "damage" "10"
+        "range" "55"
+        "attack_speed" "20"
+        "price" "100"
+        "Equipement" "1"
+        "cat"   "weapon"
+
+        //next are the bonus weapon get eachtime it level up 
+        "dmg_grow" "3"
+        "range_grow" "2"
+        "as_grow" "2"
+        //quality , will be used for drop and color weapon's name :D
+        "quality" "Normal"
         "effect"{"1" "poison_1"} // rust is poisoneous
     }
     "item_leather_vest"
@@ -28,77 +76,99 @@
         "hp" "15"
         "armor" "1.5"
         "attack_speed" "-5"
-        "Name"  "Leather Vest"
         "price" "20"
         "Equipement" "1"
         "cat"   "chest"
+        "quality" "Poor"
     }
     "item_leather_trousers"
     { 
+        "Ilevel" "0"
         "hp" "10"
         "armor" "0.5"
         "movespeed" "-5"
-        "Name"  "Leather Trousers"
         "price" "15"
         "Equipement" "1"
         "cat"   "legs"
+        "quality" "Poor"
     }
     "item_leather_boots"
     { 
+        "Ilevel" "0"
         "hp" "5"
         "armor" "0.5"
         "movespeed" "15"
-        "Name"  "Leather Boots"
         "price" "15"
         "Equipement" "1"
         "cat"   "boots"
+        "quality" "Poor"
     }
     "item_leather_gloves"
     { 
+        "Ilevel" "0"
         "hp" "5"
         "armor" "0.5"
         "attack_speed" "15"
-        "Name"  "Leather Gloves"
         "price" "15"
         "Equipement" "1"
         "cat"   "gloves"
+        "quality" "Poor"
     }
     "item_leather_hood"
-    { 
+    {
+        "Ilevel" "0" 
         "hp" "5"
         "armor" "1"
         "attack_speed" "15"
-        "Name"  "Leather Hood"
         "price" "15"
         "Equipement" "1"
         "cat"   "helmet"
+        "quality" "Poor"
     }
     "item_red_potion"
     { 
         "heal" "50"
-        "Name"  "Red Potion"
-        "price" "15"
+        "heal_pct" "5"
+        "price" "5"
         "stackable" "1"
         "cat"   "consumable"
         "duration"  "1.8"
+        "quality" "Poor"
     }
     "item_blue_potion"
     { 
         "heal_mana" "20"
-        "Name"  "Blue Potion"
-        "price" "10"
+        "heal_mana_pct" "5"
+        "price" "3"
         "stackable" "1"
         "cat"   "consumable"
         "duration"  "1.6"
+        "quality" "Poor"
     }
     "item_purple_potion"
     { 
         "heal" "50"
+        "heal_pct" "3.5"
         "heal_mana" "20"
-        "Name"  "Purple Potion"
-        "price" "20"
+        "heal_mana_pct" "3.5"
+        "price" "8"
         "stackable" "1"
         "cat"   "consumable"
         "duration"  "2"
+        "quality" "Poor"
     }
+
+    "item_power_soul"
+    { 
+        "damage" "0"
+        "m_damage" "0"
+        "range" "0"
+        "loh" "0"
+        "ls" "0"
+        "attack_speed" "0"
+        "price" "0"
+        "Soul" "1"
+        "cat"   "soul"
+    }
+
 }

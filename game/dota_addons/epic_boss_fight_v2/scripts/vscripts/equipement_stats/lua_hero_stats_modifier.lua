@@ -46,7 +46,7 @@ end
 
 function lua_hero_stats_modifier:GetModifierBaseAttack_BonusDamage()
 	if IsServer() then
-		return ((self:GetCaster().hero_stats.damage + self:GetCaster().skill_bonus.damage) + (self:GetCaster().hero_stats.str + self:GetCaster().skill_bonus.str)*1.5)
+		return ((self:GetCaster().hero_stats.str + self:GetCaster().skill_bonus.str)*1.5)
 	end
 end
 

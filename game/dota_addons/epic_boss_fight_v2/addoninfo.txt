@@ -5,7 +5,7 @@
   "IsPlayable"  "1"
   "Arena_Map"
   {
-          "MaxPlayers"                    "10"
+          "MaxPlayers"                    "6"
   }
   "Default_Keys"
    {
@@ -23,25 +23,25 @@
         }
         "03"
         {
-            "Key"       "1"
+            "Key"       "5"
             "Command"   "+item_1"
             "Name"      "Use Item 1"
         }
         "04"
         {
-            "Key"       "2"
+            "Key"       "6"
             "Command"   "+item_2"
             "Name"      "Use Item 2"
         }
         "05"
         {
-            "Key"       "3"
+            "Key"       "7"
             "Command"   "+item_3"
             "Name"      "Use Item 3"
         }
         "06"
         {
-            "Key"       "4"
+            "Key"       "8"
             "Command"   "+item_4"
             "Name"      "Use Item 4"
         }

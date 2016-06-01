@@ -19,6 +19,12 @@ MODIFIER_EVENT_ON_ATTACK_LANDED
 	return funcs
 end
 
+function log10(number)
+    if number <0 then print ("WTF") return number end
+    number = math.log(number)/math.log(10)
+    return number
+end
+
 function lua_equipement_modifier:OnAttackLanded(event)
 	if IsServer() then
 		local hero = self:GetCaster()
@@ -30,14 +36,23 @@ function lua_equipement_modifier:OnAttackLanded(event)
 			hero:SetHealth(hero:GetHealth() + life_steal)
 
 			if hero.equipement.weapon ~= nil then
-				local digits = #tostring( damage )
-				hero.equipement.weapon.XP = ((math.random(0,2)+(digits*4))*0.25) + hero.equipement.weapon.XP
+				hero.equipement.weapon.XP = ((math.random(1,3)+ math.ceil(log10(damage)^3) )*0.25) + hero.equipement.weapon.XP
 				inv_manager:weapon_checklevelup(hero)
 				inv_manager:save_inventory(hero)
+			end
+			if self:GetCaster().equip_stats.m_damage >0 then
+				local damageTable = {
+					victim = target,
+					attacker = hero,
+					damage = self:GetCaster().equip_stats.m_damage,
+					damage_type = DAMAGE_TYPE_MAGICAL,
+				}
+				ApplyDamage(damageTable)
 			end
 		end
 	end
 end
+
 
 
 function lua_equipement_modifier:IsHidden()
