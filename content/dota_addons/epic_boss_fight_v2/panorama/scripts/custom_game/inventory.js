@@ -552,17 +552,17 @@ function Open_Hero_Panel(){
 			var H_str = $.CreatePanel( "Label", $("#menu_info_h"), "Hero_Info_str" )
 			H_str.SetHasClass( "Inventory_Label_small", true );
 			H_str.style.position = "350px 150px 1px";
-			H_str.text = $.Localize("#Strength") + " : "+ Number((stats.hero_stats.str + stats.skill_stats.str).toFixed(2));
+			H_str.text = $.Localize("#Strength") + " : "+ Number((stats.hero_stats.str + stats.skill_stats.str+ stats.equip_stats.str).toFixed(2));
 			
 			var H_agi = $.CreatePanel( "Label", $("#menu_info_h"), "Hero_Info_agi" )
 			H_agi.SetHasClass( "Inventory_Label_small", true );
 			H_agi.style.position = "350px 175px 1px";
-			H_agi.text = $.Localize("#Agility") + " : "+ Number((stats.hero_stats.agi + stats.skill_stats.agi).toFixed(2));
+			H_agi.text = $.Localize("#Agility") + " : "+ Number((stats.hero_stats.agi + stats.skill_stats.agi+ stats.equip_stats.agi).toFixed(2));
 			
 			var H_int = $.CreatePanel( "Label", $("#menu_info_h"), "Hero_Info_int" )
 			H_int.SetHasClass( "Inventory_Label_small", true );
 			H_int.style.position = "350px 200px 1px";
-			H_int.text = $.Localize("#Inteligence") + " : "+ Number((stats.hero_stats.int + stats.skill_stats.int).toFixed(2));
+			H_int.text = $.Localize("#Inteligence") + " : "+ Number((stats.hero_stats.int + stats.skill_stats.int+ stats.equip_stats.int).toFixed(2));
 			
 			var H_dmg = $.CreatePanel( "Label", $("#menu_info_h"), "Hero_Info_dmg" )
 			H_dmg.SetHasClass( "Inventory_Label_small", true );
@@ -571,7 +571,7 @@ function Open_Hero_Panel(){
 			var attack_speed = ((100 + as) * 0.01) / (Entities.GetBaseAttackTime( Players.GetPlayerHeroEntityIndex( ID ) ))
 			var aps = Number((attack_speed).toFixed(2));
 			
-			var dmg = Number((stats.equip_stats.damage + stats.skill_stats.str*1.5 +stats.hero_stats.str*1.5 + stats.equip_stats.damage + 2).toFixed(2));
+			var dmg = Number((stats.equip_stats.damage + stats.skill_stats.str*1.5 +stats.hero_stats.str*1.5+ stats.equip_stats.str*1.5 + 2).toFixed(2));
 			var dps = Number((dmg*aps).toFixed(1));
 			H_dmg.text = $.Localize("#Damage") + " : "+ + dmg + "("+ dps + " " + $.Localize("#DPS") + ")";
 			
@@ -862,26 +862,30 @@ function display_info(item) {
 			}
 		}
 		
+		if (typeof item.hp != 'undefined') {
+			if (item.hp != 0 || item.bonus_ls != 0 || item.upgrade_ls != 0 || item.bonus_ls != 'undefined'  || item.upgrade_ls != 'undefined' ) {
+				var hp = $.CreatePanel( "Label", Info_Panel, "Info_Item_range" )
+				hp.SetHasClass( "Inventory_Label_small", true );
+				hp.style.position = "10px "+ pos_y+"px 1px";
+				pos_y = pos_y + 25
+				if (typeof item.hp == 'undefined'){item.hp = 0}
+				hp.text = $.Localize("#Bonus_Health") + " : " + Number((item.hp*Math.log10(stats.hero_stats.str + stats.skill_stats.str+ stats.equip_stats.str + 10)).toFixed(1))
+				hp.hittest = false
 
-		create_label(item.hp,$.Localize("#Bonus_Health"),"")
+			}
+		}
+		
 		create_label(item.mp,$.Localize("#Bonus_Mana"),"")
 		create_label(item.hp_regen,$.Localize("#HP_per_sec"),"")
 		create_label(item.mp_regen,$.Localize("#MP_per_sec"),"")
 		create_label(item.armor,$.Localize("#Armor"),"")
 		create_label(item.m_ress,$.Localize("#Magic_Ress"),"%")
 		create_label(item.movespeed,$.Localize("#Move_Speed"),"")
+		create_label(item.str,$.Localize("#Bonus_Strength"),"")
+		create_label(item.agi,$.Localize("#Bonus_Agility"),"")
+		create_label(item.int,$.Localize("#Bonus_Inteligence"),"")
 		create_label(item.upgrade_point,$.Localize("#Upgrade_slot")," " + $.Localize("#Available"))
 		pos_y = pos_y + 50
-		if (typeof item.effect != 'undefined') {
-			if ((Object.size(item.effect))>=1) {
-				var Label_effect = $.CreatePanel( "Label", Info_Panel, "Info_Item_effect" )
-				Label_effect.SetHasClass( "Inventory_Label_small", true );
-				Label_effect.style.position = "-10px "+ pos_y+"px 1px";
-				pos_y = pos_y + 75
-				Label_effect.hittest = false
-				Label_effect.text = $.Localize("#Effect")+ " : " + $.Localize("#" + item.effect[1]) +" | " + $.Localize("#" + item.effect[1] + "_desc")
-			}
-		}
 		
 	}
 	
@@ -892,6 +896,18 @@ function display_info(item) {
 	create_label(item.duration,$.Localize("#Duration"),"")
 	
 	create_lore(item)
+	if (typeof item.effect != 'undefined') {
+			if ((Object.size(item.effect))>=1) {
+				for (j = 1; j < Object.size(item.effect)+1; j++){
+					var Label_effect = $.CreatePanel( "Label", Info_Panel, "Info_Item_effect" )
+					Label_effect.SetHasClass( "Inventory_Label_small", true );
+					Label_effect.style.position = "-10px "+ pos_y+"px 1px";
+					pos_y = pos_y + 90
+					Label_effect.hittest = false
+					Label_effect.text = $.Localize("#Effect")+ " : " + $.Localize("#" + item.effect[j]) +" | " + $.Localize("#" + item.effect[j] + "_desc")
+				}
+			}
+		}
 	
 	function create_label(stat,stat_name,end){
 		if (typeof stat != 'undefined') {
@@ -899,7 +915,7 @@ function display_info(item) {
 				var Label = $.CreatePanel( "Label", Info_Panel, "Info_Item_"+stat_name )
 				Label.SetHasClass( "Inventory_Label_small", true );
 				Label.style.position = "10px "+ pos_y+"px 1px";
-				pos_y = pos_y + 25
+				pos_y = pos_y + 30
 				if (Players.HasCustomGameTicketForPlayerID( ID ) == true) {
 					Label.text = stat_name + " : " + Number((stat*1.1).toFixed(2)) + end
 				}
@@ -916,7 +932,7 @@ function display_info(item) {
 				var Label = $.CreatePanel( "Label", Info_Panel, "Info_Item_lore" )
 				Label.SetHasClass( "Inventory_Label_small", true );
 				Label.style.position = "-10px "+ pos_y+"px 1px";
-				pos_y = pos_y + 25
+				pos_y = pos_y + 120
 				Label.text = $.Localize("#"+item.item_name+"_desc")
 				Label.hittest = false
 		

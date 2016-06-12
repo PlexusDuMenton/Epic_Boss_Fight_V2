@@ -1,5 +1,26 @@
 "Items" 
 { 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //           __        _______    _    ____   ___  _   _             
+    // _____ ____\ \      / / ____|  / \  |  _ \ / _ \| \ | |_____ _____ 
+    //|_____|_____\ \ /\ / /|  _|   / _ \ | |_) | | | |  \| |_____|_____|
+    //|_____|_____|\ V  V / | |___ / ___ \|  __/| |_| | |\  |_____|_____|
+    //              \_/\_/  |_____/_/   \_\_|    \___/|_| \_|            
+    //                                                                                                      
     "item_crowbar"
     { 
         "Ilevel" "333"
@@ -22,7 +43,7 @@
     }
     "item_rust_dagger"
     { 
-        "Ilevel" "0"
+        "Ilevel" "1"
         "damage" "5"
         "range" "15"
         "attack_speed" "50"
@@ -36,15 +57,82 @@
         "quality" "Poor"
         "effect"{"1" "poison_1"} // rust is poisoneous
     }
+    "item_broken_bow"
+    { 
+        "Ilevel" "1"
+        "damage" "3"
+        "range" "400"
+        "attack_speed" "20"
+        "price" "20"
+        "Equipement" "1"
+        "ranged" "1"
+        "cat"   "weapon"
+        //next are the bonus weapon get eachtime it level up 
+        "dmg_grow" "2"
+        "range_grow" "15"
+        "as_grow" "3"
+        "quality" "Poor"
+    }
+    "item_bow"
+    { 
+        "Ilevel" "4"
+        "damage" "8"
+        "range" "600"
+        "attack_speed" "40"
+        "price" "100"
+        "Equipement" "1"
+        "ranged" "1"
+        "cat"   "weapon"
+        //next are the bonus weapon get eachtime it level up 
+        "dmg_grow" "4"
+        "range_grow" "20"
+        "as_grow" "5"
+        "quality" "Normal"
+    }
+    "item_long_bow"
+    { 
+        "Ilevel" "8"
+        "damage" "20"
+        "range" "1000"
+        "attack_speed" "10"
+        "price" "500"
+        "Equipement" "1"
+        "ranged" "1"
+        "cat"   "weapon"
+        //next are the bonus weapon get eachtime it level up 
+        "dmg_grow" "10"
+        "range_grow" "30"
+        "as_grow" "1"
+        "projectile_name"   "particles/units/heroes/hero_clinkz/clinkz_base_attack.vpcf"
+        "quality" "Normal"
+    }
+    "item_fire_long_bow"
+    { 
+        "Ilevel" "20"
+        "damage" "100"
+        "range" "1000"
+        "attack_speed" "10"
+        "price" "2250"
+        "Equipement" "1"
+        "ranged" "1"
+        "cat"   "weapon"
+        //next are the bonus weapon get eachtime it level up 
+        "dmg_grow" "25"
+        "range_grow" "30"
+        "as_grow" "1"
+        "quality" "Magic"
+        "projectile_name"   "particles/units/heroes/hero_clinkz/clinkz_searing_arrow.vpcf"
+        "effect"{"1" "fire_1"} // rust is poisoneous
+    }
     "item_dagger"
     { 
-        "Ilevel" "3"
+        "Ilevel" "5"
         "damage" "15"
         "range" "15"
         "ranged" "0"
         "magical" "0"
         "attack_speed" "50"
-        "price" "120"
+        "price" "250"
         "Equipement" "1"
         "cat"   "weapon"
         //next are the bonus weapon get eachtime it level up 
@@ -55,7 +143,7 @@
     }
     "item_rust_sword"
     { 
-        "Ilevel" "2"
+        "Ilevel" "3"
         "damage" "10"
         "range" "55"
         "attack_speed" "20"
@@ -71,8 +159,121 @@
         "quality" "Normal"
         "effect"{"1" "poison_1"} // rust is poisoneous
     }
+    "item_sword"
+    { 
+        "Ilevel" "8"
+        "damage" "25"
+        "range" "55"
+        "attack_speed" "30"
+        "price" "400"
+        "Equipement" "1"
+        "cat"   "weapon"
+
+        //next are the bonus weapon get eachtime it level up 
+        "dmg_grow" "5"
+        "range_grow" "2"
+        "as_grow" "2"
+        //quality , will be used for drop and color weapon's name :D
+        "quality" "Normal"
+    }
+    "item_curved_sword"
+    { 
+        "Ilevel" "12"
+        "damage" "35"
+        "range" "50"
+        "attack_speed" "50"
+        "price" "600"
+        "Equipement" "1"
+        "cat"   "weapon"
+
+        //next are the bonus weapon get eachtime it level up 
+        "dmg_grow" "7"
+        "range_grow" "2"
+        "as_grow" "3"
+        //quality , will be used for drop and color weapon's name :D
+        "quality" "Superior"
+    }
+    "item_skull_sword"
+    { 
+        "Ilevel" "20"
+        "damage" "70"
+        "ls" "5"
+        "range" "50"
+        "attack_speed" "50"
+        "price" "2000"
+        "Equipement" "1"
+        "cat"   "weapon"
+
+        //next are the bonus weapon get eachtime it level up 
+        "dmg_grow" "15"
+        "range_grow" "2"
+        "as_grow" "4"
+        //quality , will be used for drop and color weapon's name :D
+        "quality" "Magic"
+        "effect"{"1" "bleed_1"}
+    }
+    "item_skeleton_sword"
+    { 
+        "Ilevel" "30"
+        "damage" "120"
+        "ls" "10"
+        "range" "50"
+        "attack_speed" "50"
+        "price" "4000"
+        "Equipement" "1"
+        "cat"   "weapon"
+
+        //next are the bonus weapon get eachtime it level up 
+        "dmg_grow" "25"
+        "range_grow" "2"
+        "as_grow" "5"
+        //quality , will be used for drop and color weapon's name :D
+        "quality" "Magic"
+        "effect"{"1" "bleed_2"}
+    }
+    "item_dragon_skull_sword"
+    { 
+        "Ilevel" "50"
+        "damage" "500"
+        "ls" "25"
+        "range" "70"
+        "attack_speed" "40"
+        "price" "10000"
+        "Equipement" "1"
+        "cat"   "weapon"
+
+        //next are the bonus weapon get eachtime it level up 
+        "dmg_grow" "100"
+        "range_grow" "3"
+        "as_grow" "4"
+        //quality , will be used for drop and color weapon's name :D
+        "quality" "Rare"
+        "effect"{"1" "bleed_3"
+                "2" "fire_3"
+                } 
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //                       _____  __  __  ____  _____                
+    // ______ ______   /\   |  __ \|  \/  |/ __ \|  __ \ ______ ______  ______ ______  ______ ______ 
+    //|______|______| /  \  | |__) | \  / | |  | | |__) |______|______||______|______||______|______|
+    // ______ ______ / /\ \ |  _  /| |\/| | |  | |  _  / ______ ______  ______ ______  ______ ______ 
+    //|______|______/ ____ \| | \ \| |  | | |__| | | \ \|______|______||______|______||______|______|
+    //             /_/    \_\_|  \_\_|  |_|\____/|_|  \_\              
     "item_leather_vest"
     { 
+        "Ilevel" "3"
         "hp" "15"
         "armor" "1.5"
         "attack_speed" "-5"
@@ -83,7 +284,7 @@
     }
     "item_leather_trousers"
     { 
-        "Ilevel" "0"
+        "Ilevel" "2"
         "hp" "10"
         "armor" "0.5"
         "movespeed" "-5"
@@ -94,7 +295,7 @@
     }
     "item_leather_boots"
     { 
-        "Ilevel" "0"
+        "Ilevel" "1"
         "hp" "5"
         "armor" "0.5"
         "movespeed" "15"
@@ -105,7 +306,7 @@
     }
     "item_leather_gloves"
     { 
-        "Ilevel" "0"
+        "Ilevel" "1"
         "hp" "5"
         "armor" "0.5"
         "attack_speed" "15"
@@ -116,7 +317,7 @@
     }
     "item_leather_hood"
     {
-        "Ilevel" "0" 
+        "Ilevel" "1" 
         "hp" "5"
         "armor" "1"
         "attack_speed" "15"
@@ -125,6 +326,67 @@
         "cat"   "helmet"
         "quality" "Poor"
     }
+    "item_heavy_leather_armor"
+    { 
+        "Ilevel" "8"
+        "hp" "50"
+        "armor" "8"
+        "attack_speed" "-10"
+        "price" "100"
+        "Equipement" "1"
+        "cat"   "chest"
+        "quality" "normal"
+    }
+    "item_bruiser_armor"
+    { 
+        "Ilevel" "15"
+        "hp" "200"
+        "armor" "20"
+        "attack_speed" "-20"
+        "price" "500"
+        "Equipement" "1"
+        "cat"   "chest"
+        "quality" "Superior"
+    }
+    "item_taraske_plate"
+    { 
+        "Ilevel" "50"
+        "hp" "2000"
+        "str" "50"
+        "armor" "100"
+        "attack_speed" "-10"
+        "price" "10000"
+        "Equipement" "1"
+        "cat"   "chest"
+        "quality" "Rare"
+        "effect"{"1" "tarask_blood"} // rust is poisoneous
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //                      _____   ____ _______ _____ ____  _   _                      
+    // ______ ______ ______|  __ \ / __ \__   __|_   _/ __ \| \ | |______ ______ ______ 
+    //|______|______|______| |__) | |  | | | |    | || |  | |  \| |______|______|______|
+    // ______ ______ ______|  ___/| |  | | | |    | || |  | | . ` |______ ______ ______ 
+    //|______|______|______| |    | |__| | | |   _| || |__| | |\  |______|______|______|
+    //                     |_|     \____/  |_|  |_____\____/|_| \_|                     
     "item_red_potion"
     { 
         "heal" "50"

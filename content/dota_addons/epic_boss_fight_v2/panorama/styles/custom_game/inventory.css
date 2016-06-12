@@ -235,6 +235,7 @@ background-image: url("file://{images}/custom_game/inventory/inventory_Panel.png
  background-image: url("file://{images}/custom_game/inventory/Info_BG.png");
   height: 900px;
  width: 400px;
+ overflow: clip scroll;
 }
 
 

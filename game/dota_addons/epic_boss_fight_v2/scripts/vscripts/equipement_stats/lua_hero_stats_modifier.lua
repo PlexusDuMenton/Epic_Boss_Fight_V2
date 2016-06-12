@@ -76,7 +76,7 @@ end
 
 function lua_hero_stats_modifier:GetModifierHealthBonus()
 	if IsServer() then
-		return (self:GetCaster().hero_stats.hp + self:GetCaster().skill_bonus.hp)
+		return (self:GetCaster().hero_stats.hp + self:GetCaster().skill_bonus.hp) *(math.log(self:GetCaster().equip_stats.str+self:GetCaster().hero_stats.str+self:GetCaster().skill_bonus.str +10)/math.log(10))
 	end
 end
 

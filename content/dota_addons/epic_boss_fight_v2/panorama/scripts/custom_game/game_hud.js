@@ -15,8 +15,8 @@ GameEvents.Subscribe( "center_on_hero", center_camera_on_hero)
 	
 function center_camera_on_hero(){
 	if (camera_free == true){
-	$.Schedule(0.05,block_camera);
-	$.Schedule(0.1,free_camera);
+	$.Schedule(0.01,block_camera);
+	$.Schedule(0.02,free_camera);
 	}
 }
 

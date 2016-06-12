@@ -19,7 +19,7 @@ function Update(){
 
 function HealthBar(data) {
 	$("#Health_Bar").style.clip = "rect( 0% ," + ((data.HP/data.MAXHP)*98.77+0.54) + "%" + ", 100% ,0% )";
-	$("#hp_text").text = "Health : " + Number((data.HP).toFixed(2)) +" / "+Number((data.MAXHP).toFixed(2));
+	$("#hp_text").text = "Health : " + Number((data.HP*data.EHP_MULT).toFixed(0)) +" / "+Number((data.MAXHP*data.EHP_MULT).toFixed(0));
 	$("#name").text = $.Localize("#" + data.name)
 	if (data.CAT == "second") {
 		$("#overlay").SetHasClass("overlay",false)

@@ -56,14 +56,23 @@ function open_shop(arg){
 		for (j = 0; j < row_size; j++){
 				var item_name =	 row[j]
 				var item_info = info[item_name]
+				if(typeof ((j+1)/7)==='number' && (((j+1)/7)%1)===0) {
+					X_pos = 100
+					Y_pos = Y_pos + 128
+				}
+				
 				slot = $.CreatePanel( "Image", $("#main_panel") , "item_row_"+i+"_slot_"+j );
 				over_slot = $.CreatePanel( "Image", slot , "over_row_"+i+"_slot_"+j );
 				slot.style.position = X_pos + "px "+ (-70 + Y_pos) + "px 0px";
-				X_pos = X_pos + 96
 				over_slot.SetHasClass( "over_slot", true )
 				slot.SetHasClass( "slot", true )
 				slot.SetImage("file://{images}/custom_game/itemhud/"+item_name+ ".png")
 				set_panel_event(slot,item_info,over_slot)
+				price = $.CreatePanel( "Label", $("#main_panel") , "price_"+i+"_slot_"+j );
+				price.style.position = X_pos + "px "+ (-90 + Y_pos) + "px 0px";
+				price.SetHasClass( "price", true )
+				price.text = item_info.price 
+				X_pos = X_pos + 96
 		}
 		
 	}

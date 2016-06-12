@@ -132,7 +132,7 @@ function round_manager:Check_For_Victory()
 	if GameRules.STATES ~= GAME_STATE_FIGHT then
 		return
 	end
-	if boss_manager.Alive_Ennemy == 0 and round_manager.Round_Started == true then
+	if boss_manager.Alive_Ennemy == 0 and round_manager.Round_Started == true and boss_manager.Core_Ennemy == 0 then
 		round_manager:Regen_Player()
 		round_manager.Round_Started = false
 		print ("Round is finished")

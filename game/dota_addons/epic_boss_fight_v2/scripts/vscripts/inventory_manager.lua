@@ -17,6 +17,47 @@ QUALITY_POWER[6] = 5000
 QUALITY_POWER[7] = 10000
 QUALITY_POWER[8] = 50000
 
+quality_improvement = {}
+
+quality_improvement[0] = 1.0
+quality_improvement[1] = 1.15
+quality_improvement[2] = 1.30
+quality_improvement[3] = 1.50
+quality_improvement[4] = 2.0
+quality_improvement[5] = 3.0
+quality_improvement[6] = 4.0
+
+power_diviser = {}
+
+power_diviser[0] = 1.0
+power_diviser[1] = 1.25
+power_diviser[2] = 1.50
+power_diviser[3] = 2.5
+power_diviser[4] = 4.0
+power_diviser[5] = 7.0
+power_diviser[6] = 12.0
+
+difficulty_multiplier = {}
+
+difficulty_multiplier[0] = 1
+difficulty_multiplier[1] = 1.5
+difficulty_multiplier[2] = 2.0
+difficulty_multiplier[3] = 3.0
+difficulty_multiplier[4] = 5.0
+difficulty_multiplier[5] = 10.0
+difficulty_multiplier[6] = 25.0
+
+loot_difficulty = {}
+
+loot_difficulty[0] = 0.66
+loot_difficulty[1] = 1.0
+loot_difficulty[2] = 1.33
+loot_difficulty[3] = 2.0
+loot_difficulty[4] = 4.33
+loot_difficulty[5] = 6.66
+loot_difficulty[6] = 12
+
+
 function log10(number)
     if number <0 then print ("WTF") return number end
     number = math.log(number)/math.log(10)
@@ -158,17 +199,17 @@ function inv_manager:reforge(weapon)
 
 
     if item.Equipement == true then
-        if item.damage ~= nil then item.damage = math.ceil(item_info.damage + math.random(0,item_info.damage*0.2)) end
-        if item.m_damage ~= nil then item.m_damage = math.ceil(item_info.m_damage + math.random(0,item_info.m_damage*0.2)) end
-        if item.range ~= nil then item.range = math.ceil(item_info.range + math.random(0,item_info.range*0.2)) end
-        if item.loh ~= nil then item.loh = math.ceil(item_info.loh + math.random(0,item_info.loh*0.2)) end
-        if item.attack_speed ~= nil then item.attack_speed = math.ceil(item_info.attack_speed + math.random(0,item_info.attack_speed*0.2)) end
-        if item.armor ~= nil then item.armor = math.ceil(item_info.armor + math.random(0,item_info.armor*0.2)) end
-        if item.hp ~= nil then item.hp = math.ceil(item_info.hp + math.random(0,item_info.hp*0.2)) end
-        if item.movespeed ~= nil then item.movespeed = math.ceil(item_info.movespeed + math.random(0,item_info.movespeed*0.2)) end
-        if item.hp_regen ~= nil then item.hp_regen = math.ceil(item_info.hp_regen + math.random(0,item_info.hp_regen*0.2)) end
-        if item.mp ~= nil then item.mp = math.ceil(item_info.mp + math.random(0,item_info.mp*0.2)) end
-        if item.mp_regen ~= nil then item.mp_regen = math.ceil(item_info.mp_regen + math.random(0,item_info.mp_regen*0.2)) end
+        if item.damage ~= nil then item.damage = math.ceil(item_info.damage + math.random(0,item_info.damage*0.35)*quality_improvement[item.difficulty]) end
+        if item.m_damage ~= nil then item.m_damage = math.ceil(item_info.m_damage + math.random(0,item_info.m_damage*0.35)*quality_improvement[item.difficulty]) end
+        if item.range ~= nil then item.range = math.ceil(item_info.range + math.random(0,item_info.range*0.05)*(0.7 + 0.3*quality_improvement[item.difficulty])) end
+        if item.loh ~= nil then item.loh = math.ceil(item_info.loh + math.random(0,item_info.loh*0.35)*quality_improvement[item.difficulty]) end
+        if item.attack_speed ~= nil then item.attack_speed = math.ceil(item_info.attack_speed + math.random(0,item_info.attack_speed*0.35)*quality_improvement[item.difficulty]) end
+        if item.armor ~= nil then item.armor = math.ceil(item_info.armor + math.random(0,item_info.armor*0.35)*quality_improvement[item.difficulty]) end
+        if item.hp ~= nil then item.hp = math.ceil(item_info.hp + math.random(0,item_info.hp*0.35)*quality_improvement[item.difficulty]) end
+        if item.movespeed ~= nil then item.movespeed = math.ceil(item_info.movespeed + math.random(0,item_info.movespeed*0.35)*quality_improvement[item.difficulty]) end
+        if item.hp_regen ~= nil then item.hp_regen = math.ceil(item_info.hp_regen + math.random(0,item_info.hp_regen*0.35)) end
+        if item.mp ~= nil then item.mp = math.ceil(item_info.mp + math.random(0,item_info.mp*0.35)*quality_improvement[item.difficulty]) end
+        if item.mp_regen ~= nil then item.mp_regen = math.ceil(item_info.mp_regen + math.random(0,item_info.mp_regen*0.35)*quality_improvement[item.difficulty]) end
 
         if item.cat == "weapon" then
             item.Next_Level_XP = inv_manager.XP_Table[item.level]
@@ -210,13 +251,18 @@ function inv_manager:Create_Item(Item)
     if item.magical == 1 then item.magical = true else item.magical = nil end
     if item.Soul == 1 then item.Soul = true else item.Soul = nil end
     if item.Soul == true then
-        local power = math.floor((100 * (1+GameRules.loot_multiplier)^(log10(GameRules.loot_multiplier)^0.10 *0.85) ) * (0.5 + math.random()*(0.5))) * 0.01 + 1
-        item.Ilevel = math.ceil((log10(power)*3)^2.75) - 1
+        local loot_mult = math.floor(GameRules.Actual_Max_Level^1.6)*0.5
+        loot_mult = loot_mult * difficulty_multiplier[GameRules.player_difficulty]
+        loot_mult = loot_mult * loot_difficulty[GameRules.player_difficulty] + 1
+        loot_mult = loot_mult/(0.895 + 0.105 * power_diviser[GameRules.player_difficulty])
+
+        local power = math.floor((100 * (1+loot_mult)^((log10(loot_mult)^0.145 *0.68)/(0.96 + 0.04 * power_diviser[GameRules.player_difficulty]) ) ) * (0.25 + math.random()*(0.25))) * 0.01 + 1
+        item.Ilevel = math.ceil((log10(power)*3)^2.76) - 1
         if item.Ilevel>MAX_LEVEL then item.Ilevel = MAX_LEVEL end
         local power_mult = 1
-        if item.Ilevel>=250 then
-            local random_number = math.random(10,(10000/log10(GameRules.loot_multiplier/5)))/10
-            power = power*(1+math.floor(100 *(math.log(1 +((13/random_number))^10)/math.log(13)))/100)
+        if item.Ilevel>=100 then
+            local random_number = math.random(10,(10000/log10(GameRules.loot_multiplier/5))/(quality_improvement[GameRules.player_difficulty]))/10
+            power = power*(1+math.floor(100 *(math.log(1 +((13/random_number))^10)/math.log(13)))/100)+1
             power_mult = (1+math.floor(100 *(math.log(1 +((13/random_number))^10)/math.log(13)))/100)
 
             if random_number == 1 then
@@ -301,10 +347,10 @@ function inv_manager:Create_Item(Item)
         if power > 0 then
             rng = math.random() - (1/(10/power_mult)-0.1)
             if rng<0.63 then
-                item.range = math.ceil(power *0.9* ((0.4 + math.random()/1.667)))
+                item.range = math.ceil((power *0.9* ((0.4 + math.random()/1.667)))^0.40)
                 power = power - item.range
             elseif rng < 0.8 then
-                item.range = math.ceil(power * (0.66 + math.random()/3))
+                item.range = math.ceil((power * (0.66 + math.random()/3))^0.40)
                 power = 0
             end
         end
@@ -315,7 +361,10 @@ function inv_manager:Create_Item(Item)
         else
             item.ls = (10.5 + log10(power)^2)  - math.ceil((10 + log10(power)^2)/((1+power)^0.1)) + math.random()
         end
-        item.price = math.ceil((item.damage/3 + item.loh/2 + item.ls^3 + item.range + item.attack_speed)^0.666)
+        item.price = math.ceil((item.damage/3 + item.loh/2 + item.ls^3 + item.range^3 + item.attack_speed)^1.05)
+        if item.price > 10000 then
+            item.price = 10000 + item.price^0.75
+        end
         if item.attack_speed == 0 then item.attack_speed = nil end
         if item.ls == 0 then item.ls = nil end
         if item.loh == 0 then item.loh = nil end
@@ -327,17 +376,13 @@ function inv_manager:Create_Item(Item)
     end
 
     if item.Equipement == true then
-        if item.damage ~= nil then item.damage = math.ceil(item_info.damage + math.random(0,item_info.damage*0.2)) end
-        if item.m_damage ~= nil then item.m_damage = math.ceil(item_info.m_damage + math.random(0,item_info.m_damage*0.2)) end
-        if item.range ~= nil then item.range = math.ceil(item_info.range + math.random(0,item_info.range*0.2)) end
-        if item.loh ~= nil then item.loh = math.ceil(item_info.loh + math.random(0,item_info.loh*0.2)) end
-        if item.attack_speed ~= nil then item.attack_speed = math.ceil(item_info.attack_speed + math.random(0,item_info.attack_speed*0.2)) end
-        if item.armor ~= nil then item.armor = math.ceil(item_info.armor + math.random(0,item_info.armor*0.2)) end
-        if item.hp ~= nil then item.hp = math.ceil(item_info.hp + math.random(0,item_info.hp*0.2)) end
-        if item.movespeed ~= nil then item.movespeed = math.ceil(item_info.movespeed + math.random(0,item_info.movespeed*0.2)) end
-        if item.hp_regen ~= nil then item.hp_regen = math.ceil(item_info.hp_regen + math.random(0,item_info.hp_regen*0.2)) end
-        if item.mp ~= nil then item.mp = math.ceil(item_info.mp + math.random(0,item_info.mp*0.2)) end
-        if item.mp_regen ~= nil then item.mp_regen = math.ceil(item_info.mp_regen + math.random(0,item_info.mp_regen*0.2)) end
+        item.difficulty = GameRules.player_difficulty
+        if item.Ilevel == nil then 
+                    print ("ilevel of weapon is nil , replace it by 0") 
+                    item.Ilevel = 0
+                end
+        if item.Ilevel>MAX_LEVEL then item.Ilevel = MAX_LEVEL end
+        local random_number = 10000
 
         if item.cat == "weapon" then
             item.level = 1
@@ -349,6 +394,37 @@ function inv_manager:Create_Item(Item)
 
             item.Next_Level_XP = inv_manager.XP_Table[item.level]
         end
+            if item.Ilevel >= 100 then
+                random_number = math.random(10,(10000/log10(GameRules.loot_multiplier/5))/(quality_improvement[GameRules.player_difficulty]))/10
+                if random_number == 1 then
+                    item.qualifier = "PERFECT"
+                elseif random_number < 2 then
+                    item.qualifier = "immortal"
+                elseif random_number < 4 then
+                    item.qualifier = "Ancient"
+                elseif random_number < 10 then
+                    item.qualifier = "flawless"
+                end
+            end
+
+            local multiplier_power = (1+math.floor(100 *(math.log(1 +((13/random_number))^10)/math.log(13)))/100)
+
+        if item.damage ~= nil then item.damage = math.ceil(item_info.damage*multiplier_power + math.random(0,item_info.damage*0.35)*quality_improvement[GameRules.player_difficulty]) end
+        if item.m_damage ~= nil then item.m_damage = math.ceil(item_info.m_damage*multiplier_power + math.random(0,item_info.m_damage*0.35)*quality_improvement[GameRules.player_difficulty]) end
+        if item.range ~= nil then item.range = math.ceil(item_info.range*(0.9 + 0.1*multiplier_power) + math.random(0,item_info.range*0.05)*(0.7 + 0.3*quality_improvement[GameRules.player_difficulty])) end
+        if item.loh ~= nil then item.loh = math.ceil(item_info.loh*multiplier_power + math.random(0,item_info.loh*0.35)*quality_improvement[GameRules.player_difficulty]) end
+        if item.attack_speed ~= nil then item.attack_speed = math.ceil(item_info.attack_speed*multiplier_power + math.random(0,item_info.attack_speed*0.35)*quality_improvement[GameRules.player_difficulty]) end
+        if item.armor ~= nil then item.armor = math.ceil(item_info.armor*multiplier_power + math.random(0,item_info.armor*0.35)*quality_improvement[GameRules.player_difficulty]) end
+        if item.hp ~= nil then item.hp = math.ceil(item_info.hp*multiplier_power + math.random(0,item_info.hp*0.35)*quality_improvement[GameRules.player_difficulty]) end
+        if item.movespeed ~= nil then item.movespeed = math.ceil(item_info.movespeed*multiplier_power + math.random(0,item_info.movespeed*0.35)*quality_improvement[GameRules.player_difficulty]) end
+        if item.hp_regen ~= nil then item.hp_regen = math.ceil(item_info.hp_regen*multiplier_power + math.random(0,item_info.hp_regen*0.35)*quality_improvement[GameRules.player_difficulty]) end
+        if item.mp ~= nil then item.mp = math.ceil(item_info.mp*multiplier_power + math.random(0,item_info.mp*0.35)*quality_improvement[GameRules.player_difficulty]) end
+        if item.mp_regen ~= nil then item.mp_regen = math.ceil(item_info.mp_regen*multiplier_power + math.random(0,item_info.mp_regen*0.35)*quality_improvement[GameRules.player_difficulty]) end
+        if item.str ~= nil then item.str = math.ceil(item_info.str*multiplier_power + math.random(0,item_info.str*0.35)*quality_improvement[GameRules.player_difficulty]) end
+        if item.agi ~= nil then item.agi = math.ceil(item_info.agi*multiplier_power + math.random(0,item_info.agi*0.35)*quality_improvement[GameRules.player_difficulty]) end
+        if item.int ~= nil then item.int = math.ceil(item_info.int*multiplier_power + math.random(0,item_info.int*0.35)*quality_improvement[GameRules.player_difficulty]) end
+
+        
     end
 
     return item
@@ -384,7 +460,12 @@ function inv_manager:calc_stat_item(equipement,stats,hero)
     if not eq_slot.movespeed then eq_slot.movespeed = 0 end
     if not eq_slot.ls then eq_slot.ls = 0 end
     if not eq_slot.loh then eq_slot.loh = 0 end
+    if not eq_slot.str then eq_slot.str = 0 end
+    if not eq_slot.agi then eq_slot.agi = 0 end
+    if not eq_slot.int then eq_slot.int = 0 end
     if not eq_slot.effect then eq_slot.effect = {} end
+
+
     --weapon main stats
     stats.damage = stats.damage + eq_slot.damage
     stats.damage_mult = stats.damage_mult + eq_slot.damage_mult
@@ -419,6 +500,12 @@ function inv_manager:calc_stat_item(equipement,stats,hero)
             if stats.range > 500 then stats.range = 500 end
         end
     end
+
+
+    stats.str = stats.str + eq_slot.str
+    stats.agi = stats.agi + eq_slot.agi
+    stats.int = stats.int + eq_slot.int
+
     --Armor/magic ress
     
     stats.armor = stats.armor + eq_slot.armor
@@ -461,6 +548,7 @@ function inv_manager:calc_stat_item(equipement,stats,hero)
             hero:SetAttackCapability(DOTA_UNIT_CAP_MELEE_ATTACK) 
             stats.damage = (stats.damage + eq_slot.upgrade_damage + eq_slot.bonus_damage) * damage_multiplier
         end
+        print(eq_slot.projectile_name,hero:GetAttackCapability())
         stats.m_damage = (stats.m_damage + eq_slot.m_damage + eq_slot.m_damage) * damage_multiplier
         stats.range  = stats.range  + eq_slot.upgrade_range + eq_slot.bonus_range
         stats.loh = stats.loh + eq_slot.upgrade_loh + eq_slot.bonus_loh
@@ -565,6 +653,10 @@ function inv_manager:Calculate_stats(hero) -- call this when equipement is modif
     stats.dodge = 0
     stats.ls = 0
     stats.loh = 0
+
+    stats.str = 0
+    stats.agi = 0
+    stats.int = 0
 
     stats = self:calc_stat_item(hero.equipement.chest_armor,stats)
     stats = self:calc_stat_item(hero.equipement.legs_armor,stats)
@@ -1195,7 +1287,7 @@ function inv_manager:crystalyze_weapon(hero,item)
             soul.quality = "Godlike"
         end
         print (power)
-        soul.price = math.ceil(power^0.666)
+        soul.price = math.ceil(power^1.25)
 
     return soul
 end
@@ -1217,7 +1309,7 @@ function inv_manager:crystalyze(hero,slot_weap)
     inv_manager:save_inventory(hero)
 end
 
-function inv_manager:upgrade_weapon(hero,weapon,soul) --will be called when a weapon is upgraded with a smith
+function inv_manager:upgrade_wepaon(hero,weapon,soul) --will be called when a weapon is upgraded with a smith
                 weapon.upgrade_level = weapon.upgrade_level + 1
                 if soul.damage ~= nil then
                     if weapon.upgrade_damage == nil then weapon.upgrade_damage = 0 end
@@ -1267,7 +1359,7 @@ function inv_manager:up_weapon(hero,soul_slot,weapon_slot)
     if weapon.cat ~= "weapon" then print ("weapon is not a weapon") return end
 
     if weapon.upgrade_point > 0 then
-        if soul.Ilevel <= math.floor(weapon.Ilevel*1.1) then
+        if soul.Ilevel <= math.floor(weapon.Ilevel*1.15)+5 then
             weapon = inv_manager:upgrade_weapon(hero,weapon,soul)
             hero.inventory[soul_slot] = nil
         else

@@ -14,7 +14,8 @@ MODIFIER_PROPERTY_MANA_BONUS,
 MODIFIER_PROPERTY_MANA_REGEN_CONSTANT,
 MODIFIER_PROPERTY_MOVESPEED_BONUS_CONSTANT,
 MODIFIER_PROPERTY_EVASION_CONSTANT,
-MODIFIER_EVENT_ON_ATTACK_LANDED
+MODIFIER_EVENT_ON_ATTACK_LANDED,
+MODIFIER_PROPERTY_CAST_RANGE_BONUS
 	}
 	return funcs
 end
@@ -28,6 +29,7 @@ end
 function lua_equipement_modifier:OnAttackLanded(event)
 	if IsServer() then
 		local hero = self:GetCaster()
+		local target = event.target
 		if event.attacker==self:GetParent() then
 			local heal = hero.equip_stats.loh
 			hero:SetHealth(hero:GetHealth() + heal)
@@ -68,15 +70,21 @@ end
 function lua_equipement_modifier:GetModifierBaseAttack_BonusDamage()
 	if IsServer() then
 		if self:GetCaster().equip_stats ~= nil then
-			return self:GetCaster().equip_stats.damage
+			return self:GetCaster().equip_stats.damage + self:GetCaster().equip_stats.str
 		end
+	end
+end
+
+function lua_equipement_modifier:GetModifierCastRangeBonus()
+	if IsServer() then
+		return self:GetCaster().equip_stats.int *0.2
 	end
 end
 
 function lua_equipement_modifier:GetModifierAttackSpeedBonus_Constant()
 	if IsServer() then
 		if self:GetCaster().equip_stats ~= nil then
-		return self:GetCaster().equip_stats.attack_speed
+		return self:GetCaster().equip_stats.attack_speed + self:GetCaster().equip_stats.agi*0.33
 		end
 	end
 end
@@ -108,7 +116,7 @@ end
 function lua_equipement_modifier:GetModifierHealthBonus()
 	if IsServer() then
 		if self:GetCaster().equip_stats ~= nil then
-		return self:GetCaster().equip_stats.hp
+		return self:GetCaster().equip_stats.hp * (math.log(self:GetCaster().equip_stats.str+self:GetCaster().hero_stats.str+self:GetCaster().skill_bonus.str +10)/math.log(10))
 		end
 	end
 end

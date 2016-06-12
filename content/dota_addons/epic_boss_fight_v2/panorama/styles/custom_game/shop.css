@@ -28,7 +28,7 @@ background-image: url("file://{images}/custom_game/inventory/shop_panel_base.png
 {
 	height: 500px;
   width: 680px;
-  overflow: scroll scroll;
+  overflow: clip scroll;
 }
 
 .free_space_under
@@ -45,6 +45,20 @@ background-image: url("file://{images}/custom_game/inventory/shop_panel_base.png
 	font-size: 30px;
 	margin-left: 5px;
 	color: #AACCFF;
+}
+
+.price
+ {
+	text-align: center;
+	text-overflow: clip;
+	font-weight: thin;
+	font-size: 15px;
+	margin-left: 0px;
+	color: #FFEE33;
+	height: 20px;
+	width: 64px;
+	horizontal-align: left;
+    vertical-align: top;
 }
 
 

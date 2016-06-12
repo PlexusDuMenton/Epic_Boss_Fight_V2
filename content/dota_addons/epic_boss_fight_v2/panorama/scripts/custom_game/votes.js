@@ -8,14 +8,11 @@ function ready_votes(){
 	$("#Vote_Menu").visible = true
 	var vote_time = $.CreatePanel("Label",$("#Vote_Menu"), "vote_time" );
 	vote_time.text = $.Localize("#Time") + " : 60 "+ $.Localize("#seconds")
-	vote_time.SetHasClass( "normal_label", true )
-	if (typeof CustomNetTables.GetTableValue( "info", "time") == "undefined"){
-		vote_time.visible = false
-	}
+	vote_time.SetHasClass( "time", true )
 	
 	var Button = $.CreatePanel("Button",$("#Vote_Menu"), "vote_Button_ready" );
-	Button.style.position = "125px 120px 0px"
-	Button.SetHasClass( "button", true );
+	Button.style.position = "65px 120px 0px"
+	Button.SetHasClass( "button2", true );
 	
 	var vote_text = $.CreatePanel("Label",Button, "vote_text" );
 	vote_text.text = $.Localize("#Ready")
@@ -28,15 +25,16 @@ function ready_votes(){
 	refresh_time()
 }
 
+
 function next_votes(){
 	$("#Vote_Menu").visible = true
 	var vote_time = $.CreatePanel("Label",$("#Vote_Menu"), "vote_time" );
 	vote_time.text = $.Localize("#Time") + " : 40 "+ $.Localize("#seconds")
-	vote_time.SetHasClass( "normal_label", true );
+	vote_time.SetHasClass( "time", true );
 	
 	var Button_1 = $.CreatePanel("Button",$("#Vote_Menu"), "vote_Button_lobby" );
 	Button_1.SetHasClass( "button", true );
-	Button_1.style.position = "25px 120px 0px"
+	Button_1.style.position = "15px 120px 0px"
 	
 	var vote_text_1 = $.CreatePanel("Label",Button_1, "vote_text" );
 	vote_text_1.text = $.Localize("#ToLobby")
@@ -49,7 +47,7 @@ function next_votes(){
 	
 	var Button_2 = $.CreatePanel("Button",$("#Vote_Menu"), "vote_Button_next" );
 	Button_2.SetHasClass( "button", true );
-	Button_2.style.position = "225px 120px 0px"
+	Button_2.style.position = "180px 120px 0px"
 	
 	var vote_text_2 = $.CreatePanel("Label",Button_2, "vote_text" );
 	vote_text_2.text = $.Localize("#Next_Round")
@@ -75,6 +73,8 @@ function refresh_time(){
 				$("#vote_time").visible = true
 			}
 			$("#vote_time").text = $.Localize("#Time") + " : " + CustomNetTables.GetTableValue( "KVFILE", "time").vote_time + " " + $.Localize("#seconds")
+		}else{
+			$("#vote_time").text = $.Localize("#No_One_Ready")
 		}
 	}
 }

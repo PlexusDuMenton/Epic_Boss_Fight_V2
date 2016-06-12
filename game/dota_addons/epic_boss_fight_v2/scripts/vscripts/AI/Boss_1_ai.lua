@@ -14,12 +14,9 @@ change_target_CD = 0
 function change_target()
 	if math.random(0,5) <= 3 then
 			boss_target = found_lowest_hpp_ennemy(false)
-			print ("lowest hpp")
 		else
 			boss_target = found_lowest_hpp_ennemy(true)
-			print ("rand_fucking_dom")
 		end
-		print (boss_target:GetUnitName())
 end
 
 spell_1_CD = 1.5/CD_DIVISER
@@ -102,198 +99,206 @@ function spell_2(target) --earth shake
 	local hCaster = thisEntity 
 	hCaster:Stop()
 	StartAnimation(hCaster, {duration=1.0, activity=ACT_DOTA_OVERRIDE_ABILITY_3, rate=1})
+	local nTFX = ParticleManager:CreateParticle( "particles/impact_incoming.vpcf",  PATTACH_ABSORIGIN , hTarget )
+	ParticleManager:SetParticleControl(nTFX, 4, Vector(2.5,0,0))
+	ParticleManager:SetParticleControl(nTFX, 7, hCaster:GetAbsOrigin())
 	local nCasterFX = ParticleManager:CreateParticle( "particles/units/heroes/hero_ursa/ursa_enrage_buff.vpcf",  PATTACH_POINT , hCaster )
 	Timers:CreateTimer(1,function()
 		StartAnimation(hCaster, {duration=2.5, activity=ACT_DOTA_SPAWN , rate=0.25})
 	end)
 	hCaster:SetAttackCapability(DOTA_UNIT_CAP_NO_ATTACK)
-	Timers:CreateTimer(2.5,function()
-		boss_state = "idle"
-		hCaster:SetAttackCapability(DOTA_UNIT_CAP_MELEE_ATTACK)
-		enemy = FindUnitsInRadius(DOTA_TEAM_BADGUYS,
-	                              hCaster:GetAbsOrigin(),
-	                              nil,
-	                              500,
-	                              DOTA_UNIT_TARGET_TEAM_ENEMY,
-	                              DOTA_UNIT_TARGET_ALL,
-	                              DOTA_UNIT_TARGET_FLAG_NONE,
-	                              FIND_ANY_ORDER,
-	                              false)
-	    		for k,v in pairs(enemy) do
-	    			local damageTable = {
-						victim = v,
-						attacker = hCaster,
-						damage = 25*(GameRules.difficulty^0.85),
-						damage_type = DAMAGE_TYPE_PHYSICAL,
-					}
-					ApplyDamage(damageTable) 
-					
-					EmitSoundOn( "Hero_Ursa.Earthshock", hCaster )
-					LinkLuaModifier( "lua_modifier_stun", "modifiers/lua_modifier_stun.lua", LUA_MODIFIER_MOTION_NONE )
-					v:AddNewModifier(hCaster, nil, "lua_modifier_stun", {duration = 1.5}) 
+	Timers:CreateTimer(3.0,function()
+		if hCaster:IsAlive() then
+			ParticleManager:DestroyParticle(nTFX, true)
+			ParticleManager:DestroyParticle(nCasterFX, true)
+			boss_state = "idle"
+			hCaster:SetAttackCapability(DOTA_UNIT_CAP_MELEE_ATTACK)
+			enemy = FindUnitsInRadius(DOTA_TEAM_BADGUYS,
+		                              hCaster:GetAbsOrigin(),
+		                              nil,
+		                              500,
+		                              DOTA_UNIT_TARGET_TEAM_ENEMY,
+		                              DOTA_UNIT_TARGET_ALL,
+		                              DOTA_UNIT_TARGET_FLAG_NONE,
+		                              FIND_ANY_ORDER,
+		                              false)
+		    		for k,v in pairs(enemy) do
+		    			local damageTable = {
+							victim = v,
+							attacker = hCaster,
+							damage = 25*(GameRules.difficulty^0.85),
+							damage_type = DAMAGE_TYPE_PHYSICAL,
+						}
+						ApplyDamage(damageTable) 
+						
+						EmitSoundOn( "Hero_Ursa.Earthshock", hCaster )
+						LinkLuaModifier( "lua_modifier_stun", "modifiers/lua_modifier_stun.lua", LUA_MODIFIER_MOTION_NONE )
+						v:AddNewModifier(hCaster, nil, "lua_modifier_stun", {duration = 1.5}) 
 
-	    		end
+		    		end
+		   end
 	end)
 end
 
 
 function spell_4(target)
-	spell_4_CD = 20/CD_DIVISER
+	spell_4_CD = 10 + 10/CD_DIVISER
 	local hCaster = thisEntity 
 	StartAnimation(hCaster, {duration=1.0, activity=ACT_DOTA_OVERRIDE_ABILITY_3, rate=1.0})
 	hCaster:SetBaseAttackTime(0.1)
-	hCaster:SetPhysicalArmorBaseValue(hCaster:GetPhysicalArmorBaseValue() * 10000)
+	LinkLuaModifier( "immunity", "modifiers/immunity.lua", LUA_MODIFIER_MOTION_NONE )
+	thisEntity:AddNewModifier(thisEntity, nil, "immunity", {})
 	local nCasterFX = ParticleManager:CreateParticle( "particles/units/heroes/hero_ursa/ursa_enrage_buff.vpcf",  PATTACH_POINT , hCaster )
 	Timers:CreateTimer(5,function()
 		hCaster:SetBaseAttackTime(1.0)
-		hCaster:SetPhysicalArmorBaseValue(hCaster:GetPhysicalArmorBaseValue() / 10000)
+		thisEntity:RemoveModifierByName("immunity")
 		ParticleManager:DestroyParticle(nCasterFX, true)
 	end)
 end
 
 
 function spell_1(target)
-	spell_1_CD = 15/CD_DIVISER
-	local hCaster = thisEntity --We will always have Caster.
-    hCaster:Stop()
-    local hTarget = target
-    local vPoint = hTarget:GetAbsOrigin() --We will always have Vector for the point.
-    local vOrigin = hCaster:GetAbsOrigin() --Our caster's location
-    local vtarget = vPoint
-    local nCasterFX = nil
-    hCaster:SetAttackCapability(DOTA_UNIT_CAP_NO_ATTACK)
-    local time = 0
-    local vDiff = vtarget- vOrigin
-	hCaster:MoveToPosition(hCaster:GetAbsOrigin() - hCaster:GetForwardVector())
-	vDiff.z = 0
-	local v_target = Vector(vDiff.x/vDiff:Length2D(),vDiff.y/vDiff:Length2D(),0)
+	if thisEntity:IsAlive() then
+		spell_1_CD = 15/CD_DIVISER
+		local hCaster = thisEntity --We will always have Caster.
+	    hCaster:Stop()
+	    local hTarget = target
+	    local vPoint = hTarget:GetAbsOrigin() --We will always have Vector for the point.
+	    local vOrigin = hCaster:GetAbsOrigin() --Our caster's location
+	    local vtarget = vPoint
+	    local nCasterFX = nil
+	    hCaster:SetAttackCapability(DOTA_UNIT_CAP_NO_ATTACK)
+	    local time = 0
+	    local vDiff = vtarget- vOrigin
+		hCaster:MoveToPosition(hCaster:GetAbsOrigin() - hCaster:GetForwardVector())
+		vDiff.z = 0
+		local v_target = Vector(vDiff.x/vDiff:Length2D(),vDiff.y/vDiff:Length2D(),0)
 
-	hCaster:SetForwardVector(v_target)
-	hCaster:MoveToPosition(hCaster:GetAbsOrigin() - hCaster:GetForwardVector())
+		hCaster:SetForwardVector(v_target)
+		hCaster:MoveToPosition(hCaster:GetAbsOrigin() - hCaster:GetForwardVector())
 
-	local duration = 0.5 + (vDiff:Length2D()/6000)
-    local movement_x_per_frame = vDiff.x/(50*duration)
-    local movement_y_per_frame = vDiff.y/(50*duration)
-    hCaster:SetMoveCapability(DOTA_UNIT_CAP_MOVE_NONE)
-    --create warning zone
-    Timers:CreateTimer(0.5,function()
-    	nCasterFX = ParticleManager:CreateParticle( "particles/units/heroes/hero_spirit_breaker/spirit_breaker_charge.vpcf",  PATTACH_ABSORIGIN_FOLLOW , hCaster )
-    	StartAnimation(hCaster, {duration=duration+1.5, activity=ACT_DOTA_RUN , rate=2.0})
-    end)
-    Timers:CreateTimer(0.5,function()
-    	if hCaster:IsAlive() then
-    		hCaster:SetForwardVector(v_target)
-	    	time = time + 0.02
-	    	hCaster:Stop()
-	    	movement = Vector(movement_x_per_frame,movement_y_per_frame,0)
-	    	hCaster:SetAbsOrigin(hCaster:GetAbsOrigin() + movement) 
-	    	if time >= duration then
-	    		boss_state = "idle"
-	    		hCaster:SetAttackCapability(DOTA_UNIT_CAP_MELEE_ATTACK)
-	    		hCaster:SetMoveCapability(DOTA_UNIT_CAP_MOVE_GROUND)
-	    		ParticleManager:DestroyParticle(nCasterFX, true)
-	    		FindClearSpaceForUnit(hCaster, vtarget, false) 
-	    		enemy = FindUnitsInRadius(DOTA_TEAM_BADGUYS,
-	                              hCaster:GetAbsOrigin(),
-	                              nil,
-	                              350,
-	                              DOTA_UNIT_TARGET_TEAM_ENEMY,
-	                              DOTA_UNIT_TARGET_ALL,
-	                              DOTA_UNIT_TARGET_FLAG_NONE,
-	                              FIND_ANY_ORDER,
-	                              false)
-	    		for k,v in pairs(enemy) do
-					LinkLuaModifier( "lua_modifier_stun", "modifiers/lua_modifier_stun.lua", LUA_MODIFIER_MOTION_NONE )
-					v:AddNewModifier(hCaster, nil, "lua_modifier_stun", {duration = 0.5}) 
-	    		end
+		local duration = 1.0 + (vDiff:Length2D()/6000)
+	    local movement_x_per_frame = vDiff.x/(50*duration)
+	    local movement_y_per_frame = vDiff.y/(50*duration)
+	    hCaster:SetMoveCapability(DOTA_UNIT_CAP_MOVE_NONE)
+	    --create warning zone
+	    Timers:CreateTimer(0.5,function()
+	    	nCasterFX = ParticleManager:CreateParticle( "particles/units/heroes/hero_spirit_breaker/spirit_breaker_charge.vpcf",  PATTACH_ABSORIGIN_FOLLOW , hCaster )
+	    	StartAnimation(hCaster, {duration=duration+1.5, activity=ACT_DOTA_RUN , rate=2.0})
+	    end)
+	    Timers:CreateTimer(0.5,function()
+	    	if hCaster:IsAlive() then
+	    		hCaster:SetForwardVector(v_target)
+		    	time = time + 0.02
+		    	hCaster:Stop()
+		    	movement = Vector(movement_x_per_frame,movement_y_per_frame,0)
+		    	hCaster:SetAbsOrigin(hCaster:GetAbsOrigin() + movement) 
+		    	if time >= duration then
+		    		boss_state = "idle"
+		    		hCaster:SetAttackCapability(DOTA_UNIT_CAP_MELEE_ATTACK)
+		    		hCaster:SetMoveCapability(DOTA_UNIT_CAP_MOVE_GROUND)
+		    		ParticleManager:DestroyParticle(nCasterFX, true)
+		    		FindClearSpaceForUnit(hCaster, vtarget, false) 
+		    		enemy = FindUnitsInRadius(DOTA_TEAM_BADGUYS,
+		                              hCaster:GetAbsOrigin(),
+		                              nil,
+		                              350,
+		                              DOTA_UNIT_TARGET_TEAM_ENEMY,
+		                              DOTA_UNIT_TARGET_ALL,
+		                              DOTA_UNIT_TARGET_FLAG_NONE,
+		                              FIND_ANY_ORDER,
+		                              false)
+		    		for k,v in pairs(enemy) do
+						LinkLuaModifier( "lua_modifier_stun", "modifiers/lua_modifier_stun.lua", LUA_MODIFIER_MOTION_NONE )
+						v:AddNewModifier(hCaster, nil, "lua_modifier_stun", {duration = 0.5}) 
+		    		end
 
-	    	else
-	    		return 0.02
-	    	end
-	    else
-	    	ParticleManager:DestroyParticle(nCasterFX, true)
-	    end
-    end)
+		    	else
+		    		return 0.02
+		    	end
+		    else
+		    	ParticleManager:DestroyParticle(nCasterFX, true)
+		    end
+    	end)
+	end
 end
 
 function spell_3(target)
-	spell_3_CD = 15/CD_DIVISER
-	local hCaster = thisEntity --We will always have Caster.
-    hCaster:Stop()
-    local hTarget = target
-    local vPoint = hTarget:GetAbsOrigin() --We will always have Vector for the point.
-    local vOrigin = hCaster:GetAbsOrigin() --Our caster's location
-    local vtarget = vPoint
+	if thisEntity:IsAlive() then
+		spell_3_CD = 15/CD_DIVISER
+		local hCaster = thisEntity --We will always have Caster.
+	    hCaster:Stop()
+	    local hTarget = target
+	    local vPoint = hTarget:GetAbsOrigin() --We will always have Vector for the point.
+	    local vOrigin = hCaster:GetAbsOrigin() --Our caster's location
+	    local vtarget = vPoint
 
-    local time = 0
-    local vDiff = vtarget- vOrigin
-	vDiff.z = 0
-	local v_target = Vector(vDiff.x/vDiff:Length2D(),vDiff.y/vDiff:Length2D(),0)
-	hCaster:SetForwardVector(v_target)
+	    local time = 0
+	    local vDiff = vtarget- vOrigin
+		vDiff.z = 0
+		local v_target = Vector(vDiff.x/vDiff:Length2D(),vDiff.y/vDiff:Length2D(),0)
+		hCaster:SetForwardVector(v_target)
 
+		local nTFX = ParticleManager:CreateParticle( "particles/impact_incoming.vpcf",  PATTACH_ABSORIGIN , hTarget )
+		ParticleManager:SetParticleControl(nTFX, 7, vtarget)
+		local duration = 1.3 + (vDiff:Length2D()/3000)
+		ParticleManager:SetParticleControl(nTFX, 4, Vector(duration,0,0))
+	    local movement_x_per_frame = vDiff.x/(50*duration)
+	    local movement_y_per_frame = vDiff.y/(50*duration)
+	    local movement_z_per_frame = (vDiff:Length2D()/2 + 500)/(50*duration)
+	    hCaster:SetAttackCapability(DOTA_UNIT_CAP_NO_ATTACK)
+	    hCaster:SetMoveCapability(DOTA_UNIT_CAP_MOVE_NONE)
+	    --create warning zone
+	    Timers:CreateTimer(1.0,function()
+	    	nCasterFX = ParticleManager:CreateParticle( "particles/units/heroes/hero_spirit_breaker/spirit_breaker_charge.vpcf",  PATTACH_ABSORIGIN_FOLLOW , hCaster )
+	    	StartAnimation(hCaster, {duration=duration+1, activity=ACT_DOTA_FLAIL , rate=0.5})
+	    end)
+	    Timers:CreateTimer(1.0,function()
+	    	if hCaster:IsAlive() then
+		    	time = time + 0.02
+		    	hCaster:SetForwardVector(v_target)
+		    	local z_movement = movement_z_per_frame * ((duration/2) - time)
+		    	movement = Vector(movement_x_per_frame,movement_y_per_frame,z_movement)
+		    	hCaster:SetAbsOrigin(hCaster:GetAbsOrigin() + movement) 
+		    	if time >= duration then
+		    		boss_state = "idle"
+		    		ParticleManager:DestroyParticle(nCasterFX, true)
+		    		ParticleManager:DestroyParticle(nTFX, true)
+		    		hCaster:SetAttackCapability(DOTA_UNIT_CAP_MELEE_ATTACK)
+		    		hCaster:SetMoveCapability(DOTA_UNIT_CAP_MOVE_GROUND)
+		    		FindClearSpaceForUnit(hCaster, vtarget, false) 
+		    		StartAnimation(hCaster, {duration=2.5, activity=ACT_DOTA_SPAWN , rate=1.0})
+		    		EmitSoundOn( "Hero_VengefulSpirit.NetherSwap", hCaster )
+		    		enemy = FindUnitsInRadius(DOTA_TEAM_BADGUYS,
+		                              hCaster:GetAbsOrigin(),
+		                              nil,
+		                              350,
+		                              DOTA_UNIT_TARGET_TEAM_ENEMY,
+		                              DOTA_UNIT_TARGET_ALL,
+		                              DOTA_UNIT_TARGET_FLAG_NONE,
+		                              FIND_ANY_ORDER,
+		                              false)
+		    		for k,v in pairs(enemy) do
+		    			local damageTable = {
+							victim = v,
+							attacker = hCaster,
+							damage = 15*(GameRules.difficulty^0.85),
+							damage_type = DAMAGE_TYPE_PHYSICAL,
+						}
+						ApplyDamage(damageTable) 
+						EmitSoundOn( "Hero_Ursa.Earthshock", hCaster )
+						LinkLuaModifier( "lua_modifier_stun", "modifiers/lua_modifier_stun.lua", LUA_MODIFIER_MOTION_NONE )
+						v:AddNewModifier(hCaster, nil, "lua_modifier_stun", {duration = 2}) 
 
-    local target_particle = ParticleManager:CreateParticle( "particles/econ/generic/generic_aoe_shockwave_1/generic_aoe_shockwave_1.vpcf", PATTACH_ABSORIGIN, hTarget )
-    ParticleManager:SetParticleControl( target_particle, 0,Vector(0,0,0))
-    ParticleManager:SetParticleControl( target_particle, 1,Vector(500,0,0))
-    ParticleManager:SetParticleControl( target_particle, 2,Vector(10,0,1))
-    ParticleManager:SetParticleControl( target_particle, 3,Vector(250,100,100))
-    ParticleManager:SetParticleControl( target_particle, 4,Vector(0,0,0))
-    StartAnimation(hCaster, {duration=1.0, activity=ACT_DOTA_OVERRIDE_ABILITY_3, rate=1.0})
-
-	local duration = 0.2 + (vDiff:Length2D()/3000)
-    local movement_x_per_frame = vDiff.x/(50*duration)
-    local movement_y_per_frame = vDiff.y/(50*duration)
-    local movement_z_per_frame = (vDiff:Length2D()/2 + 500)/(50*duration)
-    hCaster:SetAttackCapability(DOTA_UNIT_CAP_NO_ATTACK)
-    hCaster:SetMoveCapability(DOTA_UNIT_CAP_MOVE_NONE)
-    --create warning zone
-    Timers:CreateTimer(1.0,function()
-    	StartAnimation(hCaster, {duration=duration+1, activity=ACT_DOTA_FLAIL , rate=0.5})
-    end)
-    Timers:CreateTimer(1.0,function()
-    	if hCaster:IsAlive() then
-	    	time = time + 0.02
-	    	hCaster:SetForwardVector(v_target)
-	    	local z_movement = movement_z_per_frame * ((duration/2) - time)
-	    	movement = Vector(movement_x_per_frame,movement_y_per_frame,z_movement)
-	    	hCaster:SetAbsOrigin(hCaster:GetAbsOrigin() + movement) 
-	    	if time >= duration then
-	    		boss_state = "idle"
-	    		hCaster:SetAttackCapability(DOTA_UNIT_CAP_MELEE_ATTACK)
-	    		hCaster:SetMoveCapability(DOTA_UNIT_CAP_MOVE_GROUND)
-	    		ParticleManager:DestroyParticle(target_particle, true) 
-	    		FindClearSpaceForUnit(hCaster, vtarget, false) 
-	    		StartAnimation(hCaster, {duration=2.5, activity=ACT_DOTA_SPAWN , rate=1.0})
-	    		EmitSoundOn( "Hero_VengefulSpirit.NetherSwap", hCaster )
-	    		enemy = FindUnitsInRadius(DOTA_TEAM_BADGUYS,
-	                              hCaster:GetAbsOrigin(),
-	                              nil,
-	                              350,
-	                              DOTA_UNIT_TARGET_TEAM_ENEMY,
-	                              DOTA_UNIT_TARGET_ALL,
-	                              DOTA_UNIT_TARGET_FLAG_NONE,
-	                              FIND_ANY_ORDER,
-	                              false)
-	    		for k,v in pairs(enemy) do
-	    			local damageTable = {
-						victim = v,
-						attacker = hCaster,
-						damage = 15*(GameRules.difficulty^0.85),
-						damage_type = DAMAGE_TYPE_PHYSICAL,
-					}
-					ApplyDamage(damageTable) 
-					EmitSoundOn( "Hero_Ursa.Earthshock", hCaster )
-					LinkLuaModifier( "lua_modifier_stun", "modifiers/lua_modifier_stun.lua", LUA_MODIFIER_MOTION_NONE )
-					v:AddNewModifier(hCaster, nil, "lua_modifier_stun", {duration = 2}) 
-
-	    		end
-	    	else
-	    		return 0.02
-	    	end
-	    else
-	    	ParticleManager:DestroyParticle(target_particle, true) 
-	    end
-    end)
+		    		end
+		    	else
+		    		return 0.02
+		    	end
+		    else
+		    	ParticleManager:DestroyParticle(nTFX, true) 
+		    end
+	    end)
+	end
 end
 
 function found_lowest_hpp_ennemy(rand)

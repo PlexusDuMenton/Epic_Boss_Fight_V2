@@ -20,15 +20,18 @@ difficulty_multiplier[2] = 2.0
 difficulty_multiplier[3] = 3.0
 difficulty_multiplier[4] = 5.0
 difficulty_multiplier[5] = 10.0
+difficulty_multiplier[6] = 25.0
 
 loot_difficulty = {}
 
-loot_difficulty[0] = 0.25
-loot_difficulty[1] = 0.75
-loot_difficulty[2] = 1.25
-loot_difficulty[3] = 1.75
-loot_difficulty[4] = 2.5
-loot_difficulty[5] = 4.0
+loot_difficulty[0] = 0.66
+loot_difficulty[1] = 1.0
+loot_difficulty[2] = 1.33
+loot_difficulty[3] = 2.0
+loot_difficulty[4] = 4.33
+loot_difficulty[5] = 6.66
+loot_difficulty[6] = 12
+
 
 -- This library allow for easily delayed/timed actions
 require('libraries/timers')
@@ -162,10 +165,13 @@ function epic_boss_fight:OnHeroLevelUp(hero)
   inv_manager:Calculate_stats(hero)
 
 end
+
+
+
 -------------------------------------------------------------------  MULTIPLIER CALCULATOR
 function epic_boss_fight:Calculate_Multiplier() --Will calculate difficulty based on all player level and 
-  Timers:CreateTimer(5,function()
-    if GameRules:State_Get() >= DOTA_GAMERULES_STATE_GAME_IN_PROGRESS then
+  Timers:CreateTimer(2,function()
+    if GameRules:State_Get() >= DOTA_GAMERULES_STATE_PRE_GAME then
       local difficulty = 1
       local Actual_Max_Level = 0
       for i=0,PlayerResource:GetPlayerCount()-1 do
@@ -183,11 +189,25 @@ function epic_boss_fight:Calculate_Multiplier() --Will calculate difficulty base
       end
       if type(difficulty) ~= "number" then difficulty = 1 end 
       GameRules.Actual_Max_Level = Actual_Max_Level
+      if difficulty_multiplier[GameRules.player_difficulty] == nil then 
+        if GameRules.player_difficulty < 0 then GameRules.player_difficulty = 0 
+        else
+          difficulty_multiplier[GameRules.player_difficulty] = (GameRules.player_difficulty-1)^2
+        end
+      end
       GameRules.difficulty = difficulty * difficulty_multiplier[GameRules.player_difficulty]
+      if loot_difficulty[GameRules.player_difficulty] == nil then 
+        if GameRules.player_difficulty < 0 then GameRules.player_difficulty = 0 
+        else
+          loot_difficulty[GameRules.player_difficulty] = (GameRules.player_difficulty)*1.5
+        end
+      end
+
+
       GameRules.loot_multiplier = math.floor(GameRules.difficulty * round_manager.round^0.5) * loot_difficulty[GameRules.player_difficulty] + 1
 
     end
-  return 5
+  return 2
   end)
 
 end
@@ -321,6 +341,7 @@ function epic_boss_fight:InitGameMode()
   Convars:RegisterCommand("ebf_sell_item", function(...) return self:ebf_sell_item( ... ) end, "sell an item", ISCHEATALLOWED )
   Convars:RegisterCommand("ebf_use_item", function(...) return self:ebf_use_item( ... ) end, "Equip/Use an item", ISCHEATALLOWED )
   Convars:RegisterCommand("ebf_set_loot_multiplier", function(...) return self:ebf_set_loot_multiplier( ... ) end, "Equip/Use an item", ISCHEATALLOWED )
+  Convars:RegisterCommand("ebf_set_difficulty", function(...) return self:ebf_dfficulty( ... ) end, "Change the difficulty level of the game", ISCHEATALLOWED )
 
 
   Convars:RegisterCommand("ebf_upgrade", function(...) return self:ebf_upgrade( ... ) end, "Upgrade a weapon with a power soul", ISCHEATALLOWED )
@@ -432,6 +453,10 @@ function epic_boss_fight:httptest(com_name)
   request:Send( function(result)
 print("ok")
 end) 
+end
+
+function epic_boss_fight:ebf_dfficulty (com_name,difficulty)
+  GameRules.player_difficulty = tonumber(difficulty)
 end
 
 function epic_boss_fight:up_skill (com_name,ID)

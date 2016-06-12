@@ -216,6 +216,177 @@
     "ItemPermanent"         "0"
   }
 
+  "item_broken_bow"
+  { 
+    "ID"              "1025"
+    "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+    "BaseClass"           "item_datadriven"
+    "AbilityTextureName"      "item_broken_bow"
+
+    "ItemStackable"         "0"
+    "ItemKillable"          "0"
+    "ItemPurchasable"       "0"
+    "ItemCost"            "0"
+    "ItemShareability"        "ITEM_NOT_SHAREABLE"
+    "ItemPermanent"         "0"
+  }
+  "item_bow"
+  { 
+    "ID"              "1026"
+    "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+    "BaseClass"           "item_datadriven"
+    "AbilityTextureName"      "item_bow"
+
+    "ItemStackable"         "0"
+    "ItemKillable"          "0"
+    "ItemPurchasable"       "0"
+    "ItemCost"            "0"
+    "ItemShareability"        "ITEM_NOT_SHAREABLE"
+    "ItemPermanent"         "0"
+  }
+  "item_long_bow"
+  { 
+    "ID"              "1027"
+    "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+    "BaseClass"           "item_datadriven"
+    "AbilityTextureName"      "item_long_bow"
+
+    "ItemStackable"         "0"
+    "ItemKillable"          "0"
+    "ItemPurchasable"       "0"
+    "ItemCost"            "0"
+    "ItemShareability"        "ITEM_NOT_SHAREABLE"
+    "ItemPermanent"         "0"
+  }
+  "item_fire_long_bow"
+  { 
+    "ID"              "1028"
+    "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+    "BaseClass"           "item_datadriven"
+    "AbilityTextureName"      "item_fire_long_bow"
+
+    "ItemStackable"         "0"
+    "ItemKillable"          "0"
+    "ItemPurchasable"       "0"
+    "ItemCost"            "0"
+    "ItemShareability"        "ITEM_NOT_SHAREABLE"
+    "ItemPermanent"         "0"
+  }
+
+  "item_heavy_leather_armor"
+  { 
+    "ID"              "1029"
+    "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+    "BaseClass"           "item_datadriven"
+    "AbilityTextureName"      "item_heavy_leather_armor"
+
+    "ItemStackable"         "0"
+    "ItemKillable"          "0"
+    "ItemPurchasable"       "1"
+    "ItemCost"            "0"
+    "ItemShareability"        "ITEM_NOT_SHAREABLE"
+    "ItemPermanent"         "1"
+  }
+  "item_bruiser_armor"
+  { 
+    "ID"              "1030"
+    "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+    "BaseClass"           "item_datadriven"
+    "AbilityTextureName"      "item_bruiser_armor"
+
+    "ItemStackable"         "0"
+    "ItemKillable"          "0"
+    "ItemPurchasable"       "1"
+    "ItemCost"            "0"
+    "ItemShareability"        "ITEM_NOT_SHAREABLE"
+    "ItemPermanent"         "1"
+  }
+  "item_taraske_plate"
+  { 
+    "ID"              "1031"
+    "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+    "BaseClass"           "item_datadriven"
+    "AbilityTextureName"      "item_taraske_plate"
+
+    "ItemStackable"         "0"
+    "ItemKillable"          "0"
+    "ItemPurchasable"       "1"
+    "ItemCost"            "0"
+    "ItemShareability"        "ITEM_NOT_SHAREABLE"
+    "ItemPermanent"         "1"
+  }
+  "item_sword"
+  { 
+    "ID"              "1032"
+    "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+    "BaseClass"           "item_datadriven"
+    "AbilityTextureName"      "item_sword"
+
+    "ItemStackable"         "0"
+    "ItemKillable"          "0"
+    "ItemPurchasable"       "1"
+    "ItemCost"            "0"
+    "ItemShareability"        "ITEM_NOT_SHAREABLE"
+    "ItemPermanent"         "1"
+  }
+
+"item_curved_sword"
+  { 
+    "ID"              "1033"
+    "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+    "BaseClass"           "item_datadriven"
+    "AbilityTextureName"      "item_curved_sword"
+
+    "ItemStackable"         "0"
+    "ItemKillable"          "0"
+    "ItemPurchasable"       "1"
+    "ItemCost"            "0"
+    "ItemShareability"        "ITEM_NOT_SHAREABLE"
+    "ItemPermanent"         "1"
+  }
+  "item_skull_sword"
+  { 
+    "ID"              "1034"
+    "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+    "BaseClass"           "item_datadriven"
+    "AbilityTextureName"      "item_skull_sword"
+
+    "ItemStackable"         "0"
+    "ItemKillable"          "0"
+    "ItemPurchasable"       "1"
+    "ItemCost"            "0"
+    "ItemShareability"        "ITEM_NOT_SHAREABLE"
+    "ItemPermanent"         "1"
+  }
+  "item_skeleton_sword"
+  { 
+    "ID"              "1035"
+    "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+    "BaseClass"           "item_datadriven"
+    "AbilityTextureName"      "item_skeleton_sword"
+
+    "ItemStackable"         "0"
+    "ItemKillable"          "0"
+    "ItemPurchasable"       "1"
+    "ItemCost"            "0"
+    "ItemShareability"        "ITEM_NOT_SHAREABLE"
+    "ItemPermanent"         "1"
+  }
+  "item_dragon_skull_sword"
+  { 
+    "ID"              "1036"
+    "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+    "BaseClass"           "item_datadriven"
+    "AbilityTextureName"      "item_dragon_skull_sword"
+
+    "ItemStackable"         "0"
+    "ItemKillable"          "0"
+    "ItemPurchasable"       "1"
+    "ItemCost"            "0"
+    "ItemShareability"        "ITEM_NOT_SHAREABLE"
+    "ItemPermanent"         "1"
+  }
+
 
 
 

@@ -1,9 +1,7 @@
 if lua_hero_effect_poison_1 == nil then lua_hero_effect_poison_1 = class({}) end
-print ("test modifier")
 function lua_hero_effect_poison_1:OnCreated()
 	if IsServer() then
 		local hero = self:GetParent()
-		print ("MODIFIER !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",hero)
 	end
 end
 function lua_hero_effect_poison_1:IsHidden()
@@ -26,7 +24,6 @@ end
 function lua_hero_effect_poison_1:OnAttackLanded(event)
 	if IsServer() then
 		local hero = self:GetParent()
-		print ("test")
 		if event.attacker==self:GetParent() then
 			local target = event.target
 			local percent = 100
@@ -42,13 +39,16 @@ function lua_hero_effect_poison_1:OnAttackLanded(event)
 				damage = damage,
 				damage_type = DAMAGE_TYPE_MAGICAL,
 			}
-			Timers:CreateTimer(0.2, function()
-				timer = timer + 0.2
-				if timer <= duration then
-					ApplyDamage(damageTable) 
-					return 0.2
-				end
-		    end)
+			
+			if math.random(1,100) <= 15 then
+				Timers:CreateTimer(0.2, function()
+					timer = timer + 0.2
+					if timer <= duration then
+						ApplyDamage(damageTable) 
+						return 0.2
+					end
+			    end)
+			end
 		end
 	end
 end
