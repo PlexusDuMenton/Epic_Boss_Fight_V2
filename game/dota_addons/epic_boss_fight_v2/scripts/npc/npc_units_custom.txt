@@ -311,8 +311,8 @@
     // Attack
     //----------------------------------------------------------------
     "AttackCapabilities"    "DOTA_UNIT_CAP_MELEE_ATTACK"     // Type of attack - melee, ranged, etc.
-    "AttackDamageMin"     "10"     // Damage range min.
-    "AttackDamageMax"     "12"     // Damage range max.
+    "AttackDamageMin"     "4"     // Damage range min.
+    "AttackDamageMax"     "6"     // Damage range max.
     "AttackDamageType"      "DAMAGE_TYPE_ArmorPhysical"
     "AttackRate"        "2.0"     // Speed of attack.
     "AttackAnimationPoint"    "0.5"   // Normalized time in animation cycle to attack.
@@ -341,7 +341,7 @@
 
     // Status
     //----------------------------------------------------------------
-    "StatusHealth"        "30"     // Base health.
+    "StatusHealth"        "35"     // Base health.
     "StatusHealthRegen"     "0.5"     // Health regeneration rate.
     "StatusMana"        "0"     // Base mana.
     "StatusManaRegen"     "0"     // Mana regeneration rate.
@@ -363,9 +363,6 @@
     "AttackDesire"        "1.5"   // How much bots want to attack them vs other non-hero things
     "vscripts"              "AI/Boss_2_ai.lua"
   } 
-
-
- 
 
 
   "npc_dummy_unit"

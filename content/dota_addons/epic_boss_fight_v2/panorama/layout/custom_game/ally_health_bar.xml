@@ -1,0 +1,23 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/custom_game/ally_health_bar.css" />
+	</styles>
+	<scripts>
+		<include src="file://{resources}/scripts/custom_game/ally_health_bar.js" />
+	</scripts>
+	<Panel class="Main" hittest="false">
+		
+		<Panel id = "main_panel_ally" hittest="false">
+		</Panel>
+		<Panel id = "main_panel_ally_sub" hittest="false">
+
+		</Panel>
+		<Panel id = "hero_panel" class="HeroPanel">
+			<Button class="Close" onactivate='close_hero()'/>
+			<Panel id="equipement">
+				
+			</Panel>
+		</Panel>
+		<Panel id="Menu_h" hittest="false"/>
+	</Panel>
+</root>

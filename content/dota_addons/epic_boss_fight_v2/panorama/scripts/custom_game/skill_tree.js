@@ -18,6 +18,13 @@ Object.size = function(obj) {
     return size;
 };
 
+function close_all(){
+	if ($("#main_panel").visible == true){
+		close_skill_tree()
+	}
+	GameUI.CustomUIConfig().Events.FireEvent( "CLOSE_ALL",{})
+}
+
 function open_with_command(){
 	if ($("#main_panel").visible == true){
 		close_skill_tree()
@@ -29,6 +36,7 @@ function open_with_command(){
 GameEvents.Subscribe( "Display_Bar", Update)
 	function Update(){
 		Game.AddCommand( "+Open_ST", open_with_command, "", 0 );
+		Game.AddCommand( "+Close_ALL", close_all, "", 0 );
 		$.Schedule(0.2, Updateskill_tree);
 	}
 	

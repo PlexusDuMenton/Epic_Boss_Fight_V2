@@ -1,6 +1,14 @@
 if boss_manager == nil then
 	boss_manager = class({})
 end
+XP_M = {}
+XP_M[0] = 1
+XP_M[1] = 1.2
+XP_M[2] = 1.4
+XP_M[3] = 1.6
+XP_M[4] = 1.8
+XP_M[5] = 2.0
+XP_M[6] = 2.5
 
 MAINISDEAD = true
 SECONDARYAREDEAD = true
@@ -118,12 +126,13 @@ function boss_manager:OnEntityKilled(event)
      	 local player = PlayerResource:GetPlayer(i)
       	local hero = player:GetAssignedHero()
       	if hero.Level < GameRules.Actual_Max_Level*0.95 - 10 then
-      		hero.XP = hero.XP + (killed_unit.XP * (hero.Level/GameRules.Actual_Max_Level))
+      		local xp_to_gain = killed_unit.XP * (hero.Level/(GameRules.Actual_Max_Level^1.57))
+      		hero.XP = hero.XP + xp_to_gain
     	else
      		hero.XP = hero.XP + killed_unit.XP
     	end
     	if killed_unit.Is_Main == true or killed_unit.Is_Secondary == true then
-      		hero:ModifyGold(killed_unit.Gold, true,  DOTA_ModifyGold_Unspecified ) 
+    		hero.gold = math.ceil(hero.gold + killed_unit.Gold)
     	end
     	epic_boss_fight:Check_Hero_lvlup(hero)
     end
@@ -156,17 +165,15 @@ function boss_manager:OnSpawn(event)
 		return
 	end
 	local diff_mult = GameRules.difficulty
-	local damagemin = spawnedUnit:GetBaseDamageMin() * (diff_mult^1.15) - 2
-	local damagemax = spawnedUnit:GetBaseDamageMax() * (diff_mult^1.35) - 3
+	local damagemin = spawnedUnit:GetBaseDamageMin() * (diff_mult^1.15) - 1
+	local damagemax = spawnedUnit:GetBaseDamageMax() * (diff_mult^1.25) - 1
 	if damagemin <= 0 then damagemin = 1 end
 	if damagemax <= 0 then damagemax = 1 end
 	spawnedUnit:SetBaseDamageMin(damagemin )
 	spawnedUnit:SetBaseDamageMax(damagemax )
 
 	local EHP = (spawnedUnit:GetMaxHealth() * diff_mult^1.25 +10 )
-	print (EHP)
 	if EHP > 999999 then
-		print("boss max hp is too high")
 		spawnedUnit:SetMaxHealth(999999)
 		local armor = simualteHP(EHP,999999)
 		spawnedUnit:SetPhysicalArmorBaseValue(armor)
@@ -174,30 +181,26 @@ function boss_manager:OnSpawn(event)
 		local Mag_Ress = 1 - ((1-spawnedUnit:GetBaseMagicalResistanceValue())/(EHP/999999)) 
 		spawnedUnit:SetBaseMagicalResistanceValue(Mag_Ress)
 	else
-		print("boss max hp are lower than 999 999")
 		spawnedUnit:SetMaxHealth(EHP)
 		spawnedUnit.EHP_MULT = 1
 		spawnedUnit:SetPhysicalArmorBaseValue(0)
 	end
-	print(spawnedUnit:GetMaxHealth())
 	spawnedUnit:SetHealth(spawnedUnit:GetMaxHealth())
 
 	spawnedUnit:SetBaseHealthRegen((spawnedUnit:GetBaseHealthRegen()) * (diff_mult^0.8) - 1)
-	spawnedUnit.XP = spawnedUnit:GetDeathXP()* (1+math.log(GameRules.loot_multiplier)/math.log(2))
+	spawnedUnit.XP = math.floor(((spawnedUnit:GetDeathXP() *(GameRules.loot_multiplier*0.5) * XP_M[GameRules.player_difficulty])^1.1)/1.34)
+	print (spawnedUnit.XP,GameRules.loot_multiplier)
 	boss_manager.Alive_Ennemy = boss_manager.Alive_Ennemy + 1
-	print(spawnedUnit:GetUnitName())
 	if boss_manager.Boss_Info[spawnedUnit:GetUnitName()].Is_Main == 1 then
 		spawnedUnit.Is_Main = true
-		print ("boss is main")
-		spawnedUnit.Gold = spawnedUnit:GetMaximumGoldBounty() * (1+math.log(  GameRules.loot_multiplier)/math.log(10))
+		spawnedUnit.Gold = math.ceil(spawnedUnit:GetMaximumGoldBounty() * (1+math.log(  GameRules.loot_multiplier)/math.log(10)))
 		spawnedUnit:SetMaximumGoldBounty( 0 ) 
 		spawnedUnit:SetMinimumGoldBounty( 0 ) 
 	elseif boss_manager.Boss_Info[spawnedUnit:GetUnitName()].Is_Secondary == 1 then
 		spawnedUnit.Is_Secondary = true
-		spawnedUnit.Gold = spawnedUnit:GetMaximumGoldBounty() * (1+math.log(  GameRules.loot_multiplier)/math.log(10))
-		print ("boss is secondary")
+		spawnedUnit.Gold = math.ceil(spawnedUnit:GetMaximumGoldBounty() * (1+math.log(  GameRules.loot_multiplier)/math.log(10)))
 	else
-		spawnedUnit.Gold = spawnedUnit:GetMaximumGoldBounty() * (1+math.log(  GameRules.loot_multiplier)/math.log(10))
+		spawnedUnit.Gold = math.ceil(spawnedUnit:GetMaximumGoldBounty() * (1+math.log(  GameRules.loot_multiplier)/math.log(10)))
 		spawnedUnit:SetMaximumGoldBounty( 0 ) 
 		spawnedUnit:SetMinimumGoldBounty( 0 ) 
 	end

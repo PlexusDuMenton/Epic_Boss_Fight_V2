@@ -18,9 +18,8 @@ function OnEnterShop(trigger)
             if v.cat == "weapon" then v.level = 0 end
         end
         CustomGameEventManager:Send_ServerToPlayer(PlayerResource:GetPlayer(PID), "Open_Shop", table)
+        CustomGameEventManager:Send_ServerToPlayer(PlayerResource:GetPlayer(PID),"play_sound", {music = "Sound.Shop.1"} )
     end
-    --play sound telling player he entered it
-    --open shop hud
     return
 end
 
@@ -31,6 +30,7 @@ function OnExitShop(trigger)
     if ent:IsHero() then
         local PID = ent:GetPlayerID() 
         CustomGameEventManager:Send_ServerToPlayer(PlayerResource:GetPlayer(PID), "Close_Shop", {} )
+        CustomGameEventManager:Send_ServerToPlayer(PlayerResource:GetPlayer(PID),"play_sound", {music = "Sound.Shop.2"} )
     end
     --play exit music ?
     --close shop hud if player didn't yet
@@ -45,6 +45,7 @@ function OnEnterForge(trigger)
     if ent:IsHero() then
         local PID = ent:GetPlayerID() 
         CustomGameEventManager:Send_ServerToPlayer(PlayerResource:GetPlayer(PID), "Open_Forge", {} )
+        CustomGameEventManager:Send_ServerToPlayer(PlayerResource:GetPlayer(PID),"play_sound", {music = "Sound.Shop.1"} )
     end
     return
 end
@@ -56,6 +57,7 @@ function OnExitForge(trigger)
     if ent:IsHero() then
         local PID = ent:GetPlayerID() 
         CustomGameEventManager:Send_ServerToPlayer(PlayerResource:GetPlayer(PID), "Close_Forge", {} )
+        CustomGameEventManager:Send_ServerToPlayer(PlayerResource:GetPlayer(PID),"play_sound", {music = "Sound.Shop.2"} )
     end
     return
 end

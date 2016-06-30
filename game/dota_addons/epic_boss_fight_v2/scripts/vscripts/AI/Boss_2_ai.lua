@@ -7,7 +7,6 @@ require('libraries/animations')
 
 MOVE_SPEED = math.log(GameRules.difficulty+10)/math.log(10) * 25 + 200
 function Spawn( entityKeyValues )
-	print("test")
 	thisEntity:SetBaseMoveSpeed(MOVE_SPEED)
 	thisEntity:SetContextThink( "Boss_2_think", Boss_2_think, THINK_TIME )
 	thisEntity:SetContextThink( "change_target", change_target, 2 )
@@ -42,7 +41,6 @@ function KnockBack(radius,center,distance,team,space)
 		elseif distance == -1 then
 			v_distance = -vDiff:Length2D() + space
 			duration = - v_distance/2500
-			print(distance,v_distance,duration)
 		else
 			v_distance = distance
 			duration = - v_distance/1500
@@ -94,14 +92,15 @@ function change_target()
 		local target = nil
 		for k,v in pairs(enemy) do
 			if v:IsAlive() then
-				local hp = v:GetHealth()
+				if v.agro == nil then v.agro = 0 end
+				local hp = v:GetHealth()/(1+v.agro)
 				if hp <= lowest_hp or lowest_hp== -1 then
 					lowest_hp = hp
 					target = v
 				end
 			end
 		end
-	if force_target == nil then
+	if force_target == nil or force_target:IsAlive() == false then
 		boss_target = target
 	else
 		boss_target = force_target
@@ -114,20 +113,19 @@ local form = 0
 
 
 spell_1_CD = 6
-spell_2_CD = 0
-spell_3_CD = 0
-spell_4_CD = 0
-spell_5_CD = 0
+spell_2_CD = 10
+spell_4_CD = 5
 spell_6_CD = 0
 
 function projectile_dectection(origin,speed,duration,origin_size,final_size,team,Damage_Table,modifier_name)
+	print(duration)
 	local time = 0
 	local unit_touched = {}
 	Timers:CreateTimer(0.015,function()
 	   	time = time + 0.015
 	    if time <= duration then
 	    	local location = origin + speed * time
-			local size = origin_size + ((final_size-origin_size)*(1.12/time))
+			local size = origin_size + ((final_size-origin_size)*(time/duration))
 			local enemy = FindUnitsInRadius(team,
                               location,
                               nil,
@@ -179,21 +177,18 @@ function spell_6()
 	thisEntity:SetMoveCapability(DOTA_UNIT_CAP_MOVE_NONE)
 
 	StartAnimation(thisEntity, {duration=3.0, activity=ACT_DOTA_CAST_ABILITY_1 , rate=0.65})
-	thisEntity:SetModel("models/items/lone_druid/true_form/form_of_the_atniw/form_of_the_atniw.vmdl") 
 	Timers:CreateTimer(1.8,function()
 		KnockBack(2000,thisEntity:GetAbsOrigin()+thisEntity:GetForwardVector()*200,-1,DOTA_TEAM_GOODGUYS)
 		EndAnimation(thisEntity)
-		thisEntity:SetModel("models/items/lone_druid/true_form/form_of_the_atniw/form_of_the_atniw.vmdl") 
 		Timers:CreateTimer(0.07,function()
 			StartAnimation(thisEntity, {duration=4.0, activity=ACT_DOTA_CAST_ABILITY_4 , rate=0.15})
-			thisEntity:SetModel("models/items/lone_druid/true_form/form_of_the_atniw/form_of_the_atniw.vmdl") 
 		end)
 		Timers:CreateTimer((1.8 + 0.7/CD_DIVISER),function()
 			EmitSoundOn("n_creep_Thunderlizard_Big.Roar", thisEntity)
 			local damageTable = {
 							victim = nil,
 							attacker = thisEntity,
-							damage = 25*(GameRules.difficulty),
+							damage = 25*(GameRules.difficulty^1.2),
 							damage_type = DAMAGE_TYPE_PHYSICAL,
 						}
 			local projectileTable = {
@@ -202,8 +197,8 @@ function spell_6()
 			        vSpawnOrigin = thisEntity:GetAbsOrigin()+thisEntity:GetForwardVector()*200,
 			        fDistance = 1200,
 			        fStartRadius = 50,
-			        fEndRadius = 300,
-			        fExpireTime = GameRules:GetGameTime() + 5,
+			        fEndRadius = 400,
+			        fExpireTime = GameRules:GetGameTime() + 1.1,
 			        Source = thisEntity,
 			        bHasFrontalCone = true,
 			        bReplaceExisting = false,
@@ -220,7 +215,6 @@ function spell_6()
 				thisEntity:SetAttackCapability(DOTA_UNIT_CAP_MELEE_ATTACK)
 		    	thisEntity:SetMoveCapability(DOTA_UNIT_CAP_MOVE_GROUND)
 				EndAnimation(thisEntity)
-				thisEntity:SetModel("models/items/lone_druid/true_form/form_of_the_atniw/form_of_the_atniw.vmdl") 
 				boss_state = "idle"
 			end)
 
@@ -242,7 +236,6 @@ function spell_4()
 	StartAnimation(thisEntity, {duration=999, activity=ACT_DOTA_DEFEAT , rate=0.25})
 	thisEntity:SetAttackCapability(DOTA_UNIT_CAP_NO_ATTACK)
 	thisEntity:SetMoveCapability(DOTA_UNIT_CAP_MOVE_NONE)
-	thisEntity:SetModel("models/items/lone_druid/true_form/form_of_the_atniw/form_of_the_atniw.vmdl") 
 	nCasterFX = ParticleManager:CreateParticle( "particles/healing_ring.vpcf",  PATTACH_ABSORIGIN , thisEntity )
 	KnockBack(800,thisEntity:GetAbsOrigin(),500,DOTA_TEAM_GOODGUYS)
 	thisEntity:SetBaseHealthRegen(thisEntity:GetMaxHealth()/15)
@@ -252,7 +245,6 @@ function spell_4()
 			ParticleManager:DestroyParticle(nCasterFX, false)
 			thisEntity:SetAttackCapability(DOTA_UNIT_CAP_MELEE_ATTACK)
 		    thisEntity:SetMoveCapability(DOTA_UNIT_CAP_MOVE_GROUND)
-			thisEntity:SetModel("models/items/lone_druid/true_form/form_of_the_atniw/form_of_the_atniw.vmdl") 
 			thisEntity:SetBaseHealthRegen(base_HPR)
 			boss_state = "idle"
 		else
@@ -329,18 +321,22 @@ imobilize = false
 function Boss_2_think()
 	if thisEntity:IsAlive() or not thisEntity:IsNull() then -- verify if unity is not recently dead
 		local HPP = (thisEntity:GetHealth()/thisEntity:GetMaxHealth()) * 100
-		spell_1_CD = reduce_CD(spell_1_CD)
-		spell_2_CD = reduce_CD(spell_2_CD)
-		spell_3_CD = reduce_CD(spell_3_CD)
-		spell_4_CD = reduce_CD(spell_4_CD)
-		spell_5_CD = reduce_CD(spell_5_CD)
+		if form == 0 then
+			spell_1_CD = reduce_CD(spell_1_CD)
+		end
+		if form == 0 then
+			spell_2_CD = reduce_CD(spell_2_CD)
+		end
+		if form == 1 then
+			spell_4_CD = reduce_CD(spell_4_CD)
+		end
 		spell_6_CD = reduce_CD(spell_6_CD)
 
 
 		if boss_state == "idle" then
 			if form == 0 then
 				local rand = math.random(0,10)
-				if spell_1_CD == 0 and Is_Unit_Close(400,thisEntity:GetAbsOrigin()) == false then -- and spell requirement
+				if spell_1_CD == 0 and Is_Unit_Close(400,thisEntity:GetAbsOrigin()) == false and Is_Unit_Close(1500,thisEntity:GetAbsOrigin()) == true then -- and spell requirement
 					spell_1()
 				elseif spell_2_CD == 0 then -- and spell requirement
 					spell_2()
@@ -348,20 +344,12 @@ function Boss_2_think()
 					thisEntity:MoveToTargetToAttack(boss_target)
 				end
 			else 
-					thisEntity:SetModel("models/items/lone_druid/true_form/form_of_the_atniw/form_of_the_atniw.vmdl") 
 					if HPP <25 and spell_4_CD == 0 then 
 						spell_4()
 					elseif HPP < 90 and spell_6_CD == 0 then
 						spell_6()
 					else
 						thisEntity:MoveToTargetToAttack(boss_target)
-					end
-
-					if HPP< 50 and imobilize == false then 
-						imobilize = true
-						LinkLuaModifier( "immobilize", "modifiers/spell_5_boss_2.lua", LUA_MODIFIER_MOTION_NONE )
-						thisEntity:AddNewModifier(thisEntity, nil, "immobilize", {})
-						thisEntity:SetModel("models/items/lone_druid/true_form/form_of_the_atniw/form_of_the_atniw.vmdl") 
 					end
 			end
 		end
@@ -375,6 +363,8 @@ function Boss_2_think()
 			nCasterFX = ParticleManager:CreateParticle( "particles/healing_ring.vpcf",  PATTACH_ABSORIGIN , thisEntity )
 			LinkLuaModifier( "immunity", "modifiers/immunity.lua", LUA_MODIFIER_MOTION_NONE )
 			thisEntity:AddNewModifier(thisEntity, nil, "immunity", {})
+			LinkLuaModifier( "immobilize", "modifiers/spell_5_boss_2.lua", LUA_MODIFIER_MOTION_NONE )
+			thisEntity:AddNewModifier(thisEntity, nil, "immobilize", {})
 			boss_state = "transform"
 			Timers:CreateTimer(0.02,function()
 			    	time = time + 0.02
@@ -382,7 +372,8 @@ function Boss_2_think()
 			    	local movement = Vector(0,0,z_movement)
 			    	thisEntity:SetAbsOrigin(thisEntity:GetAbsOrigin() + movement) 
 			    	if time >= 1 then
-			    		thisEntity:SetModel("models/items/lone_druid/true_form/form_of_the_atniw/form_of_the_atniw.vmdl") 
+			    		LinkLuaModifier( "transform", "modifiers/transform.lua", LUA_MODIFIER_MOTION_NONE )
+						thisEntity:AddNewModifier(thisEntity, nil, "transform", {})
 			    	end
 			    	if time >= 2 then
 			    		EndAnimation(thisEntity)
@@ -392,7 +383,6 @@ function Boss_2_think()
 			    		ParticleManager:DestroyParticle(nCasterFX, false)
 			    		boss_state = "idle"
 			    		thisEntity:RemoveModifierByName("immunity")
-						thisEntity:SetModel("models/items/lone_druid/true_form/form_of_the_atniw/form_of_the_atniw.vmdl") 
 						thisEntity:SetMaxHealth(thisEntity:GetMaxHealth()*1.5)
 						thisEntity:SetHealth(thisEntity:GetMaxHealth())
 						thisEntity:SetBaseAttackTime(0.75)

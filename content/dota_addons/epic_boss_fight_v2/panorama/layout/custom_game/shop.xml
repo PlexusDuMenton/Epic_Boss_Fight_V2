@@ -14,6 +14,7 @@
 			<Panel id = "tab">
 
 			</Panel>
+			<Panel id="Menu_shop" hittest="false"/>
 		</Panel>
 	</Panel>
 </root>

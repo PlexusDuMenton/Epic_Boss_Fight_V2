@@ -46,37 +46,34 @@ end
 
 function HeroSelection:load_hero(table,PID)
 	print ('load hero')
+	
 	local player = PlayerResource:GetPlayer(PID)
 	if table == nil or table.inventory == nil then 
-		CustomGameEventManager:Send_ServerToPlayer(player,"load_empty", {}) 
-		print ("load slot is empty or corrupted , back to hero selection menu")
+		CustomGameEventManager:Send_ServerToPlayer(player,"load_fail", {}) 
+		Notifications:Save(PID, {text="#Empty",duration=2,color="FF2222"})
 		return
 	end
-
 	local oldhero = player:GetAssignedHero()
 	local Hero_Name = table.hero_name
 	local hero = PlayerResource:ReplaceHeroWith( PID, Hero_Name, 0, 0 )
 	inv_manager:Create_Inventory(hero)
-	skill_manager:create_skill_tree(hero)
-	hero.skill_tree = table.skill_tree
+	skill_manager:load_skill_tree(hero,table.skill_tree,table.active_list)
 	hero.inventory = table.inventory
-	hero.equipement = table.equipement
-	print ("Level : ",table.Level,table.level)
-	if hero.Level > 1 then
-		for i=2,hero.level do
-			epic_boss_fight:OnHeroLevelUp(hero)
+	hero.equipement = table.equipement 
+	if table.level > 1 then
+		for i=2,table.level do
+			epic_boss_fight:Update_stat(hero)
 		end
 	end
 	hero.xp = table.XP
 	hero.item_bar = table.item_bar
 
-	PlayerResource:SetGold(PID, table.gold, true)
+	hero.gold = table.gold
 	hero.stats_points = table.stats_points
+	DeepPrintTable(table)
 	inv_manager:update_effect (hero)
 	hero:AddAbility('lua_equipement')
 	hero:AddAbility('lua_hero_stats')
 
-	PlayerResource:SetCameraTarget(table.PID, hero)
-	PlayerResource:SetCameraTarget(table.PID, nil)
 	CustomGameEventManager:Send_ServerToPlayer(player,"Display_Bar", {}) 
 end

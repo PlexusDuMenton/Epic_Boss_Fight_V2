@@ -24,13 +24,13 @@ difficulty_multiplier[6] = 25.0
 
 loot_difficulty = {}
 
-loot_difficulty[0] = 0.66
-loot_difficulty[1] = 1.0
-loot_difficulty[2] = 1.33
-loot_difficulty[3] = 2.0
-loot_difficulty[4] = 4.33
-loot_difficulty[5] = 6.66
-loot_difficulty[6] = 12
+loot_difficulty[0] = 1.0
+loot_difficulty[1] = 1.05
+loot_difficulty[2] = 1.10
+loot_difficulty[3] = 1.20
+loot_difficulty[4] = 1.30
+loot_difficulty[5] = 1.40
+loot_difficulty[6] = 1.50
 
 
 -- This library allow for easily delayed/timed actions
@@ -67,7 +67,7 @@ Storage:SetApiKey("1a632e691765ceac74723d73de5d72abb6374146") -- TBD : load this
 XP_PER_LEVEL_TABLE = {} 
 REAL_XP_TABLE = {}
 for i=0,MAX_LEVEL do 
-  XP_PER_LEVEL_TABLE[i] = math.floor(i*40 + (1*i^3) + (2 * i^2)) - i*3
+  XP_PER_LEVEL_TABLE[i] = math.floor(i*40 + (1*i^3.5) + (2 * i^2)) - i*3
   if i > 0 then
     REAL_XP_TABLE[i] = XP_PER_LEVEL_TABLE[i] - XP_PER_LEVEL_TABLE[i-1]
   end
@@ -124,19 +124,11 @@ function epic_boss_fight:Check_Hero_lvlup(hero)
   end
 end
 
-function epic_boss_fight:OnHeroLevelUp(hero)
-  print ("LEVEL UP !")
+function epic_boss_fight:Update_stat(hero)
   hero.Level = hero.Level + 1
-  local level = hero.Level
   local Primary = hero:GetPrimaryAttribute()
-  local lvlup_effect = ParticleManager:CreateParticle("particles/generic_hero_status/hero_levelup.vpcf", PATTACH_ABSORIGIN  , hero)
-  hero:EmitSound("sounds/ui/levelup_female.vsnd")
-  Timers:CreateTimer(1,function()
-    ParticleManager:DestroyParticle(lvlup_effect, false)
-  end)
-  hero:SetAbilityPoints(0) 
-  hero.stats_points = hero.stats_points + 1
-  if Primary == 0 then
+  local level = hero.Level
+   if Primary == 0 then
       hero.hero_stats.hp = hero.hero_stats.hp + math.ceil(100*(level^0.75)*5)/100
       hero.hero_stats.str = hero.hero_stats.str + math.ceil(100*(level^0.4))/100
       hero.hero_stats.agi = hero.hero_stats.agi +  math.ceil(100*(0.2*level^0.025))/100
@@ -163,6 +155,19 @@ function epic_boss_fight:OnHeroLevelUp(hero)
       hero.hero_stats.agi = hero.hero_stats.agi + math.ceil(100*(level^0.3))/100
   end
   inv_manager:Calculate_stats(hero)
+end
+
+function epic_boss_fight:OnHeroLevelUp(hero)
+  print ("LEVEL UP !")
+  epic_boss_fight:Update_stat(hero)
+  local lvlup_effect = ParticleManager:CreateParticle("particles/generic_hero_status/hero_levelup.vpcf", PATTACH_ABSORIGIN  , hero)
+  hero:EmitSound("sounds/ui/levelup_female.vsnd")
+  Timers:CreateTimer(1,function()
+    ParticleManager:DestroyParticle(lvlup_effect, false)
+  end)
+  hero:SetAbilityPoints(0) 
+  hero.stats_points = hero.stats_points + 1
+ 
 
 end
 
@@ -174,12 +179,13 @@ function epic_boss_fight:Calculate_Multiplier() --Will calculate difficulty base
     if GameRules:State_Get() >= DOTA_GAMERULES_STATE_PRE_GAME then
       local difficulty = 1
       local Actual_Max_Level = 0
+      local player_ammount = 0
       for i=0,PlayerResource:GetPlayerCount()-1 do
         local hero = PlayerResource:GetSelectedHeroEntity(i) 
         if hero~=nil then
           if hero.inventory ~= nil then
             if PlayerResource:GetConnectionState(i) == 2 then
-              difficulty = math.floor(difficulty + hero.Level^1.6)*0.5
+              player_ammount = player_ammount +1
               if hero.Level > Actual_Max_Level then
                 Actual_Max_Level = hero.Level
               end
@@ -187,6 +193,8 @@ function epic_boss_fight:Calculate_Multiplier() --Will calculate difficulty base
           end
         end
       end
+      difficulty = (0.75*Actual_Max_Level) ^1.25 * (player_ammount^0.1) 
+      if difficulty < 1 then difficulty = 1 end
       if type(difficulty) ~= "number" then difficulty = 1 end 
       GameRules.Actual_Max_Level = Actual_Max_Level
       if difficulty_multiplier[GameRules.player_difficulty] == nil then 
@@ -204,7 +212,7 @@ function epic_boss_fight:Calculate_Multiplier() --Will calculate difficulty base
       end
 
 
-      GameRules.loot_multiplier = math.floor(GameRules.difficulty * round_manager.round^0.5) * loot_difficulty[GameRules.player_difficulty] + 1
+      GameRules.loot_multiplier = math.floor(GameRules.Actual_Max_Level^1.6 * round_manager.round^0.1) * loot_difficulty[GameRules.player_difficulty] + 1
 
     end
   return 2
@@ -264,12 +272,12 @@ function epic_boss_fight:InitGameMode()
   ListenToGameEvent( "entity_killed", Dynamic_Wrap( epic_boss_fight, "OnEntityKilled" ), self )
 
   HeroSelection:Start()
-
+  item_list_init = {}
   Timers:CreateTimer(0.05,function()
     for i=0,PlayerResource:GetPlayerCount()-1 do
       local hero = PlayerResource:GetSelectedHeroEntity(i) 
       if hero~=nil then
-        epic_boss_fight:update_net_table(hero)
+        epic_boss_fight:update_net_table(hero,i)
       end
     end
     return 0.025
@@ -311,7 +319,7 @@ function epic_boss_fight:InitGameMode()
       weapon_list[k].bonus_ls = 0
     end
   end
-  CustomNetTables:SetTableValue( "KVFILE",key, { weapon_evolution = LoadKeyValues("scripts/kv/w_evolution.kv") , weapon_list = weapon_list } )
+  item_list_init = { weapon_evolution = LoadKeyValues("scripts/kv/w_evolution.kv") , weapon_list = weapon_list } 
 
   CustomGameEventManager:RegisterListener( "Use_Item", Dynamic_Wrap(epic_boss_fight, 'Use_Item'))
   CustomGameEventManager:RegisterListener( "Unequip_Item", Dynamic_Wrap(epic_boss_fight, 'Unequip_Item'))
@@ -332,6 +340,29 @@ function epic_boss_fight:InitGameMode()
   CustomGameEventManager:RegisterListener( "Upgrade_skill", Dynamic_Wrap(epic_boss_fight, 'Upgrade_skill'))
   CustomGameEventManager:RegisterListener( "Unequip_skill", Dynamic_Wrap(epic_boss_fight, 'unset_skill'))
   CustomGameEventManager:RegisterListener( "add_skill", Dynamic_Wrap(epic_boss_fight, 'add_skill'))
+
+
+  -- TRADDING LISTENER :
+  CustomGameEventManager:RegisterListener( "ask_trading", Dynamic_Wrap(epic_boss_fight, 'ask_trading'))
+  CustomGameEventManager:RegisterListener( "accept_trading", Dynamic_Wrap(epic_boss_fight, 'accept_trading'))
+  CustomGameEventManager:RegisterListener( "refuse_trading", Dynamic_Wrap(epic_boss_fight, 'refuse_trading'))
+  CustomGameEventManager:RegisterListener( "set_trade_gold", Dynamic_Wrap(epic_boss_fight, 'set_trade_gold'))
+
+  CustomGameEventManager:RegisterListener( "add_to_trade", Dynamic_Wrap(epic_boss_fight, 'add_to_trade'))
+  CustomGameEventManager:RegisterListener( "remove_from_trade", Dynamic_Wrap(epic_boss_fight, 'remove_from_trade'))
+
+  CustomGameEventManager:RegisterListener( "send_confirmation", Dynamic_Wrap(epic_boss_fight, 'send_confirmation'))
+
+  CustomGameEventManager:RegisterListener( "cancel_confirmation", Dynamic_Wrap(epic_boss_fight, 'cancel_confirmation'))
+  CustomGameEventManager:RegisterListener( "accept_confirmation", Dynamic_Wrap(epic_boss_fight, 'accept_confirmation'))
+  CustomGameEventManager:RegisterListener( "cancel_trading", Dynamic_Wrap(epic_boss_fight, 'cancel_trading'))
+
+
+
+
+
+
+
 
 
   DebugPrint('[BAREBONES] Done loading Barebones gamemode!\n\n')
@@ -358,6 +389,7 @@ function epic_boss_fight:InitGameMode()
   Convars:RegisterCommand("ebf_unequip_skill", function(...) return self:unequip_skill( ... ) end, "unequip a skill", ISCHEATALLOWED )
 
   Convars:RegisterCommand("ebf_Level_up", function(...) return self:Level_UP( ... ) end, "Level up", ISCHEATALLOWED )
+  Convars:RegisterCommand("ebf_Reward", function(...) return self:reward( ... ) end, "Give Reward", ISCHEATALLOWED )
 
   Convars:RegisterCommand("ebf_skills", function(...) return self:ebf_skills( ... ) end, "Display Skills", ISCHEATALLOWED )
   Convars:RegisterCommand("ebf_skill_list", function(...) return self:ebf_skill_list( ... ) end, "Display Skills", ISCHEATALLOWED )
@@ -365,9 +397,8 @@ function epic_boss_fight:InitGameMode()
 
   Convars:RegisterCommand("ebf_info", function(...) return self:print_info( ... ) end, "display inventory slots", ISCHEATALLOWED )
 
-  --Convars:RegisterCommand("ebf_save", function(...) return self:save( ... ) end, "save your current character to a slot", 0)
+  Convars:RegisterCommand("ebf_save", function(...) return self:save( ... ) end, "save your current character to a slot", 0)
   --disabled Save for now
-
   Timers:CreateTimer(1,function()  
     if GameRules:State_Get() >= DOTA_GAMERULES_STATE_GAME_IN_PROGRESS then
       GameRules.PlayerAmmount = 0
@@ -387,6 +418,117 @@ function epic_boss_fight:InitGameMode()
 
   GameRules:GetGameModeEntity():SetThink( "OnThink", round_manager, 0.025 ) 
 end
+
+
+function epic_boss_fight:set_trade_gold(data)
+    local PID = data.PlayerID
+    local ammount = tonumber(data.gold)
+    if ammount == nil then ammount = 0 end
+    local hero = PlayerResource:GetSelectedHeroEntity( PID )
+    inv_manager:Set_trade_gold(hero,ammount)
+    
+  end
+
+function epic_boss_fight:send_confirmation(data)
+    local PID = data.PlayerID
+    local contactPID = data.trading_with
+    local player_TW = PlayerResource:GetPlayer(contactPID)
+    CustomGameEventManager:Send_ServerToPlayer(player_TW,"enter_confirmation", {ask_ID = data.PlayerID }) 
+  end
+
+  function epic_boss_fight:cancel_confirmation(data)
+    local PID = data.PlayerID
+    local contactPID = data.trading_with
+    local player_TW = PlayerResource:GetPlayer(contactPID)
+    CustomGameEventManager:Send_ServerToPlayer(player_TW,"stop_confirmation", {ask_ID = data.PlayerID }) 
+    local hero_1 = PlayerResource:GetSelectedHeroEntity( PID )
+    local hero_2 = PlayerResource:GetSelectedHeroEntity( contactPID )
+    Timers:CreateTimer(0.2,function()  
+      hero_1.confirm_trade = nil
+      hero_2.confirm_trade = nil
+    end)
+  end
+
+  function epic_boss_fight:accept_confirmation(data)
+    local PID = data.PlayerID
+    local contactPID = data.trading_with
+    local hero_1 = PlayerResource:GetSelectedHeroEntity(PID)
+    hero_1.confirm_trade = true
+    local hero_2 = PlayerResource:GetSelectedHeroEntity( contactPID )
+    if hero_2.confirm_trade == true then
+      inv_manager:accept_trade(hero_1,hero_2)
+      hero_1.confirm_trade = nil
+      hero_2.confirm_trade = nil
+      local player_1 = PlayerResource:GetPlayer(PID)
+      local player_2 = PlayerResource:GetPlayer(contactPID)
+      CustomGameEventManager:Send_ServerToPlayer(player_1,"stop_trading", {}) 
+      CustomGameEventManager:Send_ServerToPlayer(player_2,"stop_trading", {}) 
+    end
+  end
+
+  function epic_boss_fight:cancel_trading(data)
+    local PID = data.PlayerID
+    local contactPID = data.trading_with
+    local hero = PlayerResource:GetSelectedHeroEntity(PID)
+    local hero_2 = PlayerResource:GetSelectedHeroEntity( contactPID )
+    inv_manager:cancel_trade(hero,hero_2)
+  end
+
+function epic_boss_fight:ask_trading(data)
+  local PID = data.PlayerID
+  local contactPID = data.trading_with
+  local player_TW = PlayerResource:GetPlayer(contactPID)
+  CustomGameEventManager:Send_ServerToPlayer(player_TW,"asked_trading", {ask_ID = data.PlayerID }) 
+end
+function epic_boss_fight:accept_trading(data)
+  local PID_2 = data.PlayerID
+  local PID_1 = data.trading_with
+  local hero_1 = PlayerResource:GetSelectedHeroEntity( PID_1 )
+  local hero_2 = PlayerResource:GetSelectedHeroEntity( PID_2 )
+  local player_1 = PlayerResource:GetPlayer(PID_1)
+  local player_2 = PlayerResource:GetPlayer(PID_2)
+  hero_1.trading = true
+  hero_1.trading_with = hero_2
+  hero_2.trading = false
+  hero_2.trading_with = hero_1
+  local key1 = "trade_player_"..PID_1
+    CustomNetTables:SetTableValue( "info",key1, {trade_gold = hero_1.trade_gold , trade = hero_1.trade} )
+  local key2 = "trade_player_"..PID_2
+  CustomNetTables:SetTableValue( "info",key2, {trade_gold = hero_2.trade_gold , trade = hero_2.trade} )
+  inv_manager:save_inventory(hero_1)
+  inv_manager:save_inventory(hero_2)
+
+  --SAVE HERO 1 AND 2 ON SERVER
+
+  CustomGameEventManager:Send_ServerToPlayer(player_1,"start_trading", {ask_ID = PID_2 }) 
+  CustomGameEventManager:Send_ServerToPlayer(player_2,"start_trading", {ask_ID = PID_1 }) 
+end
+
+function epic_boss_fight:refuse_trading(data)
+  local hero = PlayerResource:GetSelectedHeroEntity( data.PlayerID )
+  local PID = hero:GetPlayerID()
+  local contactPID = data.trading_with
+   
+  Notifications:Player_interaction(contactPID, {PID = PID,text="#REFUSE_TRADE",duration=2,color="FFFFFF  "})
+end
+function epic_boss_fight:add_to_trade(data)
+  local hero = PlayerResource:GetSelectedHeroEntity( data.PlayerID )
+  local item_slot = data.Slot
+  local ammount = tonumber(data.ammount)
+  if ammount == nil then ammount = 1 end
+  if ammount <= 0 then ammount = 9999999 end
+  inv_manager:Send_trading(hero,item_slot,ammount,hero.trading_with)
+end
+function epic_boss_fight:remove_from_trade(data)
+  local hero = PlayerResource:GetSelectedHeroEntity( data.PlayerID )
+  local item_slot = data.Slot
+  local ammount = tonumber(data.ammount)
+  if ammount == nil then ammount = 1 end
+  if ammount <= 0 then ammount = 9999999 end
+  inv_manager:withdraw_trading(hero,item_slot,ammount)
+end
+
+
 
 function epic_boss_fight:Get_Vote(param)
   DeepPrintTable(param)
@@ -429,7 +571,6 @@ function epic_boss_fight:Get_Vote(param)
             end
             CustomNetTables:SetTableValue( "KVFILE","time", { vote_time = nil } )
             round_manager.countdown = DEFAULT_COUNTDOWN_TIME
-            print ("going to prepare time")
             GameRules.STATES = GAME_STATE_PREPARE_TIME
             return 
             end
@@ -448,11 +589,14 @@ function epic_boss_fight:Get_Vote(param)
 end
 
 
+function epic_boss_fight:reward(com_name)
+  round_manager:reward()
+end
+
 function epic_boss_fight:httptest(com_name)
-  local request = CreateHTTPRequest("POST","192.168.1.84")
-  request:Send( function(result)
-print("ok")
-end) 
+  local hero = Convars:GetCommandClient():GetAssignedHero()
+  local SteamID = PlayerResource:GetSteamAccountID(hero:GetPlayerID())
+  local data = {hero = "ok"}
 end
 
 function epic_boss_fight:ebf_dfficulty (com_name,difficulty)
@@ -668,7 +812,6 @@ end
 function epic_boss_fight:ebf_give_item(com_name,item_name)
   local hero = Convars:GetCommandClient():GetAssignedHero()
   Item = epic_boss_fight:_CreateItem(item_name,hero)
-  for k,v in pairs(Item) do print(k,v) end
   inv_manager:Add_Item(hero,Item)
 end
 
@@ -681,21 +824,47 @@ end
 function epic_boss_fight:Sell_Item(data)
   local slot = tonumber( data.Slot )
   local hero = PlayerResource:GetSelectedHeroEntity( data.PlayerID )
-  inv_manager:Sell_Item(hero,slot)
+  local ammount = tonumber(data.ammount)
+  if ammount == nil then ammount = 1 end
+  if ammount <= 0 then ammount = 99999 end
+  inv_manager:Sell_Item(hero,slot,ammount)
 end
 
 function epic_boss_fight:Buy_Item(data)
   local hero = PlayerResource:GetSelectedHeroEntity( data.PlayerID )
   Item = epic_boss_fight:_CreateItem(data.name,hero)
-  if PlayerResource:HasCustomGameTicketForPlayerID( hero:GetPlayerID() ) == true then local size = INVENTORY_PASS_SIZE else size = INVENTORY_SIZE end
-  if Item.stackable == false and #hero.inventory == size then
-    Notifications:Inventory(hero:GetPlayerID(), {text="#NOSLOT",duration=2,color="FFAAAA"})
+  local ammount = data.ammount
+  if ammount == "max" then
+    ammount = math.floor(hero.gold/data.price)
   else
-    if hero:GetGold()>= data.price then
-      PlayerResource:SpendGold(data.PlayerID,data.price, 4) 
-      inv_manager:Add_Item(hero,Item)
+    ammount = tonumber(data.ammount)
+    if ammount == nil then ammount = 1 end
+    if ammount <= 0 then ammount = 1 end
+  end
+
+  if hero.trading == true then
+        Notifications:Inventory(hero:GetPlayerID(), {text="#IN_TRADING",duration=2,color="FFAAAA"})
+  else
+    if PlayerResource:HasCustomGameTicketForPlayerID( hero:GetPlayerID() ) == true then local size = INVENTORY_PASS_SIZE else size = INVENTORY_SIZE end
+    if Item.stackable == false and #hero.inventory == size then
+      Notifications:Inventory(hero:GetPlayerID(), {text="#NOSLOT",duration=2,color="FFAAAA"})
     else
-      Notifications:Inventory(hero:GetPlayerID(), {text="#NOGOLD",duration=2,color="FFAAAA"})
+      if Item.stackable == true then
+        if hero.gold>= data.price*ammount then
+          hero.gold = hero.gold - (data.price*ammount)
+          Item.ammount = ammount
+          inv_manager:Add_Item(hero,Item)
+        else
+          Notifications:Inventory(hero:GetPlayerID(), {text="#NOGOLD",duration=2,color="FFAAAA"})
+        end
+      else
+        if hero.gold>= data.price then
+          hero.gold = hero.gold - (data.price)
+          inv_manager:Add_Item(hero,Item)
+        else
+          Notifications:Inventory(hero:GetPlayerID(), {text="#NOGOLD",duration=2,color="FFAAAA"})
+        end
+      end
     end
   end
 end
@@ -784,15 +953,21 @@ function epic_boss_fight:OnItemPickUp(event)
   end
 end
 
-function epic_boss_fight:update_net_table(hero)
+function epic_boss_fight:update_net_table(hero,ID)
   local key = "player_"..hero:GetPlayerID()
-  
-  local current_XP = hero.XP
-  if hero.equipement~=nil then
-    if hero.equipement.weapon ~= nil then  
-      CustomNetTables:SetTableValue( "info",key, {gold = hero:GetGold() ,CD = hero.CD,Name = hero:GetUnitName(),inforge = hero.Isinforge,inshop = hero.Isinshop,LVL = hero.Level ,WName = hero.equipement.weapon.item_name, WLVL = hero.equipement.weapon.level ,HP = hero:GetHealth(),MAXHP = hero:GetMaxHealth(),MP = hero:GetMana(),MAXMP = hero:GetMaxMana(),HXP =current_XP,MAXHXP = REAL_XP_TABLE[hero.Level],WXP = hero.equipement.weapon.XP,MAXWXP = hero.equipement.weapon.Next_Level_XP  } )
-    else
-      CustomNetTables:SetTableValue( "info",key, {gold = hero:GetGold() ,CD = hero.CD,Name = hero:GetUnitName(),inforge = hero.Isinforge,inshop = hero.Isinshop,LVL = hero.Level ,WName = "Fist", WLVL = 0 ,HP = hero:GetHealth(),MAXHP = hero:GetMaxHealth(),MP = hero:GetMana(),MAXMP = hero:GetMaxMana(),HXP = current_XP,MAXHXP = REAL_XP_TABLE[hero.Level],WXP = 0,MAXWXP = 0  } )
+  if PlayerResource:GetConnectionState(ID) ~= 2 then
+    CustomNetTables:SetTableValue( "info",key, {} )
+    if hero.trading == true then
+      inv_manager:cancel_trade(hero,hero.trade_with)
+    end
+  else
+    local current_XP = hero.XP
+    if hero.equipement~=nil then
+      if hero.equipement.weapon ~= nil then  
+        CustomNetTables:SetTableValue( "info",key, {gold = math.floor(hero.gold) ,CD = hero.CD,Name = hero:GetUnitName(),inforge = hero.Isinforge,inshop = hero.Isinshop,LVL = hero.Level ,WName = hero.equipement.weapon.item_name, WLVL = hero.equipement.weapon.level ,HP = hero:GetHealth(),MAXHP = hero:GetMaxHealth(),MP = hero:GetMana(),MAXMP = hero:GetMaxMana(),HXP =current_XP,MAXHXP = REAL_XP_TABLE[hero.Level],WXP = hero.equipement.weapon.XP,MAXWXP = hero.equipement.weapon.Next_Level_XP  } )
+      else
+        CustomNetTables:SetTableValue( "info",key, {gold = math.floor(hero.gold) ,CD = hero.CD,Name = hero:GetUnitName(),inforge = hero.Isinforge,inshop = hero.Isinshop,LVL = hero.Level ,WName = "Fist", WLVL = 0 ,HP = hero:GetHealth(),MAXHP = hero:GetMaxHealth(),MP = hero:GetMana(),MAXMP = hero:GetMaxMana(),HXP = current_XP,MAXHXP = REAL_XP_TABLE[hero.Level],WXP = 0,MAXWXP = 0  } )
+      end
     end
   end
 end

@@ -19,7 +19,8 @@ function ready_votes(){
 	vote_text.SetHasClass( "normal_label", true );
 	
 	Button.SetPanelEvent('onactivate', (function(){
-		clean_all()
+		Button.DeleteAsync(0)
+		vote_text.DeleteAsync(0)
 		GameEvents.SendCustomGameEventToServer( "Vote_Round", { context: "lobby"} );
 	}))
 	refresh_time()
@@ -72,7 +73,7 @@ function refresh_time(){
 			if ($("#vote_time").visible == false){
 				$("#vote_time").visible = true
 			}
-			$("#vote_time").text = $.Localize("#Time") + " : " + CustomNetTables.GetTableValue( "KVFILE", "time").vote_time + " " + $.Localize("#seconds")
+			$("#vote_time").text = $.Localize("#Time") + " : " + Number((CustomNetTables.GetTableValue( "KVFILE", "time").vote_time).toFixed(2)) + " " + $.Localize("#seconds")
 		}else{
 			$("#vote_time").text = $.Localize("#No_One_Ready")
 		}

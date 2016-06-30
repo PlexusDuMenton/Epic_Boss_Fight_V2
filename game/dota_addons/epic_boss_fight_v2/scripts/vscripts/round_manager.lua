@@ -13,10 +13,11 @@ end
 print (ROUND_MAX)
 
 
+
 LOBBY_VECTOR = Vector(2000,-5500,0)
 ARENA_VECTOR = Vector(-1000,1750,0)
 
-DEFAULT_COUNTDOWN_TIME = 7.5 --seconde
+DEFAULT_COUNTDOWN_TIME = 12.5 --seconde
 VOTE_TIME_REWARD = 10
 ONTHING_REFRESH_TIME = 0.1
 
@@ -25,6 +26,10 @@ if round_manager == nil then
     _G.round_manager = class({})
 end
 
+
+
+round_manager.countdown_10 = false
+round_manager.countdown_3 = false
 round_manager.Round_Started = false
 round_manager.vote = false
 round_manager.lobby_vote = false
@@ -32,6 +37,21 @@ round_manager.result_lobby = 0
 round_manager.result_next = 0
 round_manager.countdown = DEFAULT_COUNTDOWN_TIME
 round_manager.round = 1
+
+function round_manager:play_music_round(round)
+	print("play another music")
+	round = tostring(round)
+	local music = LoadKeyValues("scripts/kv/round_music.kv")[round] 
+	if music == "Sound.Music.1" then
+		local rand = math.random(1,3)
+		if rand == 1 then
+			music = "Sound.Music.1_alt_1"
+		elseif rand == 2 then
+			music = "Sound.Music.1_alt_2"
+		end
+	end
+	CustomGameEventManager:Send_ServerToAllClients( "play_music", {music = music} )
+end
 
 function round_manager:OnThink()
 	--if GameRules.STATES == GAME_STATE_LOADING then
@@ -45,12 +65,23 @@ function round_manager:OnThink()
 			end
 		elseif GameRules.STATES == GAME_STATE_PREPARE_TIME then
 			if round_manager.countdown <= 0 then
+				round_manager.countdown_10 = false
+				round_manager.countdown_3 = false
+				round_manager:play_music_round(round_manager.round)
 				GameRules.STATES = GAME_STATE_FIGHT
 				round_manager.countdown = DEFAULT_COUNTDOWN_TIME
 				boss_manager:Start_Round(round_manager.round)
 				--spawn ennemy
 			else
 				round_manager.countdown = round_manager.countdown - ONTHING_REFRESH_TIME
+				if round_manager.countdown <= 10 and round_manager.countdown_10 == false then 
+					round_manager.countdown_10 = true
+					CustomGameEventManager:Send_ServerToAllClients("play_sound", {music = "Sound.Game.CountDown"} )
+				end
+				if round_manager.countdown <= 1 and round_manager.countdown_3 == false then 
+					round_manager.countdown_3 = true
+					CustomGameEventManager:Send_ServerToAllClients("play_sound", {music = "Sound.Game.Prepare"} )
+				end
 				CustomNetTables:SetTableValue( "KVFILE","time", { countdown = round_manager.countdown } )
 			end
 			--set hp to max , revive if dead , update counter , when done , go into next round 
@@ -89,6 +120,7 @@ function round_manager:Check_For_Defeat()
 		end
 	end
 	if Lose == true then
+		CustomGameEventManager:Send_ServerToAllClients("play_sound", {music = "Sound.Game.Defeated"} )
 		for nPlayerID = 0, DOTA_MAX_TEAM_PLAYERS-1 do
 			if PlayerResource:GetTeam( nPlayerID ) == DOTA_TEAM_GOODGUYS then
 				if PlayerResource:HasSelectedHero( nPlayerID ) then
@@ -108,7 +140,7 @@ function round_manager:Check_For_Defeat()
 						for _,unit in pairs ( Entities:FindAllByName( "npc_dota_creature")) do
 							if unit:GetTeamNumber() == DOTA_TEAM_BADGUYS then
 								unit.XP = 0
-								unit.Gold = 0
+								unit.Gold = math.ceil(unit.Gold/3)
 								unit.Spawn_Unit_On_Death = false
 								unit.On_Death = nil
 								unit:ForceKill(true)
@@ -117,6 +149,7 @@ function round_manager:Check_For_Defeat()
 						--kill all bosses/ennemies
 						round_manager.round = 1
 						GameRules.STATES = GAME_STATE_LOBBY
+						round_manager:play_music_round("lobby")
 						FindClearSpaceForUnit(hero,LOBBY_VECTOR, true)
 						Timers:CreateTimer(0.1,function() 
 							CustomGameEventManager:Send_ServerToAllClients("center_on_hero", {} )
@@ -138,6 +171,7 @@ function round_manager:Check_For_Victory()
 		print ("Round is finished")
 		if round_manager.round >= ROUND_MAX then
 			GameRules.STATES = GAME_STATE_LOBBY
+			round_manager:play_music_round("lobby")
 			for nPlayerID = 0, DOTA_MAX_TEAM_PLAYERS-1 do
 				if PlayerResource:GetTeam( nPlayerID ) == DOTA_TEAM_GOODGUYS then
 					if PlayerResource:HasSelectedHero( nPlayerID ) then
@@ -150,9 +184,11 @@ function round_manager:Check_For_Victory()
 				end
 			end
 			round_manager.round = 1
+			CustomGameEventManager:Send_ServerToAllClients("play_sound", {music = "Sound.Game.Victory"} )
 			round_manager:reward_final()
 		else
 			GameRules.STATES = GAME_STATE_REWARD
+			CustomGameEventManager:Send_ServerToAllClients("play_sound", {music = "Sound.Game.Victory_round"} )
 			round_manager:reward()
 		end
 	end
@@ -191,6 +227,7 @@ function round_manager:Vote_next(context)
 				CustomGameEventManager:Send_ServerToAllClients("Hide_Reward", {} )
 				round_manager.round = 1
 				GameRules.STATES = GAME_STATE_LOBBY
+				round_manager:play_music_round("lobby")
 				FindClearSpaceForUnit(hero,LOBBY_VECTOR, true) 
 				Timers:CreateTimer(0.1,function()
 					CustomGameEventManager:Send_ServerToAllClients("center_on_hero", {} )
@@ -225,6 +262,7 @@ function round_manager:Vote_next(context)
 								end
 							end
 							GameRules.STATES = GAME_STATE_LOBBY
+							round_manager:play_music_round("lobby")
 						else
 							for nPlayerID = 0, DOTA_MAX_TEAM_PLAYERS-1 do
 								if PlayerResource:GetTeam( nPlayerID ) == DOTA_TEAM_GOODGUYS then
@@ -239,7 +277,7 @@ function round_manager:Vote_next(context)
 									end
 								end
 							end
-							print ("going to prepare time from vote")
+							print ("going to prepare time from vote why dont you play other sound §")
 							GameRules.STATES = GAME_STATE_PREPARE_TIME
 						end
 						CustomNetTables:SetTableValue( "KVFILE","time", { vote_time = nil } )
@@ -266,6 +304,7 @@ function round_manager:Get_potion_Reward(Max_Chance,Table)
 end
 
 function round_manager:Get_Reward(Table)
+	DeepPrintTable(Table)
 	local Max_Chance = 0
 	for k,v in pairs(Table) do
 			Max_Chance = v.chance + Max_Chance
@@ -310,14 +349,33 @@ function round_manager:reward_final()
 				end
 				item_reward_1 = round_manager:Get_potion_Reward(max_chance,potion_list) --name
 				local item_table = LoadKeyValues("scripts/kv/drop_table.kv")["equipement"]
+				local item_table_alt = LoadKeyValues("scripts/kv/drop_table.kv")[round_manager.round]
 				local item_list = {}
 				for k,v in pairs(item_table) do
-					print (v.LM)
-					if loot_multiplier >= v.LM and v.LM >= (loot_multiplier*0.5 - 10) then
-						item_list[#item_list] = v
+						if loot_multiplier >= v.LM and v.LM >= (loot_multiplier*0.50 - 7)  then
+							print (k,loot_multiplier,v.LM,(loot_multiplier*0.50 - 7))
+							item_list[k] = v
+						end
 					end
-				end
-				item_reward_2 = round_manager:Get_Reward(item_table) --name
+					if item_table_alt ~= nil then
+						for k,v in pairs(item_table_alt) do
+							if loot_multiplier >= v.LM then
+									item_list[k] = v
+							end
+						end
+					end
+					local list_size = 0
+					for k,v in pairs(item_list) do
+						list_size = list_size +1
+					end
+					if list_size == 0 then
+						for k,v in pairs(item_table) do
+							if loot_multiplier >= v.LM then
+								item_list[k] = v
+							end
+						end
+					end
+				item_reward_2 = round_manager:Get_Reward(item_list) --name
 				item_reward_3 = "item_power_soul"
 
 				print (item_reward_1)
@@ -372,14 +430,33 @@ function round_manager:reward()
 
 				elseif loot_number >= 20 then --normal equipement
 					local item_table = LoadKeyValues("scripts/kv/drop_table.kv")["equipement"]
+					local item_table_alt = LoadKeyValues("scripts/kv/drop_table.kv")[round_manager.round]
 					local item_list = {}
 					for k,v in pairs(item_table) do
-						print (v.LM)
-						if loot_multiplier >= v.LM and v.LM >= (loot_multiplier*0.5 - 10) then
-							item_list[#item_list] = v
+						if loot_multiplier >= v.LM and v.LM >= (loot_multiplier*0.50 - 7)  then
+							print (k,loot_multiplier,v.LM,(loot_multiplier*0.50 - 7))
+							item_list[k] = v
 						end
 					end
-					item_reward = round_manager:Get_Reward(item_table) --name
+					if item_table_alt ~= nil then
+						for k,v in pairs(item_table_alt) do
+							if loot_multiplier >= v.LM then
+									item_list[k] = v
+							end
+						end
+					end
+					local list_size = 0
+					for k,v in pairs(item_list) do
+						list_size = list_size +1
+					end
+					if list_size == 0 then
+						for k,v in pairs(item_table) do
+							if loot_multiplier >= v.LM then
+								item_list[k] = v
+							end
+						end
+					end
+					item_reward = round_manager:Get_Reward(item_list) --name
 				else --power souls
 					item_reward = "item_power_soul"
 				end

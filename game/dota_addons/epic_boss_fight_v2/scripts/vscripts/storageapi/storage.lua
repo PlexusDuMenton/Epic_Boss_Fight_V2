@@ -1,4 +1,4 @@
-STORAGEAPI_API_URL = "http://dota2.tools/api/v1/storage"
+STORAGEAPI_API_URL = "http://92.222.90.44/"
 
 --[[
 	Storage API interface to store data for Dota 2 Custom Game players.
@@ -79,8 +79,6 @@ function Storage:Put(steam_id, data, callback)
 
 	-- Invalidate cache since we're setting new data
 	self:Invalidate(steam_id)
-	DeepPrintTable(data)
-
 	if not pcall(function()
 		data = JSON:encode(data)
 	end) then
@@ -92,7 +90,6 @@ function Storage:Put(steam_id, data, callback)
 	-- Send the request
 	self:SendHTTPRequest("POST",
 		{
-			api_key = api_key,
 			steam_id = tostring(steam_id),
 			data = data
 		}, 
@@ -136,7 +133,6 @@ end
 	@param 	callback handle	The function that should run when the storage is retrieved
 ]]
 function Storage:Get(steam_id, callback)
-
 	-- Check if we have a valid cache and return it if we do
 	if storeCache[steam_id] ~= nil then
 		callback(storeCache[steam_id], true)
@@ -146,20 +142,17 @@ function Storage:Get(steam_id, callback)
 	-- Send the request
 	self:SendHTTPRequest("GET",
 		{
-			api_key = api_key,
-			steam_id = tostring(steam_id)
+			steamid = tostring(steam_id)
 		}, 
 
 		function(result)
 			-- Decode response into lua table
-	
 			local resultTable = {}
 			if not pcall(function()
 				resultTable = JSON:decode(result)
 			end) then
-				Warning("[dota2.tools.Storage] Can't decode result: " .. result)
+				print("[dota2.tools.Storage] Can't decode result: ")
 			end
-
 			
 			-- If we get an error response, successBool should be false
 			if resultTable ~= nil and resultTable["errors"] ~= nil then
@@ -168,8 +161,8 @@ function Storage:Get(steam_id, callback)
 				return
 			end
 
-			if resultTable ~= nil and resultTable["data"] ~= nil and resultTable["data"]["data"] ~= nil then
-				storeCache[steam_id] = resultTable["data"]["data"]
+			if resultTable ~= nil then
+				storeCache[steam_id] = resultTable
 			end
 			-- If we get a success response, successBool should be true
 			callback(storeCache[steam_id], true)

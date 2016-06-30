@@ -44,8 +44,12 @@ function Precache( context )
 
   PrecacheResource( "particle", "particles/units/heroes/hero_ursa/ursa_earthshock.vpcf", context )
   PrecacheResource( "soundfile", "soundevents/game_sounds_heroes/game_sounds_ursa.vsndevts", context )   
+  PrecacheResource( "soundfile", "soundevents/game_sounds_heroes/game_sounds_gyrocopter.vsndevts", context )   
   PrecacheResource( "soundfile", "soundevents/game_sounds_heroes/game_sounds_phantom_assassin.vsndevts", context ) 
-                 
+
+  PrecacheResource( "soundfile", "soundevents/game_sounds_custom.vsndevts", context ) 
+
+
 
 
   

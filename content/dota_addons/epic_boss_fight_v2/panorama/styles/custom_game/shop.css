@@ -5,6 +5,36 @@
     overflow: clip;
 }
 
+.Text_entry_place_holder
+{
+	background-image: url("file://{images}/custom_game/inventory/slide_bar.png");
+	background-size: 100% 100%;
+	height: 50px;
+	text-align: center;
+	width: 200px;
+	text-overflow: clip;
+	font-weight: thin;
+	font-size: 20px;
+	color: #AACCFF;
+}
+
+.Text_entry
+{
+	background-image: url("file://{images}/custom_game/inventory/slide_bar.png");
+	background-size: 100% 100%;
+	height: 50px;
+	width: 200px;
+	text-overflow: clip;
+	font-weight: thin;
+	font-size: 40px;
+	color: #AACCFF;
+}
+
+#Menu_shop
+{
+width: 100%;
+    height: 100%;
+}
 #main
 {
 margin-right: 60px;

@@ -1,6 +1,13 @@
 
 GameEvents.Subscribe( "inventory_notification", notification_top)
-GameEvents.Subscribe( "save_notification", notification_bot)
+
+GameEvents.Subscribe( "Player_interaction_notification", function(table){
+table.text = ( Players.GetPlayerName( table.PID ) + $.Localize(table.text)) 
+notification_top(table)
+}
+)
+
+GameEvents.Subscribe( "save_notification", notification_top)
 GameEvents.Subscribe( "custom_notification", notification_top_right)
 GameEvents.Subscribe( "clean_notification", notification_clean)
 

@@ -162,6 +162,21 @@ function skill_manager:create_skill_tree (hero)
 	skill_manager:update_skill_bonus(hero)
 end
 
+function skill_manager:load_skill_tree (hero,skill_tree,active_list)
+	hero.skill_tree = {}
+	hero.active_list = {}
+	hero.active_ability = 0
+	print ("J'en esrt marre de me faire ENCULER !")
+	for k,v in pairs (skill_tree) do
+		hero.skill_tree[tonumber(k)] = copy(v)
+	end
+	for i = 1,5 do
+		skill_manager:equip_skill (hero,-i,i)
+	end
+	skill_manager:skill_table (hero)
+	skill_manager:update_skill_bonus(hero)
+end
+
 function skill_manager:upgrade(hero,ID)
 	if hero.stats_points < 1 then
 		--tell the player he don't have any power point (lol nub)
@@ -210,7 +225,6 @@ function skill_manager:unequip_skill (hero,slot)
 				hero.skill_tree[ID].slot = nil
 				hero.skill_tree[ID].equip = false
 				hero.active_list[slot] = hero.skill_tree[-slot]
-				DeepPrintTable(hero.active_list)
 				for i = 1,4 do
 					hero:RemoveAbility(hero.active_list[i].name)
 					hero:AddAbility(hero.active_list[i].name)
@@ -240,7 +254,7 @@ function skill_manager:equip_skill (hero,ID,slot)
 			print ("not ultimate ability")
 			return
 		end
-		print ("try to equip a skill",hero.skill_tree[ID].lvl,hero.skill_tree[ID].equip,hero.skill_tree[ID].type)
+		print ("try to equip a skill",ID,hero.skill_tree[ID],hero.skill_tree[-1],type(ID),type(-1))
 		if hero.skill_tree[ID].lvl > 0 and hero.skill_tree[ID].equip == false and hero.skill_tree[ID].type == "active" or hero.skill_tree[ID].type == "ultimate" then
 			print ("equip a skill")
 			if ID > 0 then
@@ -309,7 +323,6 @@ function skill_manager:skill_table (hero)
 	for i=0,hero.node_level do
 		table[i]= {}
 	end
-	DeepPrintTable(hero.skill_tree)
 	for k,skill in pairs(hero.skill_tree) do 
 		if skill.ID >= 0 then
 			local lvl_pos = skill.Lvl_Position

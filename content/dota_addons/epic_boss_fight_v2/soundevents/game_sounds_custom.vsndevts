@@ -1,4 +1,4 @@
-"Creature.FireBreath.Cast"
+"Sound.Music.1"
 {
 	"operator_stacks"
 	{
@@ -7,31 +7,35 @@
 			"reference_operator"
 			{
 				"operator"		"sos_reference_stack"
-				"reference_stack"		"dota_update_default"
+				"reference_stack"		"dota_src1_3d"
 				"operator_variables"
 				{
 					"vsnd_files"
 					{
 						"value"
 						{
-							"value0"		"sounds/mini_rosh_firebreath.vsnd"
+							"value0"		"sounds/music/dsadowski_01/music/ui_main_01.vsnd"
 						}
+					}
+					"volume"
+					{
+						"value"		"3.000000"
 					}
 					"volume_min"
 					{
-						"value"		"1.000000"
+						"value"		"3.000000"
 					}
 					"volume_max"
 					{
-						"value"		"1.000000"
+						"value"		"3.000000"
 					}
 					"pitch_min"
 					{
-						"value"		"0.950000"
+						"value"		"1.000000"
 					}
 					"pitch_max"
 					{
-						"value"		"1.050000"
+						"value"		"1.000000"
 					}
 					"chan_type"
 					{
@@ -41,21 +45,13 @@
 					{
 						"value"		"0"
 					}
-					"soundlevel_min"
-					{
-						"value"		"90.000000"
-					}
-					"soundlevel_max"
-					{
-						"value"		"90.000000"
-					}
+					  "soundlevel"        {   "value"     "100.00000" }
 				}
 			}
 		}
 	}
 }
-
-"Reflex.Midnight_Pulse"
+"Sound.Music.1_alt_1"
 {
 	"operator_stacks"
 	{
@@ -64,23 +60,27 @@
 			"reference_operator"
 			{
 				"operator"		"sos_reference_stack"
-				"reference_stack"		"dota_update_default"
+				"reference_stack"		"dota_src1_3d"
 				"operator_variables"
 				{
 					"vsnd_files"
 					{
 						"value"
 						{
-							"value0"		"sounds/weapons/hero/enigma/midnight_pulse.vsnd"
+							"value0"		"sounds/music/dsadowski_01/music/countdown.vsnd"
 						}
+					}
+					"volume"
+					{
+						"value"		"2.000000"
 					}
 					"volume_min"
 					{
-						"value"		"1.000000"
+						"value"		"2.000000"
 					}
 					"volume_max"
 					{
-						"value"		"1.000000"
+						"value"		"2.000000"
 					}
 					"pitch_min"
 					{
@@ -98,47 +98,572 @@
 					{
 						"value"		"0"
 					}
-					"soundlevel_min"
+					  "soundlevel"        {   "value"     "100.00000" }
+				}
+			}
+		}
+	}
+}
+"Sound.Music.1_alt_2"
+{
+	"operator_stacks"
+	{
+		"update_stack"
+		{
+			"reference_operator"
+			{
+				"operator"		"sos_reference_stack"
+				"reference_stack"		"dota_src1_3d"
+				"operator_variables"
+				{
+					"vsnd_files"
 					{
-						"value"		"81.000000"
+						"value"
+						{
+							"value0"		"sounds/music/jlin_01/music/ui_hero_select.vsnd"
+						}
 					}
-					"soundlevel_max"
+					"volume"
 					{
-						"value"		"81.000000"
+						"value"		"2.000000"
 					}
-					"mixgroup"
+					"volume_min"
 					{
-						"value"		"Weapons"
+						"value"		"2.000000"
 					}
-					"spread_radius"
+					"volume_max"
 					{
-						"value"		"600.000000"
+						"value"		"2.000000"
 					}
+					"pitch_min"
+					{
+						"value"		"1.000000"
+					}
+					"pitch_max"
+					{
+						"value"		"1.000000"
+					}
+					"chan_type"
+					{
+						"value"		"6"
+					}
+					"memory_type"
+					{
+						"value"		"0"
+					}
+					  "soundlevel"        {   "value"     "100.00000" }
+				}
+			}
+		}
+	}
+}
+"Sound.Music.2"
+{
+	"operator_stacks"
+	{
+		"update_stack"
+		{
+			"reference_operator"
+			{
+				"operator"		"sos_reference_stack"
+				"reference_stack"		"dota_src1_3d"
+				"operator_variables"
+				{
+					"vsnd_files"
+					{
+						"value"
+						{
+							"value0"		"sounds/music/dsadowski_01/music/laning_01_layer_01.vsnd"
+						}
+					}
+					"volume"
+					{
+						"value"		"7.000000"
+					}
+					"volume_min"
+					{
+						"value"		"7.000000"
+					}
+					"volume_max"
+					{
+						"value"		"7.000000"
+					}
+					"pitch_min"
+					{
+						"value"		"1.000000"
+					}
+					"pitch_max"
+					{
+						"value"		"1.000000"
+					}
+					"chan_type"
+					{
+						"value"		"6"
+					}
+					"memory_type"
+					{
+						"value"		"0"
+					}
+					  "soundlevel"        {   "value"     "100.00000" }
+				}
+			}
+		}
+	}
+}
+"Sound.Music.3"
+{
+	"operator_stacks"
+	{
+		"update_stack"
+		{
+			"reference_operator"
+			{
+				"operator"		"sos_reference_stack"
+				"reference_stack"		"dota_src1_3d"
+				"operator_variables"
+				{
+					"vsnd_files"
+					{
+						"value"
+						{
+							"value0"		"sounds/music/dsadowski_01/music/ui_startup_01.vsnd"
+						}
+					}
+					"volume"
+					{
+						"value"		"7.000000"
+					}
+					"volume_min"
+					{
+						"value"		"7.000000"
+					}
+					"volume_max"
+					{
+						"value"		"7.000000"
+					}
+					"pitch_min"
+					{
+						"value"		"1.000000"
+					}
+					"pitch_max"
+					{
+						"value"		"1.000000"
+					}
+					"chan_type"
+					{
+						"value"		"6"
+					}
+					"memory_type"
+					{
+						"value"		"0"
+					}
+					  "soundlevel"        {   "value"     "100.00000" }
 				}
 			}
 		}
 	}
 }
 
-
-"Start"
+"Sound.Shop.1"
 {
 	"operator_stacks"
 	{
 		"update_stack"
 		{
-			"update_operator"
+			"reference_operator"
 			{
 				"operator"		"sos_reference_stack"
-				"reference_stack"		"src1_3d"
+				"reference_stack"		"dota_src1_3d"
 				"operator_variables"
 				{
 					"vsnd_files"
 					{
 						"value"
 						{
-							"value0"		"sounds/start.vsnd"
+							"value0"		"sounds/ui/shop_available.vsnd"
 						}
+					}
+					"volume"
+					{
+						"value"		"5.000000"
+					}
+					"volume_min"
+					{
+						"value"		"5.000000"
+					}
+					"volume_max"
+					{
+						"value"		"5.000000"
+					}
+					"pitch_min"
+					{
+						"value"		"1.000000"
+					}
+					"pitch_max"
+					{
+						"value"		"1.000000"
+					}
+					"chan_type"
+					{
+						"value"		"6"
+					}
+					"memory_type"
+					{
+						"value"		"0"
+					}
+					  "soundlevel"        {   "value"     "100.00000" }
+				}
+			}
+		}
+	}
+}
+
+"Sound.Shop.2"
+{
+	"operator_stacks"
+	{
+		"update_stack"
+		{
+			"reference_operator"
+			{
+				"operator"		"sos_reference_stack"
+				"reference_stack"		"dota_src1_3d"
+				"operator_variables"
+				{
+					"vsnd_files"
+					{
+						"value"
+						{
+							"value0"		"sounds/ui/shop_unavailable.vsnd"
+						}
+					}
+					"volume"
+					{
+						"value"		"5.000000"
+					}
+					"volume_min"
+					{
+						"value"		"5.000000"
+					}
+					"volume_max"
+					{
+						"value"		"5.000000"
+					}
+					"pitch_min"
+					{
+						"value"		"1.000000"
+					}
+					"pitch_max"
+					{
+						"value"		"1.000000"
+					}
+					"chan_type"
+					{
+						"value"		"6"
+					}
+					"memory_type"
+					{
+						"value"		"0"
+					}
+					  "soundlevel"        {   "value"     "100.00000" }
+				}
+			}
+		}
+	}
+}
+
+"Sound.Game.CountDown"
+{
+	"operator_stacks"
+	{
+		"update_stack"
+		{
+			"reference_operator"
+			{
+				"operator"		"sos_reference_stack"
+				"reference_stack"		"dota_src1_3d"
+				"operator_variables"
+				{
+					"vsnd_files"
+					{
+						"value"
+						{
+							"value0"		"sounds/vo/announcer_dlc_clockwerk/announcer_battle_prepare_10.vsnd"
+						}
+					}
+					"volume"
+					{
+						"value"		"2.000000"
+					}
+					"volume_min"
+					{
+						"value"		"2.000000"
+					}
+					"volume_max"
+					{
+						"value"		"2.000000"
+					}
+					"pitch_min"
+					{
+						"value"		"1.000000"
+					}
+					"pitch_max"
+					{
+						"value"		"1.000000"
+					}
+					"chan_type"
+					{
+						"value"		"6"
+					}
+					"memory_type"
+					{
+						"value"		"0"
+					}
+					  "soundlevel"        {   "value"     "100.00000" }
+				}
+			}
+		}
+	}
+}
+
+"Sound.Game.Prepare"
+{
+	"operator_stacks"
+	{
+		"update_stack"
+		{
+			"reference_operator"
+			{
+				"operator"		"sos_reference_stack"
+				"reference_stack"		"dota_src1_3d"
+				"operator_variables"
+				{
+					"vsnd_files"
+					{
+						"value"
+						{
+							"value0"		"sounds/vo/announcer_dlc_clockwerk/announcer_battle_prepare_01.vsnd"
+						}
+					}
+					"volume"
+					{
+						"value"		"1.500000"
+					}
+					"volume_min"
+					{
+						"value"		"1.500000"
+					}
+					"volume_max"
+					{
+						"value"		"1.500000"
+					}
+					"pitch_min"
+					{
+						"value"		"1.000000"
+					}
+					"pitch_max"
+					{
+						"value"		"1.000000"
+					}
+					"chan_type"
+					{
+						"value"		"6"
+					}
+					"memory_type"
+					{
+						"value"		"0"
+					}
+					  "soundlevel"        {   "value"     "100.00000" }
+				}
+			}
+		}
+	}
+}
+
+"Sound.Game.Respawn"
+{
+	"operator_stacks"
+	{
+		"update_stack"
+		{
+			"reference_operator"
+			{
+				"operator"		"sos_reference_stack"
+				"reference_stack"		"dota_src1_3d"
+				"operator_variables"
+				{
+					"vsnd_files"
+					{
+						"value"
+						{
+							"value0"		"sounds/music/dsadowski_01/stingers/respawn.vsnd"
+						}
+					}
+					"volume"
+					{
+						"value"		"3.000000"
+					}
+					"volume_min"
+					{
+						"value"		"3.000000"
+					}
+					"volume_max"
+					{
+						"value"		"3.000000"
+					}
+					"pitch_min"
+					{
+						"value"		"1.000000"
+					}
+					"pitch_max"
+					{
+						"value"		"1.000000"
+					}
+					"chan_type"
+					{
+						"value"		"6"
+					}
+					"memory_type"
+					{
+						"value"		"0"
+					}
+					  "soundlevel"        {   "value"     "100.00000" }
+				}
+			}
+		}
+	}
+}
+
+"Sound.Game.Victory_round"
+{
+	"operator_stacks"
+	{
+		"update_stack"
+		{
+			"reference_operator"
+			{
+				"operator"		"sos_reference_stack"
+				"reference_stack"		"dota_src1_3d"
+				"operator_variables"
+				{
+					"vsnd_files"
+					{
+						"value"
+						{
+							"value0"		"sounds/music/stingers/greevil_stingers/greevil_mega_spawn.vsnd"
+						}
+					}
+					"volume"
+					{
+						"value"		"1.5000000"
+					}
+					"volume_min"
+					{
+						"value"		"1.500000"
+					}
+					"volume_max"
+					{
+						"value"		"1.500000"
+					}
+					"pitch_min"
+					{
+						"value"		"1.000000"
+					}
+					"pitch_max"
+					{
+						"value"		"1.000000"
+					}
+					"chan_type"
+					{
+						"value"		"6"
+					}
+					"memory_type"
+					{
+						"value"		"0"
+					}
+					  "soundlevel"        {   "value"     "100.00000" }
+				}
+			}
+		}
+	}
+}
+
+"Sound.Game.Victory"
+{
+	"operator_stacks"
+	{
+		"update_stack"
+		{
+			"reference_operator"
+			{
+				"operator"		"sos_reference_stack"
+				"reference_stack"		"dota_src1_3d"
+				"operator_variables"
+				{
+					"vsnd_files"
+					{
+						"value"
+						{
+							"value0"		"sounds/music/jlin_01/stingers/radiant_win.vsnd"
+						}
+					}
+					"volume"
+					{
+						"value"		"1.500000"
+					}
+					"volume_min"
+					{
+						"value"		"1.500000"
+					}
+					"volume_max"
+					{
+						"value"		"1.500000"
+					}
+					"pitch_min"
+					{
+						"value"		"1.000000"
+					}
+					"pitch_max"
+					{
+						"value"		"1.000000"
+					}
+					"chan_type"
+					{
+						"value"		"6"
+					}
+					"memory_type"
+					{
+						"value"		"0"
+					}
+					  "soundlevel"        {   "value"     "100.00000" }
+				}
+			}
+		}
+	}
+}
+
+"Sound.Game.Defeated"
+{
+	"operator_stacks"
+	{
+		"update_stack"
+		{
+			"reference_operator"
+			{
+				"operator"		"sos_reference_stack"
+				"reference_stack"		"dota_src1_3d"
+				"operator_variables"
+				{
+					"vsnd_files"
+					{
+						"value"
+						{
+							"value0"		"sounds/music/dsadowski_01/stingers/dire_lose.vsnd"
+						}
+					}
+					"volume"
+					{
+						"value"		"1.000000"
 					}
 					"volume_min"
 					{
@@ -150,11 +675,11 @@
 					}
 					"pitch_min"
 					{
-						"value"		"0.950000"
+						"value"		"1.000000"
 					}
 					"pitch_max"
 					{
-						"value"		"1.050000"
+						"value"		"1.000000"
 					}
 					"chan_type"
 					{
@@ -164,14 +689,7 @@
 					{
 						"value"		"0"
 					}
-					"soundlevel_min"
-					{
-						"value"		"90.000000"
-					}
-					"soundlevel_max"
-					{
-						"value"		"90.000000"
-					}
+					  "soundlevel"        {   "value"     "100.00000" }
 				}
 			}
 		}

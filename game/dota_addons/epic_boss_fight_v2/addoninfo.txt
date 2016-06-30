@@ -23,33 +23,39 @@
         }
         "03"
         {
-            "Key"       "5"
+            "Key"       "F1"
             "Command"   "+item_1"
             "Name"      "Use Item 1"
         }
         "04"
         {
-            "Key"       "6"
+            "Key"       "F2"
             "Command"   "+item_2"
             "Name"      "Use Item 2"
         }
         "05"
         {
-            "Key"       "7"
+            "Key"       "F3"
             "Command"   "+item_3"
             "Name"      "Use Item 3"
         }
         "06"
         {
-            "Key"       "8"
+            "Key"       "F4"
             "Command"   "+item_4"
             "Name"      "Use Item 4"
         }
-        "06"
+        "07"
         {
             "Key"       "J"
             "Command"   "+Open_ST"
             "Name"      "Open Skill Tree"
+        }
+        "08"
+        {
+            "Key"       "TAB"
+            "Command"   "+Close_ALL"
+            "Name"      "Close All Panel"
         }
     }
 }

@@ -7,6 +7,13 @@ var weapon_evolution
 var weapon_list
 $("#main_panel").visible = false
 
+GameEvents.Subscribe( "item_list", item_list)
+
+function item_list(arg){
+	weapon_evolution = arg.weapon_evolution
+	weapon_list = arg.weapon_list
+}
+
 GameUI.CustomUIConfig().Events.SubscribeEvent( "to_forge_main", (function(arg){
 	main_slot = arg.Slot 
 update_slot("main")}))
@@ -336,8 +343,7 @@ function close_forge(){
 function create_tabs(){
 	$("#main_panel").visible = true
 	CustomNetTables.SubscribeNetTableListener
-	weapon_evolution = CustomNetTables.GetTableValue( "KVFILE","init").weapon_evolution
-	weapon_list = CustomNetTables.GetTableValue( "KVFILE","init").weapon_list
+	
 	main_slot = -1
 	secondary_slot = -1
 	selected_tab = "infusion"

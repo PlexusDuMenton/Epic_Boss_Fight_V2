@@ -1,0 +1,308 @@
+.Main
+{
+    width: 100%;
+    height: 100%;
+    overflow: clip;
+}
+
+#trading_panel
+{
+margin-right: 60px;
+  margin-top: 50px;
+  height: 500px;
+  width: 680px;
+  horizontal-align: right;
+  
+}
+
+#ask_panel
+{
+margin-left: 1200px;
+  margin-top: 50px;
+  height: 200px;
+  width: 350px;
+  
+}
+.ask
+{
+background-image: url("file://{images}/custom_game/vote_panel.png");
+background-size: 100% 100%;
+  height: 200px;
+  width: 350px;
+  
+}
+.normal_label
+ {
+	width: 500px;
+	text-align: center;
+	text-overflow: clip;
+	font-weight: thin;
+	font-size: 25px;
+	margin-left: 5px;
+	margin-top: 5px;
+	color: #AACCFF;
+}
+
+.button_vote
+{
+	background-image: url("file://{images}/custom_game/inventory/big_button.png");
+	horizontal-align: left;
+    vertical-align: top;
+	background-size: 100% 100%;
+  height: 50px;
+  width: 150px;
+}
+.button_vote:hover
+{
+	background-image: url("file://{images}/custom_game/inventory/big_button_hover.png");
+	horizontal-align: left;
+    vertical-align: top;
+  background-size: 100% 100%;
+  height: 50px;
+  width: 150px;
+}
+
+
+
+.Inventory_Menu
+{
+  height: 160px;
+  width: 200px;
+}
+.Inventory_Button
+{
+  background-image: url("file://{images}/custom_game/inventory/button_menu.png");
+  height: 40px;
+  width: 200px;
+}
+.Inventory_Button:hover
+{
+  background-image: url("file://{images}/custom_game/inventory/button_menu_hover.png");
+  brightness: 1.5;
+}
+.ItemButton{
+	background-image: url("file://{images}/custom_game/inventory/item_slot_simple.png");
+	height: 64px;
+  width: 64px;
+  background-size: 64px 64px; 
+}
+.ItemImage{
+	height: 64px;
+  width: 64px;
+}
+.ItemButton:hover{
+	background-image: url("file://{images}/custom_game/inventory/item_slot_hover.png");
+}
+.Inventory_Label_small
+{
+	text-align: center;
+	text-overflow: clip;
+	font-weight: thin;
+  font-size: 20px;
+	margin-left: 10px;
+	color: #FFFFFF;
+}
+.Inventory_Label_small2
+{
+	text-align: left;
+	text-overflow: clip;
+	font-weight: thin;
+  font-size: 20px;
+	margin-left: 10px;
+	color: #FFFFFF;
+}
+
+.Inventory_Label_ve_small
+{
+	text-align: center;
+	text-overflow: clip;
+	font-weight: thin;
+  font-size: 18px;
+	color: #FFFFFF;
+}
+
+.Inventory_Label_v_small
+{
+	text-align: center;
+	text-overflow: clip;
+	font-weight: thin;
+  font-size: 20px;
+	margin-left: 3px;
+	margin-top: 5px;
+	color: #FFFFFF;
+}
+
+.trade_ask
+ {
+	width: 350px;
+	text-align: center;
+	text-overflow: clip;
+	font-weight: thin;
+	font-size: 30px;
+	margin-left: 0px;
+	margin-top: 0px;
+	color: #AACCFF;
+}
+
+
+.Name_1
+ {
+	width: 300px;
+	text-align: center;
+	text-overflow: clip;
+	font-weight: thin;
+	font-size: 40px;
+	margin-left: 80px;
+	margin-top: 265px;
+	color: #AACCFF;
+}
+.Name_2
+ {
+	width: 300px;
+	text-align: center;
+	text-overflow: clip;
+	font-weight: thin;
+	font-size: 40px;
+	margin-left: 80px;
+	margin-top: 190px;
+	color: #AACCFF;
+}
+
+.gold_entry
+{
+	background-image: url("file://{images}/custom_game/inventory/slide_bar.png");
+	background-size: 100% 100%;
+	height: 30px;
+	width: 150px;
+	text-overflow: clip;
+	font-weight: thin;
+	font-size: 20px;
+	color: #FFDD55;
+	margin-left: 510px;
+	margin-top: 270px;
+}
+
+.gold_1
+ {
+	width: 400px;
+	text-align: left;
+	text-overflow: clip;
+	font-weight: thin;
+	font-size: 20px;
+	margin-left: 400px;
+	margin-top: 200px;
+	color: #FFDD88;
+}
+
+.gold_2
+ {
+	text-align: right;
+	text-overflow: clip;
+	font-weight: thin;
+	font-size: 20px;
+	margin-left: 400px;
+	margin-top: 270px;
+	color: #FFDD88;
+}
+
+.ACCEPT_BUTTON
+{
+	background-image: url("file://{images}/custom_game/inventory/big_button.png");
+	horizontal-align: left;
+    vertical-align: top;
+	background-size: 100% 100%;
+	margin-left: 450px;
+	margin-top: 330px;
+  height: 60px;
+  width: 200px;
+}
+.ACCEPT_BUTTON:hover
+{
+	background-image: url("file://{images}/custom_game/inventory/big_button_hover.png");
+	horizontal-align: left;
+    vertical-align: top;
+  background-size: 100% 100%;
+  height: 60px;
+  width: 200px;
+}
+
+.ACCEPT_LABEL
+ {
+	width: 200px;
+	text-align: center;
+	text-overflow: clip;
+	font-weight: thin;
+	font-size: 20px;
+	margin-left: 5px;
+	margin-top: 12px;
+	color: #AAFFDD;
+}
+
+.CANCEL_BUTTON
+{
+	background-image: url("file://{images}/custom_game/inventory/big_button.png");
+	horizontal-align: left;
+    vertical-align: top;
+	background-size: 100% 100%;
+	margin-left: 450px;
+	margin-top: 410px;
+  height: 60px;
+  width: 200px;
+}
+.CANCEL_BUTTON:hover
+{
+	background-image: url("file://{images}/custom_game/inventory/big_button_hover.png");
+	horizontal-align: left;
+    vertical-align: top;
+  background-size: 100% 100%;
+  height: 60px;
+  width: 200px;
+}
+
+.CANCEL_LABEL
+ {
+	width: 200px;
+	text-align: center;
+	text-overflow: clip;
+	font-weight: thin;
+	font-size: 20px;
+	margin-left: 5px;
+	margin-top: 12px;
+	color: #FFAAAA;
+}
+
+.trade
+{
+background-image: url("file://{images}/custom_game/inventory/trade_panel_base.png");
+background-size: 100% 100%;
+  height: 500px;
+  width: 680px;
+  
+}
+
+.Text_entry_place_holder
+{
+	background-image: url("file://{images}/custom_game/inventory/slide_bar.png");
+	background-size: 100% 100%;
+	height: 50px;
+	text-align: center;
+	width: 200px;
+	text-overflow: clip;
+	font-weight: thin;
+	font-size: 15px;
+	color: #AACCFF;
+}
+
+.Text_entry
+{
+	background-image: url("file://{images}/custom_game/inventory/slide_bar.png");
+	background-size: 100% 100%;
+	height: 50px;
+	width: 200px;
+	text-overflow: clip;
+	font-weight: thin;
+	font-size: 40px;
+	color: #AACCFF;
+}
+
+

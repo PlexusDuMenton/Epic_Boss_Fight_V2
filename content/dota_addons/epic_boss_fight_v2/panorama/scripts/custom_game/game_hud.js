@@ -1,3 +1,23 @@
+var music = Game.EmitSound("Sound.Music.1") 
+$.Msg(music)
+
+GameEvents.Subscribe( "play_music", play_music)
+
+function play_music(msg){
+	if (msg.music){
+		Game.StopSound(music)
+		music = Game.EmitSound(msg.music) 
+	}
+}
+
+GameEvents.Subscribe( "play_sound", play_sound)
+
+function play_sound(msg){
+	if (msg.music){
+		Game.EmitSound(msg.music) 
+	}
+}
+
 var ID = Players.GetLocalPlayer()
 var high = 900
 var camera_free = true
@@ -5,7 +25,7 @@ GameUI.SetCameraPitchMin( 0 )
 GameUI.SetCameraPitchMax( 0 )
 
 function free_camera(){
-	GameUI.SetCameraTarget(-1)
+	GameUI.SetCameraTarget(-2)
 	}
 function block_camera(){
 	GameUI.SetCameraTarget(Players.GetPlayerHeroEntityIndex( ID ))

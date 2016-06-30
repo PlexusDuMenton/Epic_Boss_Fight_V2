@@ -1,18 +1,25 @@
 --SAVING USING THE STORAGE LIB
 --FINISHED , SLOT WORKS FINE , I WILL JUST ACTIVATE ANTI CHEAT WHEN LAUNCHING THE FINAL VERSION
+
 function save(hero,slot,info,automatic)
 		if info ~= true then info =false end
 		if automatic ~= true then automatic = false end
 
-		--if GameRules:IsCheatMode() == false then --Check if this lobby cheated
+		if hero.trading == true then
+	      inv_manager:cancel_trade(hero,hero.trade_with)
+	    end
+
+		--if GameRules:IsCheatMode() == false and Convars:GetBool("developer") == false then --Check if this lobby cheated
 			print("Saving")
-			local data_table = {}
 			Storage:Get( PlayerResource:GetSteamAccountID(hero:GetPlayerID()), function( resultTable, successBool )
 				if successBool then
+					local data_table = {}
+					data_table.data = {}
 					if resultTable	~= nil then
 						data_table = resultTable
 					end
-					data_table[tostring(slot)] = { hero_name = hero:GetClassname(),
+					if slot == nil then slot = 0 end
+					data_table.data[tostring(slot)] = { hero_name = hero:GetClassname(),
 								inventory = hero.inventory,
 								item_bar = hero.item_bar,
 								active_list = hero.active_list,
@@ -20,12 +27,9 @@ function save(hero,slot,info,automatic)
 								level = hero.Level,
 								xp = hero.XP,
 								stats_points = hero.stats_points,
-								gold = hero:GetGold(),
+								gold = hero.gold,
 								skill_tree = hero.skill_tree
-								}
-					if info == true then
-						DeepPrintTable(data_table)
-					end
+							}
 					--PASSING IT IN STORAGE
 					Storage:Put( PlayerResource:GetSteamAccountID(hero:GetPlayerID()), data_table, function( resultTable, successBool )
 						if successBool then
@@ -53,7 +57,7 @@ function save(hero,slot,info,automatic)
 					end
 				end
 			end)
-		--[[elseif GameRules.cheats == true then
+		--[[else
 			--Notification
 			if automatic == false then
 				Notifications:Save(hero:GetPlayerOwner(), {text="Save are disactivated when cheat is detected",duration=2,color="#FF2222"})
@@ -71,8 +75,9 @@ local data_table = {}
     if successBool then
     	print ("acces granted")
     	print ("load slot "..slot)
-    	data_table = resultTable[tostring(slot)]
-    	DeepPrintTable(data_table)
+    	if resultTable ~= nil then 
+    		data_table = resultTable.data[tostring(slot)]
+    	end
     elseif successBool == false then
       --Notification
       Notifications:Save(pID, {text="acess to server failed, try again later",duration=3,color="FF2222"})

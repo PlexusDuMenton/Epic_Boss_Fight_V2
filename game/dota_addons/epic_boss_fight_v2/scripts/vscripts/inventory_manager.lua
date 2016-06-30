@@ -57,6 +57,7 @@ loot_difficulty[4] = 4.33
 loot_difficulty[5] = 6.66
 loot_difficulty[6] = 12
 
+--20% dodge , if melee_weap qeap equiped : +50 as , + 15% dmg
 
 function log10(number)
     if number <0 then print ("WTF") return number end
@@ -529,8 +530,8 @@ function inv_manager:calc_stat_item(equipement,stats,hero)
 
         if hero ~= nil then damage_multiplier =  damage_multiplier * (hero.dmg_mult/100) end
         if eq_slot.ranged == true then damage_multiplier = damage_multiplier*0.8 end
-        print (damage_multiplier," ",stats.damage ," ", eq_slot.damage ," ",eq_slot.upgrade_damage ," ", eq_slot.bonus_damage)
         if eq_slot.ranged == true then
+            hero.item_agro = 0
             hero:SetAttackCapability(DOTA_UNIT_CAP_RANGED_ATTACK) 
             if eq_slot.magical == true then
                 if eq_slot.projectile_name == nil then eq_slot.projectile_name = "particles/units/heroes/hero_leshrac/leshrac_base_attack.vpcf" end
@@ -544,16 +545,17 @@ function inv_manager:calc_stat_item(equipement,stats,hero)
                 stats.damage = (stats.damage + eq_slot.upgrade_damage + eq_slot.bonus_damage )* damage_multiplier
             end
         else
+            hero.item_agro = 1
             hero:SetRangedProjectileName("")
             hero:SetAttackCapability(DOTA_UNIT_CAP_MELEE_ATTACK) 
             stats.damage = (stats.damage + eq_slot.upgrade_damage + eq_slot.bonus_damage) * damage_multiplier
         end
-        print(eq_slot.projectile_name,hero:GetAttackCapability())
         stats.m_damage = (stats.m_damage + eq_slot.m_damage + eq_slot.m_damage) * damage_multiplier
         stats.range  = stats.range  + eq_slot.upgrade_range + eq_slot.bonus_range
         stats.loh = stats.loh + eq_slot.upgrade_loh + eq_slot.bonus_loh
         stats.attack_speed = stats.attack_speed + eq_slot.upgrade_attack_speed + eq_slot.bonus_attack_speed
         stats.ls = stats.ls + eq_slot.upgrade_ls + eq_slot.bonus_ls
+        hero.agro = hero.item_agro + hero.base_agro
     end
     DeepPrintTable(stats)
     return stats
@@ -637,6 +639,10 @@ end
 
 function inv_manager:Calculate_stats(hero) -- call this when equipement is modified (equip new item , load caracter , weapon broke down)
     local stats= {}
+    if hero.effect_bonus == nil then hero.effect_bonus = {} end
+    for k,v in pairs(hero.effect_bonus) do
+        v = 0
+    end
     stats.effect = {} --here goes every effect an item/equipement add (every modifier on hit ie : chance to stun on hit , modifier )
     stats.damage_mult = 0
     stats.damage = 0
@@ -664,9 +670,8 @@ function inv_manager:Calculate_stats(hero) -- call this when equipement is modif
     stats = self:calc_stat_item(hero.equipement.gloves,stats)
     stats = self:calc_stat_item(hero.equipement.boots,stats)
 
-    --stats = self:calc_stat_item(hero.equipement.shield,stats) must be done later  , it'll have to check if weapon if 2 handed or not, need to fix some other bug before working on this ^^
-
-    --stats = self:calc_stat_item(hero.equipement.necklace,stats)
+    stats = self:calc_stat_item(hero.equipement.necklace,stats)
+    stats = self:calc_stat_item(hero.equipement.wings,stats)
     --stats = self:calc_stat_item(hero.equipement.earring1,stats)
     --stats = self:calc_stat_item(hero.equipement.earring2,stats)
 
@@ -679,8 +684,15 @@ function inv_manager:Calculate_stats(hero) -- call this when equipement is modif
     --to add : a function that add hero side stats (levels...) and apply them
     local key = "player_"..hero:GetPlayerID()
     inv_manager:save_inventory(hero)
-    CustomNetTables:SetTableValue( "stats",key, {equip_stats = hero.equip_stats,skill_stats = hero.skill_bonus,hero_stats = hero.hero_stats,Name = hero:GetUnitName(),LVL = hero.Level,stats_points = hero.stats_points  } )
     CreateItem("item_void", hero, hero) 
+    Timers:CreateTimer(0.25,function()
+        CustomNetTables:SetTableValue( "stats",key, {effect_bonus = hero.effect_bonus,equip_stats = hero.equip_stats,skill_stats = hero.skill_bonus,hero_stats = hero.hero_stats,Name = hero:GetUnitName(),LVL = hero.Level,stats_points = hero.stats_points  } )
+    end)
+
+    Timers:CreateTimer(1.0,function()
+        CustomNetTables:SetTableValue( "stats",key, {effect_bonus = hero.effect_bonus,equip_stats = hero.equip_stats,skill_stats = hero.skill_bonus,hero_stats = hero.hero_stats,Name = hero:GetUnitName(),LVL = hero.Level,stats_points = hero.stats_points  } )
+    end)
+    
     
 end
 
@@ -708,83 +720,282 @@ function inv_manager:Init_Hero_Stat()
 end
 
 function inv_manager:Create_Inventory(hero) -- call this when the hero entity is created
+    
+
+    CustomGameEventManager:Send_ServerToPlayer(hero:GetPlayerOwner(), "item_list", item_list_init )
     hero.inventory = {}
     hero.equipement = {}
     hero.item_bar = {}
+    hero.trade = {}
+    hero.agro = 0
+    hero.item_agro = 0 
+    hero.base_agro = 0
+    hero.trading = false
+    hero.trade_gold = 0
     hero.Level = 1
     hero.stats_points = 0
     hero.XP = 0
     hero.CD = 0
+    hero.gold = 0
     inv_manager:update_effect (hero)
     inv_manager:Calculate_stats(hero)
     hero.hero_stats = inv_manager:Init_Hero_Stat()
     inv_manager:Calculate_stats(hero)
     inv_manager:save_inventory(hero)
-    
-
+    local Item = nil
+    if hero:GetUnitName() == "npc_dota_hero_legion_commander" then
+        Item = epic_boss_fight:_CreateItem("item_rust_dagger",hero)
+    else
+        Item = epic_boss_fight:_CreateItem("item_broken_bow",hero)
+    end
+    hero.effect_bonus = {}
+    hero.effect_bonus.damage = 0
+    hero.effect_bonus.as = 0
+    inv_manager:Add_Item(hero,Item)
 end
+
+function inv_manager:accept_trade(hero_1,hero_2)
+    CustomGameEventManager:Send_ServerToPlayer(hero_1:GetPlayerOwner(), "stop_trading", {} )
+    CustomGameEventManager:Send_ServerToPlayer(hero_2:GetPlayerOwner(), "stop_trading", {} )
+    hero_1.trading = false
+    hero_1.trade_with = nil
+    hero_1.gold = hero_1.gold + hero_2.trade_gold - hero_1.trade_gold
+    hero_2.trading = false
+    hero_2.trade_with = nil
+    hero_2.gold = hero_2.gold + hero_1.trade_gold - hero_2.trade_gold
+    hero_2.trade_gold = 0
+    hero_1.trade_gold = 0
+    for i = 0,9 do
+        if hero_1.trade[i] ~= nil then
+            inv_manager:Add_Item(hero_2,hero_1.trade[i])
+            hero_1.trade[i] = nil
+        end
+        if hero_2.trade[i] ~= nil then
+            inv_manager:Add_Item(hero_1,hero_2.trade[i])
+            hero_2.trade[i] = nil
+        end
+    end
+    local key1 = "trade_player_"..hero_1:GetPlayerID()
+    CustomNetTables:SetTableValue( "info",key1, {} )
+    local key2 = "trade_player_"..hero_2:GetPlayerID()
+    CustomNetTables:SetTableValue( "info",key2, {} )
+    inv_manager:save_inventory(hero_1)
+    inv_manager:save_inventory(hero_2)
+    --save both hero
+end
+
+
+function inv_manager:cancel_trade(hero_1,hero_2)
+    CustomGameEventManager:Send_ServerToPlayer(hero_1:GetPlayerOwner(), "stop_trading", {} )
+    CustomGameEventManager:Send_ServerToPlayer(hero_2:GetPlayerOwner(), "stop_trading", {} )
+    hero_1.trading = false
+    hero_1.trade_with = nil
+    hero_1.trade_gold = 0
+    hero_2.trading = false
+    hero_2.trade_with = nil
+    hero_2.trade_gold = 0
+    for i = 0,9 do
+        if hero_1.trade[i] ~= nil then
+            inv_manager:Add_Item(hero_1,hero_1.trade[i])
+            hero_1.trade[i] = nil
+        end
+        if hero_2.trade[i] ~= nil then
+            inv_manager:Add_Item(hero_2,hero_2.trade[i])
+            hero_2.trade[i] = nil
+        end
+    end
+    local key1 = "trade_player_"..hero_1:GetPlayerID()
+    CustomNetTables:SetTableValue( "info",key1, {} )
+    local key2 = "trade_player_"..hero_2:GetPlayerID()
+    CustomNetTables:SetTableValue( "info",key2, {} )
+    inv_manager:save_inventory(hero_1)
+    inv_manager:save_inventory(hero_2)
+    --save both hero
+end
+
+function inv_manager:start_trade(hero_1,hero_2)
+    hero_1.trading = true
+    hero_1.trade_with = hero_2
+    hero_2.trading = true
+    hero_2.trade_with = hero_1
+    local key1 = "trade_player_"..hero_1:GetPlayerID()
+    CustomNetTables:SetTableValue( "info",key1, {trade_gold = hero_1.trade_gold , trade = hero_1.trade} )
+    local key2 = "trade_player_"..hero_2:GetPlayerID()
+    CustomNetTables:SetTableValue( "info",key2, {trade_gold = hero_2.trade_gold , trade = hero_2.trade} )
+    inv_manager:save_inventory(hero)
+    CustomGameEventManager:Send_ServerToPlayer(hero_1:GetPlayerOwner(), "start_trading", {} )
+    CustomGameEventManager:Send_ServerToPlayer(hero_2:GetPlayerOwner(), "start_trading", {} )
+end
+
+function inv_manager:Set_trade_gold(hero,ammount)
+    if ammount == nil then ammount = 1 end
+    if ammount > hero.gold then ammount = hero.gold end
+    hero.trade_gold = ammount
+    local key = "trade_player_"..hero:GetPlayerID()
+    CustomNetTables:SetTableValue( "info",key, {trade_gold = hero.trade_gold , trade = hero.trade} )
+end
+
+
+function inv_manager:Send_trading(hero,slot,ammount,hero_2) -- call this when the hero entity is created
+    if ammount == nil then ammount = 1 end
+    if PlayerResource:HasCustomGameTicketForPlayerID( hero_2:GetPlayerID() ) == true then local size_2 = INVENTORY_PASS_SIZE else size_2 = INVENTORY_SIZE end
+    if #hero.trade < 10 then
+        if hero.inventory[slot] ~= nil then
+            if hero.inventory[slot].stackable == true then
+                    local flag = false
+                    for i = 0,9 do
+                        if hero.inventory[slot] ~= nil and hero.trade[i] ~= nil then
+                            if hero.trade[i].item_name == hero.inventory[slot].item_name then
+                                flag = true
+                                if hero.inventory[slot].ammount <= ammount then
+                                    ammount = hero.inventory[slot].ammount
+                                    hero.inventory[slot] = nil
+                                else
+                                    hero.inventory[slot].ammount = hero.inventory[slot].ammount - ammount
+                                end
+                                hero.trade[i].ammount = hero.trade[i].ammount + ammount
+                            end
+                        end
+                    end
+                    if #hero_2.inventory + #hero.trade + 1 <= size_2 then
+                        if flag == false then
+                            for i = 0,9 do
+                                print (hero.inventory[slot].ammount)
+                                if flag == false and hero.trade[i] == nil then
+                                    local fake_item = copy(hero.inventory[slot])
+                                    if hero.inventory[slot].ammount <= ammount then
+                                        ammount = hero.inventory[slot].ammount
+                                        hero.inventory[slot] = nil
+                                    else
+                                        print (hero.inventory[slot].ammount)
+                                        hero.inventory[slot].ammount = hero.inventory[slot].ammount - ammount
+                                        print (hero.inventory[slot].ammount)
+                                    end
+                                    fake_item.ammount = ammount
+                                    hero.trade[i] = fake_item
+                                    flag = true
+                                end
+                            end
+                        end
+                    else
+                        Notifications:Inventory(hero:GetPlayerID(), {text="#OTHER_DONT_HAVE_SPACE",duration=2,color="FFAAAA"})
+                    end
+            else
+                if #hero_2.inventory + #hero.trade + 1 <= size_2 then
+                    local flag = false
+                    for i = 0,9 do 
+                        if flag == false and hero.trade[i] == nil then
+                            hero.trade[i] = hero.inventory[slot]
+                            flag = true
+                        end
+                end
+                    hero.inventory[slot] = nil
+                else
+                    Notifications:Inventory(hero:GetPlayerID(), {text="#OTHER_DONT_HAVE_SPACE",duration=2,color="FFAAAA"})
+                end
+            end
+        end 
+    else
+        Notifications:Inventory(hero:GetPlayerID(), {text="#CANT_TRADE_MORE",duration=2,color="FFAAAA"})
+    end
+    inv_manager:save_inventory(hero)
+    local key = "trade_player_"..hero:GetPlayerID()
+    CustomNetTables:SetTableValue( "info",key, {trade_gold = hero.trade_gold , trade = hero.trade} ) 
+    DeepPrintTable(CustomNetTables:GetTableValue("info", key ))
+end
+
+function inv_manager:withdraw_trading(hero,slot,ammount) -- call this when the hero entity is created
+    if ammount == nil then ammount = 1 end
+    if hero.trade[slot] ~= nil then
+        if hero.trade[slot].stackable == true then
+            if ammount >= hero.trade[slot].ammount then
+                inv_manager:Add_Item(hero,hero.trade[slot])
+                hero.trade[slot] = nil
+            else
+                local fake_item = copy(hero.trade[slot])
+                hero.trade[slot].ammount = hero.trade[slot].ammount - ammount
+                fake_item.ammount = ammount
+                inv_manager:Add_Item(hero,fake_item)
+                fake_item = nil
+            end
+        else
+            inv_manager:Add_Item(hero,hero.trade[slot])
+            hero.trade[slot] = nil
+        end
+     end 
+    inv_manager:save_inventory(hero)
+    local key = "trade_player_"..hero:GetPlayerID()
+    CustomNetTables:SetTableValue( "info",key, {trade_gold = hero.trade_gold , trade = hero.trade} )
+end
+
 
 function inv_manager:Add_Item(hero,item) --will be called when a item is purshased or picked up
     local inventory = hero.inventory
     if PlayerResource:HasCustomGameTicketForPlayerID( hero:GetPlayerID() ) == true then local size = INVENTORY_PASS_SIZE else size = INVENTORY_SIZE end
-    if item ~= nil then
-        item.metatable = nil
-        local item = copy(item)
-        print ("item is added")
-        if item.stackable == true then
-            print ("item is stackable")
-            item_name = item.item_name
-            for i=1,size do
-                if inventory[i]~= nil and inventory[i].item_name== item_name then
-                    print ("item is stacked")
-                    hero.inventory[i].ammount = inventory[i].ammount + item.ammount
-                    inv_manager:save_inventory(hero)
-                    CustomGameEventManager:Send_ServerToPlayer(hero:GetPlayerOwner(), "clean_forge", {} )
-                    return
-                elseif inventory[i] == nil then
-                    print ("item_added to inventory")
-                    inv_manager:sort( hero )
-                    table.insert(hero.inventory,item)
-                    hero:RemoveItem(item)
-                    inv_manager:save_inventory(hero)
-                    CustomGameEventManager:Send_ServerToPlayer(hero:GetPlayerOwner(), "clean_forge", {} )
-                    return
-                elseif i>=size then
-                    print ("inventory is full")
-                    inv_manager:drop(item,hero:GetOrigin())
-                    hero:RemoveItem(item)
-                    Notifications:Inventory(hero:GetPlayerID(), {text="#NOSLOT",duration=2,color="FFAAAA"})
-                    inv_manager:save_inventory(hero)
-                    CustomGameEventManager:Send_ServerToPlayer(hero:GetPlayerOwner(), "clean_forge", {} )
-                    return
-                end
-            end
-        else
-            for i=1,size do
-                print (inventory[i])
-                if inventory[i] == nil then
-                    print ("item_added to inventory")
-                    inventory[i]= item
-                    inv_manager:sort( hero )
-                    hero:RemoveItem(item)
-                    inv_manager:save_inventory(hero)
-                    CustomGameEventManager:Send_ServerToPlayer(hero:GetPlayerOwner(), "clean_forge", {} )
-                        return
-                elseif i>=size then
-                    print ("inventory is full")
-                    inv_manager:drop(item,hero:GetOrigin())
-                    hero:RemoveItem(item)
-                    Notifications:Inventory(hero:GetPlayerID(), {text="#NOSLOT",duration=2,color="FFAAAA"})
-                    inv_manager:save_inventory(hero)
-                    CustomGameEventManager:Send_ServerToPlayer(hero:GetPlayerOwner(), "clean_forge", {} )
-                        return
-                end
-            end
-        end
-        
+    if hero.trading == true then
+        inv_manager:drop(item,hero:GetOrigin())
+        hero:RemoveItem(item)
+        Notifications:Inventory(hero:GetPlayerID(), {text="#IN_TRADING",duration=2,color="FFAAAA"})
     else
-        if item == nil then print ("item is nil")
-        else print ("error , item not item (LOGIC BITCH)")
+        if item ~= nil then
+            item.metatable = nil
+            local item = copy(item)
+            print ("item is added")
+            if item.stackable == true then
+                print ("item is stackable")
+                item_name = item.item_name
+                for i=1,size do
+                    if inventory[i]~= nil and inventory[i].item_name== item_name then
+                        print ("item is stacked")
+                        hero.inventory[i].ammount = inventory[i].ammount + item.ammount
+                        inv_manager:save_inventory(hero)
+                        CustomGameEventManager:Send_ServerToPlayer(hero:GetPlayerOwner(), "clean_forge", {} )
+                        return
+                    elseif inventory[i] == nil then
+                        print ("item_added to inventory")
+                        inv_manager:sort( hero )
+                        table.insert(hero.inventory,item)
+                        hero:RemoveItem(item)
+                        inv_manager:save_inventory(hero)
+                        CustomGameEventManager:Send_ServerToPlayer(hero:GetPlayerOwner(), "clean_forge", {} )
+                        return
+                    elseif i>=size then
+                        print ("inventory is full")
+                        inv_manager:drop(item,hero:GetOrigin())
+                        hero:RemoveItem(item)
+                        Notifications:Inventory(hero:GetPlayerID(), {text="#NOSLOT",duration=2,color="FFAAAA"})
+                        inv_manager:save_inventory(hero)
+                        CustomGameEventManager:Send_ServerToPlayer(hero:GetPlayerOwner(), "clean_forge", {} )
+                        return
+                    end
+                end
+            else
+                for i=1,size do
+                    print (inventory[i])
+                    if inventory[i] == nil then
+                        print ("item_added to inventory")
+                        inventory[i]= item
+                        inv_manager:sort( hero )
+                        hero:RemoveItem(item)
+                        inv_manager:save_inventory(hero)
+                        CustomGameEventManager:Send_ServerToPlayer(hero:GetPlayerOwner(), "clean_forge", {} )
+                            return
+                    elseif i>=size then
+                        print ("inventory is full")
+                        inv_manager:drop(item,hero:GetOrigin())
+                        hero:RemoveItem(item)
+                        Notifications:Inventory(hero:GetPlayerID(), {text="#NOSLOT",duration=2,color="FFAAAA"})
+                        inv_manager:save_inventory(hero)
+                        CustomGameEventManager:Send_ServerToPlayer(hero:GetPlayerOwner(), "clean_forge", {} )
+                            return
+                    end
+                end
+            end
+        
+        else
+            if item == nil then print ("item is nil")
+            else print ("error , item not item (LOGIC BITCH)")
+            end
         end
     end
 
@@ -881,8 +1092,20 @@ function inv_manager:Unequip(hero,slot_name) --also equip item
             hero.equipement.helmet= nil
             inv_manager:Calculate_stats(hero)
 
+            elseif slot_name == "necklace" then
+            table.insert(hero.inventory,hero.equipement.necklace)
+            inv_manager:sort( hero )
+            hero.equipement.necklace= nil
+            inv_manager:Calculate_stats(hero)
+
+        elseif slot_name == "wings" then
+            table.insert(hero.inventory,hero.equipement.wings)
+            inv_manager:sort( hero )
+            hero.equipement.wings= nil
+            inv_manager:Calculate_stats(hero)
+
         else
-            print ("Invalid Slot name given ;Valid item slot are : 'weapon' 'chest' 'helmet' legs' 'gloves' 'boots' ")
+            print ("Invalid Slot name given ;Valid item slot are : 'weapon' 'chest' 'helmet' legs' 'gloves' 'boots' 'necklace' or 'wings' ")
         end
         inv_manager:save_inventory(hero)
         CustomGameEventManager:Send_ServerToPlayer(hero:GetPlayerOwner(), "clean_forge", {} )
@@ -968,6 +1191,24 @@ function inv_manager:Use_Item(hero,inv_slot,IB) --also equip item
                             hero.equipement.boots = item
                         end
                     end
+                    if item.cat == "necklace" then
+                        if hero.equipement.necklace == nil then
+                            hero.equipement.necklace = item
+                            hero.inventory[inv_slot] = nil
+                        else
+                            hero.inventory[inv_slot] = hero.equipement.gloves
+                            hero.equipement.gloves = item
+                        end
+                    end
+                    if item.cat == "wings" then
+                        if hero.equipement.wings == nil then
+                            hero.equipement.wings = item
+                            hero.inventory[inv_slot] = nil
+                        else
+                            hero.inventory[inv_slot] = hero.equipement.wings
+                            hero.equipement.wings = item
+                        end
+                    end
                     inv_manager:sort( hero )
                 else 
                     print ("need more level")
@@ -975,26 +1216,30 @@ function inv_manager:Use_Item(hero,inv_slot,IB) --also equip item
 
                 end
             elseif item.cat == "consumable" then
-                print ('item is consumable')
-                if hero.CD > 0 then
-                    print (hero.CD)
-                    return
-                end
-                if item.ammount > 1 then
-                    inv_manager:Use_consumable(hero,item)
-                    if IB == 1 then
-                        hero.item_bar[inv_slot].ammount = item.ammount - 1
+                if hero:IsAlive() then
+                    print ('item is consumable')
+                    if hero.CD > 0 then
+                        print (hero.CD)
+                        return
+                    end
+                    if item.ammount > 1 then
+                        inv_manager:Use_consumable(hero,item)
+                        if IB == 1 then
+                            hero.item_bar[inv_slot].ammount = item.ammount - 1
+                        else
+                            hero.inventory[inv_slot].ammount = item.ammount - 1
+                        end
                     else
-                        hero.inventory[inv_slot].ammount = item.ammount - 1
+                        inv_manager:Use_consumable(hero,item)
+                        if IB == 1 then
+                            hero.item_bar[inv_slot] = nil
+                        else
+                            hero.inventory[inv_slot] = nil
+                        end
+                        inv_manager:sort( hero )
                     end
                 else
-                    inv_manager:Use_consumable(hero,item)
-                    if IB == 1 then
-                        hero.item_bar[inv_slot] = nil
-                    else
-                        hero.inventory[inv_slot] = nil
-                    end
-                    inv_manager:sort( hero )
+                    print ("player try to use an item but is dead")
                 end
             end
             inv_manager:save_inventory(hero)
@@ -1020,37 +1265,41 @@ function inv_manager:Use_consumable(hero,item)
         end)
     if item.duration == 0 or item.duration == nil then item.duration = 0.2 end
     Timers:CreateTimer(0.2,function()
-        if time <= item.duration then
-            time = time + 0.2
-            if item.heal ~= nil then
-                if PlayerResource:HasCustomGameTicketForPlayerID( hero:GetPlayerID() ) == true then
-                    hero:SetHealth((hero:GetHealth() + (item.heal/(5*item.duration))*1.1 ))
-                else
-                    hero:SetHealth((hero:GetHealth() + (item.heal/(5*item.duration)) ))
+        if hero:IsAlive() then
+            if time <= item.duration then
+                time = time + 0.2
+                if item.heal ~= nil then
+                    if PlayerResource:HasCustomGameTicketForPlayerID( hero:GetPlayerID() ) == true then
+                        hero:SetHealth((hero:GetHealth() + (item.heal/(5*item.duration))*1.1 ))
+                    else
+                        hero:SetHealth((hero:GetHealth() + (item.heal/(5*item.duration)) ))
+                    end
                 end
-            end
-            if item.heal_mana ~= nil then
-                if PlayerResource:HasCustomGameTicketForPlayerID( hero:GetPlayerID() ) == true then
-                    hero:SetMana((hero:GetMana() + (item.heal_mana/(5*item.duration))*1.1 ))
-                else
-                    hero:SetMana((hero:GetMana() + (item.heal_mana/(5*item.duration)) ))
+                if item.heal_mana ~= nil then
+                    if PlayerResource:HasCustomGameTicketForPlayerID( hero:GetPlayerID() ) == true then
+                        hero:SetMana((hero:GetMana() + (item.heal_mana/(5*item.duration))*1.1 ))
+                    else
+                        hero:SetMana((hero:GetMana() + (item.heal_mana/(5*item.duration)) ))
+                    end
                 end
-            end
-            if item.heal_pct ~= nil then
-                if PlayerResource:HasCustomGameTicketForPlayerID( hero:GetPlayerID() ) == true then
-                    hero:SetHealth((hero:GetHealth() + ((item.heal_pct*hero:GetMaxHealth()*0.01)/(5*item.duration))*1.1 ))
-                else
-                    hero:SetHealth((hero:GetHealth() + ((item.heal_pct*hero:GetMaxHealth()*0.01)/(5*item.duration)) ))
+                if item.heal_pct ~= nil then
+                    if PlayerResource:HasCustomGameTicketForPlayerID( hero:GetPlayerID() ) == true then
+                        hero:SetHealth((hero:GetHealth() + ((item.heal_pct*hero:GetMaxHealth()*0.01)/(5*item.duration))*1.1 ))
+                    else
+                        hero:SetHealth((hero:GetHealth() + ((item.heal_pct*hero:GetMaxHealth()*0.01)/(5*item.duration)) ))
+                    end
                 end
-            end
-            if item.heal_mana_pct ~= nil then
-                if PlayerResource:HasCustomGameTicketForPlayerID( hero:GetPlayerID() ) == true then
-                    hero:SetMana((hero:GetMana() + ((item.heal_mana_pct*hero:GetMaxMana()*0.01)/(5*item.duration))*1.1 ))
-                else
-                    hero:SetMana((hero:GetMana() + ((item.heal_mana_pct*hero:GetMaxMana()*0.01)/(5*item.duration)) ))
+                if item.heal_mana_pct ~= nil then
+                    if PlayerResource:HasCustomGameTicketForPlayerID( hero:GetPlayerID() ) == true then
+                        hero:SetMana((hero:GetMana() + ((item.heal_mana_pct*hero:GetMaxMana()*0.01)/(5*item.duration))*1.1 ))
+                    else
+                        hero:SetMana((hero:GetMana() + ((item.heal_mana_pct*hero:GetMaxMana()*0.01)/(5*item.duration)) ))
+                    end
                 end
+                return 0.2
+            else
+                return
             end
-            return 0.2
         else
             return
         end
@@ -1061,21 +1310,20 @@ end
 function inv_manager:Sell_Item(hero,inv_slot,ammount) --sell item if the player is in a shop
     local inventory = hero.inventory
      if PlayerResource:HasCustomGameTicketForPlayerID( hero:GetPlayerID() ) == true then local size = INVENTORY_PASS_SIZE else size = INVENTORY_SIZE end
-    if ammount ~= nil and ammount<0 then ammount = nil end
     if inv_slot > 0 and inv_slot <= size then
         local item = inventory[inv_slot]
         if item ~= nil then
             if hero.Isinshop == true then   --will be seen later...
-                if item.stack == true then
-                    if ammount == nil or ammount >= item.ammount then
-                        PlayerResource:ModifyGold(hero:GetPlayerID() , item.price*item.ammount*0.75 , true, 6)
+                if item.stackable == true then
+                    if ammount >= item.ammount then
+                        hero.gold = math.ceil(hero.gold + item.price*item.ammount*0.75)
                         hero.inventory[inv_slot] = nil
                     else
-                        PlayerResource:ModifyGold(hero:GetPlayerID() , item.price*ammount*0.75 , true, 6)
+                        hero.gold = math.ceil(hero.gold + item.price*ammount*0.75)
                         hero.inventory[inv_slot].ammount = item.ammount - ammount
                     end
                 else
-                    PlayerResource:ModifyGold(hero:GetPlayerID() , item.price*0.75, true, 6)
+                    hero.gold = math.ceil(hero.gold + item.price*0.75)
                     hero.inventory[inv_slot] = nil
                 end
                 CustomGameEventManager:Send_ServerToPlayer(hero:GetPlayerOwner(), "clean_forge", {} )
@@ -1309,7 +1557,7 @@ function inv_manager:crystalyze(hero,slot_weap)
     inv_manager:save_inventory(hero)
 end
 
-function inv_manager:upgrade_wepaon(hero,weapon,soul) --will be called when a weapon is upgraded with a smith
+function inv_manager:upgrade_weapon(hero,weapon,soul) --will be called when a weapon is upgraded with a smith
                 weapon.upgrade_level = weapon.upgrade_level + 1
                 if soul.damage ~= nil then
                     if weapon.upgrade_damage == nil then weapon.upgrade_damage = 0 end

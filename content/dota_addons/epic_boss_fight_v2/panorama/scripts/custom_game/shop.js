@@ -21,17 +21,52 @@ Object.size = function(obj) {
 function set_panel_event(slot,item_info,over_slot){
 	slot.SetPanelEvent("onmouseover", function(){GameUI.CustomUIConfig().Events.FireEvent( "display_info", { item : item_info} )});
 	slot.SetPanelEvent("onmouseout", function(){GameUI.CustomUIConfig().Events.FireEvent( "hide_info", {} )});	
+	// slot.SetPanelEvent("onactivate", function(){
+		// $.Msg("WTF ?!")
+		// over_slot.SetHasClass( "over_slot_selected", true )
+		// over_slot.SetHasClass( "over_slot", false )
+		// $.Schedule(1.2,(function(){
+			// if (over_slot!= null){
+				// over_slot.SetHasClass( "over_slot_selected", false )
+				// over_slot.SetHasClass( "over_slot", true )
+			// }
+		// }));
+		// GameEvents.SendCustomGameEventToServer( "Buy_Item", { name : item_info.item_name , price : item_info.price} );
+	// })
 	slot.SetPanelEvent("onactivate", function(){
-		$.Msg("WTF ?!")
-		over_slot.SetHasClass( "over_slot_selected", true )
-		over_slot.SetHasClass( "over_slot", false )
-		$.Schedule(1.2,(function(){
-			if (over_slot!= null){
-				over_slot.SetHasClass( "over_slot_selected", false )
-				over_slot.SetHasClass( "over_slot", true )
-			}
-		}));
-		GameEvents.SendCustomGameEventToServer( "Buy_Item", { name : item_info.item_name , price : item_info.price} );
+		$.Schedule(0.8,(function(){
+				if (over_slot!= null){
+					over_slot.SetHasClass( "over_slot_selected", false )
+					over_slot.SetHasClass( "over_slot", true )
+				}
+			}));
+		if (item_info.stackable == true){
+											var exit= $.CreatePanel( "Panel", $("#Menu_shop") , "exit" );
+											exit.SetHasClass( "Main", true )
+											exit.SetPanelEvent("onactivate", function(){
+												$("#Menu_shop").RemoveAndDeleteChildren()
+											})
+											var pos_mouse = GameUI.GetCursorPosition()
+											var text_entry = $.CreatePanel( "TextEntry", $("#Menu_shop"), "TextEntry");
+											text_entry.style.position = (pos_mouse[0]-1000) +"px "+pos_mouse[1]+"px 0px";
+											text_entry.text = "Ammount (max for all)"
+											text_entry.maxchars="20" 
+											text_entry.multiline = false;
+											text_entry.SetHasClass( "Text_entry_place_holder", true );
+											text_entry.SetPanelEvent('onfocus', (function(){
+												text_entry.text = ""
+												text_entry.SetHasClass( "Text_entry", true );
+											}))
+											text_entry.SetPanelEvent('oninputsubmit', (function(){
+												GameEvents.SendCustomGameEventToServer( "Buy_Item", { name : item_info.item_name , price : item_info.price ,ammount : text_entry.text} );
+												$("#Menu_shop").RemoveAndDeleteChildren()
+											}))
+									
+		}else{
+			over_slot.SetHasClass( "over_slot_selected", true )
+			over_slot.SetHasClass( "over_slot", false )
+			GameEvents.SendCustomGameEventToServer( "Buy_Item", { name : item_info.item_name , price : item_info.price} );
+		}
 	})
 }
 

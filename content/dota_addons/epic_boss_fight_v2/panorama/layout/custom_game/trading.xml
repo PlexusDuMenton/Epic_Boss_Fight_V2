@@ -1,0 +1,13 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/custom_game/trading.css" />
+	</styles>
+	<scripts>
+		<include src="file://{resources}/scripts/custom_game/trading.js" />
+	</scripts>
+	<Panel class="Main" hittest="false">
+		<Panel id = "ask_panel" hittest="false"/>
+		<Panel id = "trading_panel" hittest="false"/>
+		<Panel id="Menu_trading" hittest="false"/>
+	</Panel>
+</root>

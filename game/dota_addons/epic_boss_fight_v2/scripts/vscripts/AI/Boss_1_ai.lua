@@ -27,8 +27,11 @@ spell_4_CD = 0
 function Boss_1_think()
 	if thisEntity:IsAlive() or not thisEntity:IsNull() then -- verify if unity is not recently dead
 		GameRules:SetTimeOfDay(0.8)
+		if boss_target~= nil then
+			if boss_target:IsAlive() == false then change_target_CD = 0 end
+		end
 		if change_target_CD == 0 then
-			change_target_CD = 2.5
+			change_target_CD = 4.0
 			change_target()
 		end
 		local HPP = (thisEntity:GetHealth()/thisEntity:GetMaxHealth()) * 100
@@ -126,7 +129,7 @@ function spell_2(target) --earth shake
 		    			local damageTable = {
 							victim = v,
 							attacker = hCaster,
-							damage = 25*(GameRules.difficulty^0.85),
+							damage = 25*(GameRules.difficulty^1.2),
 							damage_type = DAMAGE_TYPE_PHYSICAL,
 						}
 						ApplyDamage(damageTable) 
@@ -282,7 +285,7 @@ function spell_3(target)
 		    			local damageTable = {
 							victim = v,
 							attacker = hCaster,
-							damage = 15*(GameRules.difficulty^0.85),
+							damage = 15*(GameRules.difficulty^1.20),
 							damage_type = DAMAGE_TYPE_PHYSICAL,
 						}
 						ApplyDamage(damageTable) 
@@ -315,7 +318,8 @@ function found_lowest_hpp_ennemy(rand)
 		local lowest_hpp = 100
 		local target = nil
 		for k,v in pairs(enemy) do
-			local hpp = (v:GetHealth()/v:GetMaxHealth())*100
+			if v.agro == nil then v.agro = 0 end
+			local hpp = (v:GetHealth()/v:GetMaxHealth())*100 - (v.agro * 5)
 			if hpp <= lowest_hpp then
 				lowest_hpp = hpp
 				target = v
