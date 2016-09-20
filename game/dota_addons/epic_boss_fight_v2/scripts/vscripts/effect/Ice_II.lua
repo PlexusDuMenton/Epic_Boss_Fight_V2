@@ -22,8 +22,6 @@ function lua_hero_effect_Ice_II:OnAttackStart( params )
 				return 0
 			end
 			local hero = self:GetParent()
-			hero:RemoveModifierByName("lua_hero_effect_critical_III_hit") 
-			hero:RemoveModifierByName("lua_hero_effect_critical_IV_hit")
 
 			local target = params.target
 			if target ~= nil then

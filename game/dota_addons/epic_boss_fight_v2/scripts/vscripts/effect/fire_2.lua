@@ -11,14 +11,14 @@ end
 
 function lua_hero_effect_fire_2:DeclareFunctions()
     local funcs = {
-    MODIFIER_EVENT_ON_ATTACK_LANDED 
+    MODIFIER_EVENT_ON_ATTACK_LANDED
     }
     return funcs
 end
 
 
 function lua_hero_effect_fire_2:GetAttributes()
-	return MODIFIER_ATTRIBUTE_NONE 
+	return MODIFIER_ATTRIBUTE_NONE
 end
 
 function lua_hero_effect_fire_2:OnAttackLanded(event)
@@ -39,16 +39,16 @@ function lua_hero_effect_fire_2:OnAttackLanded(event)
 				damage = damage,
 				damage_type = DAMAGE_TYPE_PHYSICAL,
 			}
-			if math.random(1,100) <= 25 and target.On_Fire_2 == false then
+			if math.random(1,100) <= 25 and target.On_Fire_2  ~= true then
 				target.On_Fire_2 = true
 				Fire_effect = ParticleManager:CreateParticle( "particles/frozen_flame_effect.vpcf",  PATTACH_ABSORIGIN_FOLLOW , target )
 				Timers:CreateTimer(0.2, function()
 					timer = timer + 0.2
 					if timer <= duration then
-						ApplyDamage(damageTable) 
+						ApplyDamage(damageTable)
 						return 0.2
 					else
-						target.On_Fire_2 = false
+						target.On_Fire_2 = nil
 						ParticleManager:DestroyParticle(Fire_effect, false)
 					end
 			    end)

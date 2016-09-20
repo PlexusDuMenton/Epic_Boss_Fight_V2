@@ -1,0 +1,132 @@
+.Main
+{
+    width: 100%;
+    height: 100%;
+    overflow: clip;
+}
+
+#Open_Option
+{
+margin-right: 10px;
+  margin-top: 10px;
+  height: 40px;
+  width: 200px;
+  horizontal-align: right;
+  background-image: url("file://{images}/custom_game/inventory/button_menu.png");
+}
+
+#Open_Option:hover
+{
+margin-right: 10px;
+  margin-top: 10px;
+  height: 40px;
+  width: 200px;
+  horizontal-align: right;
+  background-image: url("file://{images}/custom_game/inventory/button_menu_hover.png");
+  brightness: 1.5;
+}
+
+#Panel
+{
+margin-right: 10px;
+horizontal-align: right;
+  margin-top: 10px;
+  height: 200px;
+  width: 800px;
+background-image: url("file://{images}/custom_game/inventory/shop_panel_base.png");
+background-size: 100% 100%;
+}
+
+.text
+ {
+	text-align: center;
+	text-overflow: clip;
+	font-weight: thin;
+	font-size: 20px;
+	margin-left: 5px;
+	margin-top: 5px;
+	color: #AACCFF;
+}
+
+.text_BIG
+ {
+	text-align: center;
+	text-overflow: clip;
+	font-weight: thin;
+	font-size: 40px;
+	margin-left: 5px;
+	margin-top: 5px;
+	color: #AACCFF;
+}
+
+.Difficulty_Vote_Button
+{
+  background-image: url("file://{images}/custom_game/inventory/button_menu.png");
+  margin-right: 250px;
+  margin-top: 140px;
+  horizontal-align: right;
+  height: 40px;
+  width: 200px;
+}
+.Difficulty_Vote_Button:hover
+{
+  background-image: url("file://{images}/custom_game/inventory/button_menu_hover.png");
+  brightness: 1.5;
+  margin-right: 250px;
+  margin-top: 140px;
+  horizontal-align: right;
+}
+
+
+
+#Label_Option
+{
+	height: 40px;
+	text-overflow: clip;
+	font-weight: thin;
+	font-size: 30px;
+  margin-left: 30%;
+	color: #AACCFF;
+}
+
+
+.Difficulty_Entry
+{
+	background-image: url("file://{images}/custom_game/inventory/slide_bar.png");
+	background-size: 100% 100%;
+  margin-left: 100px;
+  margin-top: 140px;
+	height: 40px;
+	width: 60px;
+	text-overflow: clip;
+	font-weight: thin;
+	font-size: 30px;
+	color: #AACCFF;
+}
+
+.CheckBox_pos
+{
+  margin-right: 350px;
+  margin-top: 65px;
+  horizontal-align: right;
+}
+.CheckBox_text_pos
+{
+  margin-right: 550px;
+  margin-top: 50px;
+  horizontal-align: right;
+}
+
+.Close_Button
+{
+  margin-left: 10px;
+  margin-top: 10px;
+  height: 40px;
+	width: 40px;
+  background-image: url("file://{images}/custom_game/inventory/Close_button.png");
+}
+
+.Close_Button:hover
+{
+  background-image: url("file://{images}/custom_game/inventory/Close_button_hover.png");
+}

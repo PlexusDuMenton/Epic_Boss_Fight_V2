@@ -1,7 +1,7 @@
 "DOTAAbilities"
 {
   "item_rust_dagger"
-  { 
+  {
     "ID"              "1010"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -15,7 +15,7 @@
     "ItemPermanent"         "1"
   }
   "item_leather_vest"
-  { 
+  {
     "ID"              "1011"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -29,7 +29,7 @@
     "ItemPermanent"         "1"
   }
   "item_leather_trousers"
-  { 
+  {
     "ID"              "1012"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -43,7 +43,7 @@
     "ItemPermanent"         "1"
   }
   "item_leather_boots"
-  { 
+  {
     "ID"              "1013"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -57,7 +57,7 @@
     "ItemPermanent"         "1"
   }
   "item_leather_gloves"
-  { 
+  {
     "ID"              "1014"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -71,7 +71,7 @@
     "ItemPermanent"         "1"
   }
   "item_leather_hood"
-  { 
+  {
     "ID"              "1015"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -85,7 +85,7 @@
     "ItemPermanent"         "1"
   }
   "item_void"
-  { 
+  {
     "ID"              "1016"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -100,7 +100,7 @@
   }
 
   "item_red_potion"
-  { 
+  {
     "ID"              "1017"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -114,7 +114,7 @@
     "ItemPermanent"         "0"
   }
   "item_blue_potion"
-  { 
+  {
     "ID"              "1018"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -128,7 +128,7 @@
     "ItemPermanent"         "0"
   }
   "item_purple_potion"
-  { 
+  {
     "ID"              "1019"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -142,7 +142,7 @@
     "ItemPermanent"         "0"
   }
   "item_power_soul"
-  { 
+  {
     "ID"              "1020"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -157,7 +157,7 @@
   }
 
   "item_weapon_soul"
-  { 
+  {
     "ID"              "1021"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -172,7 +172,7 @@
   }
 
   "item_dagger"
-  { 
+  {
     "ID"              "1022"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -187,7 +187,7 @@
   }
 
   "item_rust_sword"
-  { 
+  {
     "ID"              "1023"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -202,7 +202,7 @@
   }
 
   "item_crowbar"
-  { 
+  {
     "ID"              "1024"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -217,7 +217,7 @@
   }
 
   "item_broken_bow"
-  { 
+  {
     "ID"              "1025"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -231,7 +231,7 @@
     "ItemPermanent"         "0"
   }
   "item_bow"
-  { 
+  {
     "ID"              "1026"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -245,7 +245,7 @@
     "ItemPermanent"         "0"
   }
   "item_long_bow"
-  { 
+  {
     "ID"              "1027"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -259,7 +259,7 @@
     "ItemPermanent"         "0"
   }
   "item_fire_long_bow"
-  { 
+  {
     "ID"              "1028"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -274,7 +274,7 @@
   }
 
   "item_heavy_leather_armor"
-  { 
+  {
     "ID"              "1029"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -288,7 +288,7 @@
     "ItemPermanent"         "1"
   }
   "item_bruiser_armor"
-  { 
+  {
     "ID"              "1030"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -302,7 +302,7 @@
     "ItemPermanent"         "1"
   }
   "item_taraske_plate"
-  { 
+  {
     "ID"              "1031"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -316,7 +316,7 @@
     "ItemPermanent"         "1"
   }
   "item_sword"
-  { 
+  {
     "ID"              "1032"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -331,7 +331,7 @@
   }
 
 "item_curved_sword"
-  { 
+  {
     "ID"              "1033"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -345,7 +345,7 @@
     "ItemPermanent"         "1"
   }
   "item_skull_sword"
-  { 
+  {
     "ID"              "1034"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -359,7 +359,7 @@
     "ItemPermanent"         "1"
   }
   "item_skeleton_sword"
-  { 
+  {
     "ID"              "1035"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -372,8 +372,8 @@
     "ItemShareability"        "ITEM_NOT_SHAREABLE"
     "ItemPermanent"         "1"
   }
-  "item_dragon_skull_sword"
-  { 
+  "item_wolf_skull_sword"
+  {
     "ID"              "1036"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -387,7 +387,7 @@
     "ItemPermanent"         "1"
   }
   "item_red_small_potion"
-  { 
+  {
     "ID"              "1037"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -401,7 +401,7 @@
     "ItemPermanent"         "0"
   }
   "item_blue_small_potion"
-  { 
+  {
     "ID"              "1038"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -415,7 +415,7 @@
     "ItemPermanent"         "0"
   }
   "item_purple_small_potion"
-  { 
+  {
     "ID"              "1039"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -430,7 +430,7 @@
   }
 
   "item_super_potion"
-  { 
+  {
     "ID"              "1040"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -444,7 +444,7 @@
     "ItemPermanent"         "0"
   }
   "item_mechanical_gloves"
-  { 
+  {
     "ID"              "1041"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -458,7 +458,7 @@
     "ItemPermanent"         "0"
   }
   "item_mechanical_helmet_I"
-  { 
+  {
     "ID"              "1042"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -472,7 +472,7 @@
     "ItemPermanent"         "0"
   }
   "item_mechanical_helmet_II"
-  { 
+  {
     "ID"              "1043"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -486,7 +486,7 @@
     "ItemPermanent"         "0"
   }
   "item_mechanical_vest_I"
-  { 
+  {
     "ID"              "1044"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -500,7 +500,7 @@
     "ItemPermanent"         "0"
   }
   "item_mechanical_vest_II"
-  { 
+  {
     "ID"              "1045"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -514,7 +514,7 @@
     "ItemPermanent"         "0"
   }
   "item_mechanical_vest_III"
-  { 
+  {
     "ID"              "1046"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -529,7 +529,7 @@
   }
 
 "item_mechanical_vest_IV"
-  { 
+  {
     "ID"              "1047"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -544,7 +544,7 @@
   }
 
 "item_mechanoid_armor"
-  { 
+  {
     "ID"              "1048"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -558,7 +558,7 @@
     "ItemPermanent"         "0"
   }
   "item_mechanoid_gloves"
-  { 
+  {
     "ID"              "1049"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -573,7 +573,7 @@
   }
 
 "item_mechanoid_helmet"
-  { 
+  {
     "ID"              "1050"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -588,7 +588,7 @@
   }
 
 "item_broken_great_sword"
-  { 
+  {
     "ID"              "1051"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -603,7 +603,7 @@
   }
 
 "item_great_sword"
-  { 
+  {
     "ID"              "1052"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -618,7 +618,7 @@
   }
 
 "item_cleave_great_sword"
-  { 
+  {
     "ID"              "1053"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -633,7 +633,7 @@
   }
 
 "item_cleave_great_axe"
-  { 
+  {
     "ID"              "1054"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -648,7 +648,7 @@
   }
 
 "item_demon_steel_great_sword"
-  { 
+  {
     "ID"              "1055"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -663,7 +663,7 @@
   }
 
 "item_dual_blade_great_sword"
-  { 
+  {
     "ID"              "1056"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -678,7 +678,7 @@
   }
 
 "item_shatered_hero_great_sword"
-  { 
+  {
     "ID"              "1057"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -693,7 +693,7 @@
   }
 
 "item_sixth_guardian"
-  { 
+  {
     "ID"              "1058"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -708,7 +708,7 @@
   }
 
 "item_silver_ruler"
-  { 
+  {
     "ID"              "1059"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -723,7 +723,7 @@
   }
 
 "item_cursed_necklace"
-  { 
+  {
     "ID"              "1060"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -738,7 +738,7 @@
   }
 
 "item_mechanical_sword"
-  { 
+  {
     "ID"              "1061"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -753,7 +753,7 @@
   }
 
 "item_mechanoid_sword"
-  { 
+  {
     "ID"              "1062"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -767,7 +767,7 @@
     "ItemPermanent"         "0"
   }
 "item_lone_warrior_armor"
-  { 
+  {
     "ID"              "1063"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -781,7 +781,7 @@
     "ItemPermanent"         "0"
   }
 "item_frost_legion_armor"
-  { 
+  {
     "ID"              "1064"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -795,7 +795,7 @@
     "ItemPermanent"         "0"
   }
 "item_frost_general_armor"
-  { 
+  {
     "ID"              "1065"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -809,7 +809,7 @@
     "ItemPermanent"         "0"
   }
 "item_frost_legion_sword"
-  { 
+  {
     "ID"              "1065"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -823,7 +823,7 @@
     "ItemPermanent"         "0"
   }
 "item_ice_great_sword"
-  { 
+  {
     "ID"              "1066"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -837,7 +837,7 @@
     "ItemPermanent"         "0"
   }
 "item_frost_legion_gs"
-  { 
+  {
     "ID"              "1067"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -851,7 +851,7 @@
     "ItemPermanent"         "0"
   }
 "item_frost_general_helmet"
-  { 
+  {
     "ID"              "1068"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -865,7 +865,7 @@
     "ItemPermanent"         "0"
   }
 "item_frost_lord_helmet"
-  { 
+  {
     "ID"              "1069"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -879,7 +879,7 @@
     "ItemPermanent"         "0"
   }
 "item_frost_general_gs"
-  { 
+  {
     "ID"              "1070"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -893,7 +893,7 @@
     "ItemPermanent"         "0"
   }
 "item_frost_general_spear"
-  { 
+  {
     "ID"              "1071"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -907,7 +907,7 @@
     "ItemPermanent"         "0"
   }
 "item_frost_lord_sword"
-  { 
+  {
     "ID"              "1072"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -921,7 +921,7 @@
     "ItemPermanent"         "0"
   }
 "item_frost_lord_gs"
-  { 
+  {
     "ID"              "1073"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -935,7 +935,7 @@
     "ItemPermanent"         "0"
   }
 "item_frost_lord_gloves"
-  { 
+  {
     "ID"              "1074"
     "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
     "BaseClass"           "item_datadriven"
@@ -948,6 +948,147 @@
     "ItemShareability"        "ITEM_NOT_SHAREABLE"
     "ItemPermanent"         "0"
   }
+"item_dragon_fang"
+  {
+    "ID"              "1075"
+    "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+    "BaseClass"           "item_datadriven"
+    "AbilityTextureName"      "item_purple_potion"
+
+    "ItemStackable"         "0"
+    "ItemKillable"          "0"
+    "ItemPurchasable"       "0"
+    "ItemCost"            "0"
+    "ItemShareability"        "ITEM_NOT_SHAREABLE"
+    "ItemPermanent"         "0"
+  }
+
+"item_dragon_claw"
+  {
+    "ID"              "1076"
+    "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+    "BaseClass"           "item_datadriven"
+    "AbilityTextureName"      "item_purple_potion"
+
+    "ItemStackable"         "0"
+    "ItemKillable"          "0"
+    "ItemPurchasable"       "0"
+    "ItemCost"            "0"
+    "ItemShareability"        "ITEM_NOT_SHAREABLE"
+    "ItemPermanent"         "0"
+  }
+"item_ice_sword"
+  {
+    "ID"              "1077"
+    "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+    "BaseClass"           "item_datadriven"
+    "AbilityTextureName"      "item_purple_potion"
+
+    "ItemStackable"         "0"
+    "ItemKillable"          "0"
+    "ItemPurchasable"       "0"
+    "ItemCost"            "0"
+    "ItemShareability"        "ITEM_NOT_SHAREABLE"
+    "ItemPermanent"         "0"
+  }
+  "item_black_bow"
+    {
+      "ID"              "1078"
+      "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+      "BaseClass"           "item_datadriven"
+      "AbilityTextureName"      "item_purple_potion"
+
+      "ItemStackable"         "0"
+      "ItemKillable"          "0"
+      "ItemPurchasable"       "0"
+      "ItemCost"            "0"
+      "ItemShareability"        "ITEM_NOT_SHAREABLE"
+      "ItemPermanent"         "0"
+    }
+    "item_black_frost_bow"
+      {
+        "ID"              "1079"
+        "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+        "BaseClass"           "item_datadriven"
+        "AbilityTextureName"      "item_purple_potion"
+
+        "ItemStackable"         "0"
+        "ItemKillable"          "0"
+        "ItemPurchasable"       "0"
+        "ItemCost"            "0"
+        "ItemShareability"        "ITEM_NOT_SHAREABLE"
+        "ItemPermanent"         "0"
+      }
+      "item_desert_bow"
+        {
+          "ID"              "1080"
+          "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+          "BaseClass"           "item_datadriven"
+          "AbilityTextureName"      "item_purple_potion"
+
+          "ItemStackable"         "0"
+          "ItemKillable"          "0"
+          "ItemPurchasable"       "0"
+          "ItemCost"            "0"
+          "ItemShareability"        "ITEM_NOT_SHAREABLE"
+          "ItemPermanent"         "0"
+        }
+        "item_frost_legion_bow"
+          {
+            "ID"              "1081"
+            "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+            "BaseClass"           "item_datadriven"
+            "AbilityTextureName"      "item_purple_potion"
+
+            "ItemStackable"         "0"
+            "ItemKillable"          "0"
+            "ItemPurchasable"       "0"
+            "ItemCost"            "0"
+            "ItemShareability"        "ITEM_NOT_SHAREABLE"
+            "ItemPermanent"         "0"
+          }
+          "item_frost_legion_bow_true"
+            {
+              "ID"              "1082"
+              "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+              "BaseClass"           "item_datadriven"
+              "AbilityTextureName"      "item_purple_potion"
+
+              "ItemStackable"         "0"
+              "ItemKillable"          "0"
+              "ItemPurchasable"       "0"
+              "ItemCost"            "0"
+              "ItemShareability"        "ITEM_NOT_SHAREABLE"
+              "ItemPermanent"         "0"
+            }
+            "item_solar_bow"
+              {
+                "ID"              "1083"
+                "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+                "BaseClass"           "item_datadriven"
+                "AbilityTextureName"      "item_purple_potion"
+
+                "ItemStackable"         "0"
+                "ItemKillable"          "0"
+                "ItemPurchasable"       "0"
+                "ItemCost"            "0"
+                "ItemShareability"        "ITEM_NOT_SHAREABLE"
+                "ItemPermanent"         "0"
+              }
+              "item_cleave_bow"
+                {
+                  "ID"              "1077"
+                  "AbilityBehavior"       "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+                  "BaseClass"           "item_datadriven"
+                  "AbilityTextureName"      "item_purple_potion"
+
+                  "ItemStackable"         "0"
+                  "ItemKillable"          "0"
+                  "ItemPurchasable"       "0"
+                  "ItemCost"            "0"
+                  "ItemShareability"        "ITEM_NOT_SHAREABLE"
+                  "ItemPermanent"         "0"
+                }
 
 
 
@@ -984,13 +1125,13 @@
       "particle_folder" "particles/units/heroes/hero_morphling"
     }
 
-    
+
     // Stats
     //-------------------------------------------------------------------------------------------------------------
     "AbilityCastRange"        "100"
     "AbilityCastPoint"        "0.0"
     "AbilityChannelTime"      "5.0"
-    
+
     // Item Info
     //-------------------------------------------------------------------------------------------------------------
     "ItemCost"            "99999"
@@ -1035,34 +1176,3 @@
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

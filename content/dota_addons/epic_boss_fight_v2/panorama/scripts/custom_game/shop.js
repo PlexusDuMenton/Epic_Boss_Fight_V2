@@ -18,9 +18,27 @@ Object.size = function(obj) {
     return size;
 }
 
+function screen_rat(){
+		var screen_rat = Game.GetScreenWidth()/Game.GetScreenHeight()
+		var screen_ration = {}
+		var x_size = 1920
+		var y_size = 1080
+		if(screen_rat == 16/10){
+				x_size = 1680
+				y_size = 1050
+		}
+		if(screen_rat == 4/3){
+				x_size = 1400
+				y_size = 1050
+		}
+		screen_ration[0] = x_size/ Game.GetScreenWidth()
+		screen_ration[1] = y_size/Game.GetScreenHeight()
+		return screen_ration
+}
+
 function set_panel_event(slot,item_info,over_slot){
 	slot.SetPanelEvent("onmouseover", function(){GameUI.CustomUIConfig().Events.FireEvent( "display_info", { item : item_info} )});
-	slot.SetPanelEvent("onmouseout", function(){GameUI.CustomUIConfig().Events.FireEvent( "hide_info", {} )});	
+	slot.SetPanelEvent("onmouseout", function(){GameUI.CustomUIConfig().Events.FireEvent( "hide_info", {} )});
 	// slot.SetPanelEvent("onactivate", function(){
 		// $.Msg("WTF ?!")
 		// over_slot.SetHasClass( "over_slot_selected", true )
@@ -40,32 +58,41 @@ function set_panel_event(slot,item_info,over_slot){
 					over_slot.SetHasClass( "over_slot", true )
 				}
 			}));
-		if (item_info.stackable == true){
-											var exit= $.CreatePanel( "Panel", $("#Menu_shop") , "exit" );
-											exit.SetHasClass( "Main", true )
-											exit.SetPanelEvent("onactivate", function(){
-												$("#Menu_shop").RemoveAndDeleteChildren()
-											})
-											var pos_mouse = GameUI.GetCursorPosition()
-											var text_entry = $.CreatePanel( "TextEntry", $("#Menu_shop"), "TextEntry");
-											text_entry.style.position = (pos_mouse[0]-1000) +"px "+pos_mouse[1]+"px 0px";
-											text_entry.text = "Ammount (max for all)"
-											text_entry.maxchars="20" 
-											text_entry.multiline = false;
-											text_entry.SetHasClass( "Text_entry_place_holder", true );
-											text_entry.SetPanelEvent('onfocus', (function(){
-												text_entry.text = ""
-												text_entry.SetHasClass( "Text_entry", true );
-											}))
-											text_entry.SetPanelEvent('oninputsubmit', (function(){
-												GameEvents.SendCustomGameEventToServer( "Buy_Item", { name : item_info.item_name , price : item_info.price ,ammount : text_entry.text} );
-												$("#Menu_shop").RemoveAndDeleteChildren()
-											}))
-									
-		}else{
-			over_slot.SetHasClass( "over_slot_selected", true )
-			over_slot.SetHasClass( "over_slot", false )
-			GameEvents.SendCustomGameEventToServer( "Buy_Item", { name : item_info.item_name , price : item_info.price} );
+		if (GameUI.IsShiftDown() == true){
+			GameEvents.SendCustomGameEventToServer( "Buy_Item", { name : item_info.item_name , price : item_info.price ,ammount : 5} );
+		}else if (GameUI.IsControlDown() == true){
+			GameEvents.SendCustomGameEventToServer( "Buy_Item", { name : item_info.item_name , price : item_info.price ,ammount : 25} );
+		}
+		else{
+			if (item_info.stackable == true){
+												var exit= $.CreatePanel( "Panel", $("#Menu_shop") , "exit" );
+												exit.SetHasClass( "Main", true )
+												exit.SetPanelEvent("onactivate", function(){
+													$("#Menu_shop").RemoveAndDeleteChildren()
+												})
+												var pos_mouse = GameUI.GetCursorPosition()
+												pos_mouse[0] = (pos_mouse[0])*screen_rat()[0]
+												pos_mouse[1] = (pos_mouse[1])*screen_rat()[1]
+												var text_entry = $.CreatePanel( "TextEntry", $("#Menu_shop"), "TextEntry");
+												text_entry.style.position = (pos_mouse[0]-100) +"px "+pos_mouse[1]+"px 0px";
+												text_entry.text = "Ammount (max for all)"
+												text_entry.maxchars="20"
+												text_entry.multiline = false;
+												text_entry.SetHasClass( "Text_entry_place_holder", true );
+												text_entry.SetPanelEvent('onfocus', (function(){
+													text_entry.text = ""
+													text_entry.SetHasClass( "Text_entry", true );
+												}))
+												text_entry.SetPanelEvent('oninputsubmit', (function(){
+													GameEvents.SendCustomGameEventToServer( "Buy_Item", { name : item_info.item_name , price : item_info.price ,ammount : text_entry.text} );
+													$("#Menu_shop").RemoveAndDeleteChildren()
+												}))
+
+			}else{
+				over_slot.SetHasClass( "over_slot_selected", true )
+				over_slot.SetHasClass( "over_slot", false )
+				GameEvents.SendCustomGameEventToServer( "Buy_Item", { name : item_info.item_name , price : item_info.price} );
+			}
 		}
 	})
 }
@@ -95,7 +122,7 @@ function open_shop(arg){
 					X_pos = 100
 					Y_pos = Y_pos + 128
 				}
-				
+
 				slot = $.CreatePanel( "Image", $("#main_panel") , "item_row_"+i+"_slot_"+j );
 				over_slot = $.CreatePanel( "Image", slot , "over_row_"+i+"_slot_"+j );
 				slot.style.position = X_pos + "px "+ (-70 + Y_pos) + "px 0px";
@@ -106,15 +133,13 @@ function open_shop(arg){
 				price = $.CreatePanel( "Label", $("#main_panel") , "price_"+i+"_slot_"+j );
 				price.style.position = X_pos + "px "+ (-90 + Y_pos) + "px 0px";
 				price.SetHasClass( "price", true )
-				price.text = item_info.price 
+				price.text = item_info.price
 				X_pos = X_pos + 96
 		}
-		
+
 	}
 	Y_pos = Y_pos + 64
 	space = $.CreatePanel( "Panel", $("#main_panel") , "space" );
 	space.style.position = 0 + "px "+ (-70 + Y_pos) + "px 0px";
 	space.SetHasClass( "free_space_under", true )
 }
-
-

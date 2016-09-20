@@ -46,11 +46,11 @@ function ask_trading(msg){
 	var P_Name = Players.GetPlayerName( msg.ask_ID )
 	var Panel = $.CreatePanel("Panel",$("#ask_panel"),"panel")
 	Panel.SetHasClass( "ask", true );
-	
+
 	var trade_ask = $.CreatePanel("Label",Panel,"trade_ask")
 	trade_ask.SetHasClass( "trade_ask", true );
 	trade_ask.text = P_Name + $.Localize("#Trade_Ask")
-	
+
 	var Accept = $.CreatePanel("Panel",Panel,"Accept")
 	Accept.SetHasClass( "button_vote", true );
 	Accept.style.position = "15px 120px 0px"
@@ -62,7 +62,7 @@ function ask_trading(msg){
 	Accept_label.text = $.Localize("#Accept")
 	Accept_label.SetHasClass( "normal_label", true );
 	Accept_label.hittest = false
-	
+
 	var Refuse = $.CreatePanel("Panel",Panel,"Refuse")
 	Refuse.SetHasClass( "button_vote", true );
 	Refuse.style.position = "180px 120px 0px"
@@ -74,7 +74,7 @@ function ask_trading(msg){
 	Refuse_label.text = $.Localize("#Refuse")
 	Refuse_label.SetHasClass( "normal_label", true );
 	Refuse_label.hittest = false
-	
+
 }
 
 function close_trading(){
@@ -82,7 +82,7 @@ function close_trading(){
 	$("#Menu_trading").RemoveAndDeleteChildren()
 	intrade = false;
 	in_confirm = false;
-	
+
 }
 
 
@@ -96,23 +96,23 @@ function open_trading(msg){
 	var NAME_1 = $.CreatePanel("Label",Panel, "Name_1" );
 	NAME_1.SetHasClass( "Name_1", true );
 	NAME_1.text = Players.GetPlayerName( ID )
-	
+
 	var NAME_2 = $.CreatePanel("Label",Panel, "Name_2" );
 	NAME_2.SetHasClass( "Name_2", true );
 	NAME_2.text = Players.GetPlayerName( msg.ask_ID )
-	
+
 	var GOLD_1 = $.CreatePanel("Label",Panel, "gold_1" );
 	GOLD_1.SetHasClass( "gold_1", true );
-	GOLD_1.text = $.Localize("#gold_trade") + " : " 
-	
+	GOLD_1.text = $.Localize("#gold_trade") + " : "
+
 	var GOLD_2 = $.CreatePanel("Label",Panel, "gold_2" );
 	GOLD_2.SetHasClass( "gold_2", true );
-	GOLD_2.text = $.Localize("#gold_trade") + " : " 
-	
+	GOLD_2.text = $.Localize("#gold_trade") + " : "
+
 	var GOLD_ENTRY = $.CreatePanel("TextEntry",Panel, "gold_entry" );
 	GOLD_ENTRY.SetHasClass( "gold_entry", true );
 	GOLD_ENTRY.text = "0"
-	GOLD_ENTRY.maxchars="20" 
+	GOLD_ENTRY.maxchars="20"
 	GOLD_ENTRY.multiline = false;
 	GOLD_ENTRY.SetPanelEvent('oninputsubmit', (function(){
 		$.Msg("input submited")
@@ -125,21 +125,21 @@ function open_trading(msg){
 		}else{
 			GOLD_ENTRY.text = CustomNetTables.GetTableValue( "info", ("trade_player_" + ID)).trade_gold
 		}
-	}))									
+	}))
 	var ACCEPT = $.CreatePanel("Panel",Panel, "accept_trade" );
 	ACCEPT.SetHasClass( "ACCEPT_BUTTON", true );
-	
+
 	var ACCEPT_LABEL = $.CreatePanel("Label",ACCEPT, "accept_label" );
 	ACCEPT_LABEL.SetHasClass( "ACCEPT_LABEL", true );
 	ACCEPT_LABEL.text = $.Localize("#READY_TRADE")
-	
+
 	var CANCEL = $.CreatePanel("Panel",Panel, "cancel" );
 	CANCEL.SetHasClass( "CANCEL_BUTTON", true );
-	
+
 	var CANCEL_LABEL = $.CreatePanel("Label",CANCEL, "cancel_label" );
 	CANCEL_LABEL.SetHasClass( "CANCEL_LABEL", true );
 	CANCEL_LABEL.text = $.Localize("#CANCEL_TRADE")
-	
+
 	ACCEPT.SetPanelEvent('onactivate', (function(){
 		in_confirm = true;
 		GameUI.CustomUIConfig().Events.FireEvent( "in_confirm", {} )
@@ -162,18 +162,18 @@ function open_trading(msg){
 			}))
 		})
 	}))
-	
+
 	CANCEL.SetPanelEvent('onactivate', (function(){
 		$.Msg(msg.ask_ID)
 		GameEvents.SendCustomGameEventToServer( "cancel_trading", { trading_with : msg.ask_ID } );
 		close_trading()
 	}))
-	
+
 	var OTHER_READY = $.CreatePanel("Panel",Panel, "accept_trade" );
 	OTHER_READY.SetHasClass( "OTHER_READY", true );
 	OTHER_READY.hittest = false
-	
-	
+
+
 	var X_POS = 25
 	var Y_POS = 25
 	for (i = 0; i < 10; i++) {
@@ -184,7 +184,7 @@ function open_trading(msg){
 		Button = $.CreatePanel( "Button", sub_Panel, "item_slot_"+i+"_1" );
 		Button.SetHasClass( "ItemButton", true );
 		$.CreatePanel( "Label", sub_Panel, "label_Level_"+i+"_1" );
-		sub_Panel.style.position = ( X_POS)+"px "+ (Y_POS) +"px 1px";	
+		sub_Panel.style.position = ( X_POS)+"px "+ (Y_POS) +"px 1px";
 		X_POS = X_POS + 80
 		if (i == 4){
 			X_POS = 25
@@ -203,7 +203,7 @@ function open_trading(msg){
 		Button = $.CreatePanel( "Button", sub_Panel, "item_slot_"+i+"_2" );
 		Button.SetHasClass( "ItemButton", true );
 		$.CreatePanel( "Label", sub_Panel, "label_Level_"+i+"_2" );
-		sub_Panel.style.position = (X_POS)+"px "+ (Y_POS) +"px 1px";	
+		sub_Panel.style.position = (X_POS)+"px "+ (Y_POS) +"px 1px";
 		X_POS = X_POS + 80
 		if (i == 4){
 			X_POS = 25
@@ -251,7 +251,23 @@ function update_trade_panel(PID)
 
 
 
-
+function screen_rat(){
+		var screen_rat = Game.GetScreenWidth()/Game.GetScreenHeight()
+		var screen_ration = {}
+		var x_size = 1920
+		var y_size = 1080
+		if(screen_rat == 16/10){
+				x_size = 1680
+				y_size = 1050
+		}
+		if(screen_rat == 4/3){
+				x_size = 1400
+				y_size = 1050
+		}
+		screen_ration[0] = x_size/ Game.GetScreenWidth()
+		screen_ration[1] = y_size/Game.GetScreenHeight()
+		return screen_ration
+}
 
 
 
@@ -293,12 +309,14 @@ function create_image (i,ITT,DEF_ID){
 								label_level.hittest=false
 							}
 							Panel.SetPanelEvent("onmouseover", function(){GameUI.CustomUIConfig().Events.FireEvent( "display_info", { item : item} )});
-							Panel.SetPanelEvent("onmouseout", function(){GameUI.CustomUIConfig().Events.FireEvent( "hide_info", {} )});	
+							Panel.SetPanelEvent("onmouseout", function(){GameUI.CustomUIConfig().Events.FireEvent( "hide_info", {} )});
 							Panel.SetPanelEvent('onactivate', (function(){
 								var exit = $.CreatePanel("Button",$("#Menu_trading"), "exit" );
 								exit.SetHasClass( "Main", true );
 								var Menu = $.CreatePanel( "Panel", $("#Menu_trading"), "menu_"+item_slot.toString() );
 								var pos_mouse = GameUI.GetCursorPosition()
+								pos_mouse[0] = (pos_mouse[0])*screen_rat()[0]
+								pos_mouse[1] = (pos_mouse[1])*screen_rat()[1]
 								Menu.style.position = (GameUI.GetCursorPosition()[0]) +"px "+(GameUI.GetCursorPosition()[1])+"px 0px";
 								Menu.SetHasClass( "Inventory_Menu", true );
 								var position_Y = 0
@@ -308,7 +326,7 @@ function create_image (i,ITT,DEF_ID){
 									Trade.style.position = "0px " +position_Y +"px 1px";
 									position_Y = position_Y + 40
 									Trade.SetHasClass( "Inventory_Button", true );
-									
+
 									var label_Trade = $.CreatePanel( "Label", Trade, "label_sell_"+item_slot.toString() );
 									label_Trade.SetHasClass( "Inventory_Label_small", true );
 									label_Trade.text = $.Localize("#trade_off")
@@ -320,7 +338,7 @@ function create_image (i,ITT,DEF_ID){
 											var text_entry = $.CreatePanel( "TextEntry", $("#Menu_trading"), "TextEntry");
 											text_entry.style.position = (pos_mouse[0]+250) +"px "+pos_mouse[1]+"px 0px";
 											text_entry.text = "Ammount (0 or negative = all)"
-											text_entry.maxchars="20" 
+											text_entry.maxchars="20"
 											text_entry.multiline = false;
 											text_entry.SetHasClass( "Text_entry_place_holder", true );
 											text_entry.SetPanelEvent('onfocus', (function(){
@@ -334,23 +352,23 @@ function create_image (i,ITT,DEF_ID){
 										}else{
 												GameEvents.SendCustomGameEventToServer( "remove_from_trade", { Slot : item_slot } );
 												$("#Menu_trading").RemoveAndDeleteChildren()
-							
+
 										}
 										}))
 								}
-								
+
 								exit.SetPanelEvent('onactivate', (function(){
 									$("#Menu_trading").RemoveAndDeleteChildren()
 								}))
 							})	)
 							}
-						
+
 					}
 					else{
 						var Item_Image = $("#item_image_"+i+"_"+DEF_ID)
 						if (Item_Image != null){
 							Item_Image.SetImage("")
-							
+
 							var Panel = Item_Image.GetParent()
 							Panel.SetPanelEvent('onactivate', (function(){}))
 							Panel.SetPanelEvent("onmouseover", (function(){}))
@@ -361,10 +379,3 @@ function create_image (i,ITT,DEF_ID){
 					}
 				}
 			}
-
-
-
-
-
-
-

@@ -18,7 +18,7 @@ function Update(){
 }
 
 function HealthBar(data) {
-	$("#Health_Bar").style.clip = "rect( 0% ," + ((data.HP/data.MAXHP)*98.77+0.54) + "%" + ", 100% ,0% )";
+	$("#Health_Bar").style.clip = "rect( 0% ," + ((data.HP/data.MAXHP)*96.13+1.83) + "%" + ", 100% ,0% )";
 	$("#hp_text").text = "Health : " + Number((data.HP*data.EHP_MULT).toFixed(0)) +" / "+Number((data.MAXHP*data.EHP_MULT).toFixed(0));
 	$("#name").text = $.Localize("#" + data.name)
 	if (data.CAT == "second") {
@@ -37,7 +37,7 @@ function HealthBar(data) {
 			$("#overlay").SetHasClass( "main", false )
 		}
 	}
-	
+
 
 }
 
@@ -45,27 +45,27 @@ function Create_HealthBar(){
 	var BG = $.CreatePanel( "Panel", $("#main_panel"), "BG");
 	BG.SetHasClass("BG",true)
 	BG.hittest = false
-	
+
 	var HB = $.CreatePanel( "Panel", $("#main_panel"), "Health_Bar");
 	HB.SetHasClass("HB",true)
 	HB.hittest = false
-	
+
 	var overlay = $.CreatePanel( "Panel", $("#main_panel"), "overlay");
 	overlay.SetHasClass("overlay",true)
 	overlay.hittest = false
-	
+
 	var hp_text = $.CreatePanel( "Label", $("#main_panel"), "hp_text");
 	hp_text.SetHasClass("hp_text",true)
 	hp_text.style.position = "300px 5px 0px";
 	hp_text.hittest = false
-	
+
 	var name = $.CreatePanel( "Label", $("#main_panel"), "name");
 	name.SetHasClass("name",true)
 	name.style.position = "300px 75px 0px";
 	name.hittest = false
-	
-	
-	
-	
+
+
+
+
 
 }

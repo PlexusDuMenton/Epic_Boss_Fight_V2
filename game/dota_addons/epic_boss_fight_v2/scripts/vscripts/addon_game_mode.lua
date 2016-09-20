@@ -10,6 +10,7 @@ require("boss_manager")
 require("round_manager")
 require('gamemode')
 require('save')
+require("statcollection/init")
 
 function Precache( context )
 --[[
@@ -27,33 +28,39 @@ function Precache( context )
   -- Particles can be precached individually or by folder
   -- It it likely that precaching a single particle system will precache all of its children, but this may not be guaranteed
 
-
-
   PrecacheResource("particle", "particles/econ/generic/generic_aoe_explosion_sphere_1/generic_aoe_explosion_sphere_1.vpcf", context)
   PrecacheResource("particle_folder", "particles/units/heroes/hero_legion_commander", context)
+  PrecacheResource( "model", "models/development/invisiblebox.vmdl", context )
 
   PrecacheResource( "particle", "particles/units/heroes/hero_legion_commander/legion_weapon_blurc.vpcf", context )
 
   PrecacheResource( "particle", "particles/units/heroes/hero_huskar/huskar_burning_spear_debuff.vpcf", context )
   PrecacheResource( "particle", "particles/frozen_flame_effect.vpcf", context )
   PrecacheResource( "particle", "particles/dragon_flame_effect.vpcf", context )
-  
+
   PrecacheResource( "particle", "particles/impact_incoming.vpcf", context )
   PrecacheResource( "particle", "particles/scream_wave.vpcf", context )
+  PrecacheResource( "particle", "particles/ground_marker_test.vpcf", context )
+  PrecacheResource( "particle", "particles/boss_4_aoe.vpcf", context )
+  PrecacheResource( "particle", "particles/boss_5_grow.vpcf", context )
+
+  PrecacheResource( "particle", "particles/cluster_shot.vpcf", context )
+  PrecacheResource( "particle", "particles/focused_shot.vpcf", context )
+
+  PrecacheResource( "particle", "particles/units/heroes/hero_life_stealer/life_stealer_infest_cast.vpcf", context)
   PrecacheResource( "soundfile", "soundevents/game_sounds_creeps.vsndevts", context )
+  PrecacheResource( "soundfile", "soundevents/voscripts/game_sounds_vo_earthshaker.vsndevts", context )
 
   PrecacheResource( "particle", "particles/units/heroes/hero_ursa/ursa_earthshock.vpcf", context )
-  PrecacheResource( "soundfile", "soundevents/game_sounds_heroes/game_sounds_ursa.vsndevts", context )   
-  PrecacheResource( "soundfile", "soundevents/game_sounds_heroes/game_sounds_gyrocopter.vsndevts", context )   
-  PrecacheResource( "soundfile", "soundevents/game_sounds_heroes/game_sounds_phantom_assassin.vsndevts", context ) 
+  PrecacheResource( "soundfile", "soundevents/game_sounds_heroes/game_sounds_ursa.vsndevts", context )
+  PrecacheResource( "soundfile", "soundevents/game_sounds_heroes/game_sounds_earthshaker.vsndevts", context )
+  PrecacheResource( "soundfile", "soundevents/game_sounds_heroes/game_sounds_gyrocopter.vsndevts", context )
+  PrecacheResource( "soundfile", "soundevents/game_sounds_heroes/game_sounds_phantom_assassin.vsndevts", context )
+  PrecacheResource( "soundfile", "soundevents/game_sounds_roshan_halloween.vsndevts", context )
+  PrecacheResource( "soundfile", "soundevents/game_sounds.vsndevts", context )
 
-  PrecacheResource( "soundfile", "soundevents/game_sounds_custom.vsndevts", context ) 
+  PrecacheResource( "soundfile", "soundevents/game_sounds_custom.vsndevts", context )
 
-
-
-
-  
-  
 
   --next i'll precache all particle used by weapons :
   PrecacheResource( "particle", "particles/units/heroes/hero_leshrac/leshrac_base_attack.vpcf", context )
@@ -65,7 +72,7 @@ function Precache( context )
       PrecacheResource( "particle", v.projectile_name, context )
     end
   end
-  
+
 end
 
 -- Create the game mode when we activate

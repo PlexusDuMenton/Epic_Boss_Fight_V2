@@ -9,6 +9,7 @@ var table = {}
 var hero_level = 1
 var skill_points = 0
 var selected_skill = null
+var skill_ammounts = 0
 
 Object.size = function(obj) {
     var size = 0, key;
@@ -17,6 +18,45 @@ Object.size = function(obj) {
     }
     return size;
 };
+
+function refresh_visibility(){
+  for (skillID = 0; skillID < skill_ammounts+1; skillID++){
+    var panel = $("#skill_"+skillID)
+    var visible = false
+    var skill = skill_tree[skillID]
+
+    if (typeof skill != "undefined" && panel != null){
+      if (skillID == 0){
+        visible = true
+      }else{
+        //if (hero_level > skill.min_lvl && skill.once_unlocked == 1){
+        if (skill.once_unlocked == 1){
+          visible = true
+        }
+        if (skill.unlocked == 1){
+          visible = true
+        }
+      }
+      if(skill.unlocked != 1){
+        panel.SetHasClass( "skill_image", false );
+        panel.SetHasClass( "skill_image_locked", true );
+        panel.SetHasClass( "skill_image_unlock", false );
+      }
+      if (skill.unlocked == 1 && skill.lvl > 0){
+        panel.SetHasClass( "skill_image", true );
+        panel.SetHasClass( "skill_image_locked", false );
+        panel.SetHasClass( "skill_image_unlock", false );
+      }
+      if(skill.unlocked == 1 && skill.lvl ==0){
+        panel.SetHasClass( "skill_image", false );
+        panel.SetHasClass( "skill_image_locked", false );
+        panel.SetHasClass( "skill_image_unlock", true );
+      }
+
+      panel.visible = visible
+    }
+  }
+}
 
 function close_all(){
 	if ($("#main_panel").visible == true){
@@ -39,7 +79,7 @@ GameEvents.Subscribe( "Display_Bar", Update)
 		Game.AddCommand( "+Close_ALL", close_all, "", 0 );
 		$.Schedule(0.2, Updateskill_tree);
 	}
-	
+
 	function Updateskill_tree()
 	{
 		$.Schedule(0.1, Updateskill_tree);
@@ -54,9 +94,10 @@ GameEvents.Subscribe( "Display_Bar", Update)
 		if ($("#main_panel").visible == true ){
 			$("#Info_skill").text = $.Localize("#Power_Points") + " : " + skill_points
 		}
+    refresh_visibility()
 	}
-	
-GameUI.CustomUIConfig().Events.SubscribeEvent( "open_skill_bar", create_tree)
+
+GameUI.CustomUIConfig().Events.SubscribeEvent( "open_skill_bar", open_with_command)
 
 $("#main_panel").visible = false
 
@@ -73,7 +114,25 @@ $("#skill_tree_info").RemoveAndDeleteChildren()
 
 function create_tree() {
 	close_skill_tree()
-	
+
+	var respec = $.CreatePanel( "Panel", $("#skill_tree_panel") , "upgrade" );
+	respec.SetHasClass( "upgrade_button", true );
+	respec.style.position = "50px 50px 0px";
+	var label_respec = $.CreatePanel( "Label", respec , "upgrade_label" );
+	label_respec.SetHasClass( "respec_title", true );
+	label_respec.text = $.Localize("#Respec")
+	respec.SetPanelEvent("onactivate", function(){
+			GameEvents.SendCustomGameEventToServer( "respec", {} );
+			close_skill_tree()
+			$.Schedule(0.3,function(){create_tree()})
+		})
+
+	respec.SetPanelEvent("onmouseover", function(){
+		tool_tip_respec(respec)
+		})
+	respec.SetPanelEvent("onmouseout", function(){
+		$("#tooltip_panel").RemoveAndDeleteChildren()
+	})
 	$("#main_panel").visible = true
 	var SP_label = $.CreatePanel( "Label", $("#skill_tree_panel"), "Info_skill" )
 		SP_label.SetHasClass( "title", true );
@@ -85,30 +144,32 @@ function create_tree() {
 		var coord_x = i*(node_space_x + node_size) + init_pos_x
 		var node_ammount = Object.size(table[i])
 		var coord_y = (node_ammount/2)*node_size + (node_ammount-1) * (node_space_y/2) + init_pos_y
-		
+
 		for (j = 1; j < node_ammount+1; j++){
 			create_node(table[i][j],i,j,coord_x,coord_y)
 			coord_y = coord_y - (node_size + node_space_y)
 		}
-	
+
 	}
 	var Close = $.CreatePanel( "Panel", $("#main_panel") , "close" );
 		Close.SetHasClass( "Close", true );
 		Close.SetPanelEvent("onactivate", function(){
 			close_skill_tree()
-		})	
-	
+		})
+
 
 }
- 
+
 function create_node(skillID,i,j,coord_x,coord_y){
+  skill_ammounts = skill_ammounts + 1
 	var skill = skill_tree[skillID]
 	var Panel = $.CreatePanel( "Image", $("#skill_tree_panel") , "skill_"+skill.ID );
-		Panel.SetHasClass( "skill_image", true );
+    Panel.visible = false
+		Panel.SetHasClass( "skill_image_unlock", true );
 		Panel.style.position = coord_x+"px "+coord_y+"px 0px";
-		
+
 		Panel.SetImage("file://{images}/custom_game/skill_tree/icon/"+skill.file_name+".psd")
-		
+
 		Panel.SetPanelEvent("onmouseover", function(){
 			Panel.OverPanel = true
 			create_over_bright(Panel,skillID)
@@ -120,7 +181,7 @@ function create_node(skillID,i,j,coord_x,coord_y){
 		})
 		Panel.SetPanelEvent("onactivate", function(){
 			create_tool_tip(skillID)
-		})		
+		})
 		Panel.SetPanelEvent("oncontextmenu", function(){
 			GameEvents.SendCustomGameEventToServer( "Upgrade_skill", { skillid : skill.ID} );
 			destroy_over_bright(Panel,skillID)
@@ -133,7 +194,7 @@ function create_node(skillID,i,j,coord_x,coord_y){
 						create_tool_tip(skillID)
 				}
 			})
-		})		
+		})
 }
 
 
@@ -152,17 +213,17 @@ var Name = $.CreatePanel( "Label", tooltip_panel , "Name" );
 	if (skill.unlocked != 1) {
 		Name.style.color = "#AAAAAA"
 	}
-	
+
 	if (skill.lvl == skill.max_lvl) {
 		Name.style.color = "#FFFF33"
 		Name.style.brightness = 1.5
 	}
-	
+
 	var type = $.CreatePanel( "Label", tooltip_panel , "Type" );
 	type.SetHasClass( "text", true );
 	type.text = $.Localize("#"+skill.type);
 	type.style.position = "10px 50px 0px";
-	
+
 	var lvl = $.CreatePanel( "Label", tooltip_panel , "Level" );
 	lvl.SetHasClass( "text", true );
 	lvl.text = "Level : " + skill.lvl + " / " + skill.max_lvl;
@@ -189,14 +250,23 @@ var Name = $.CreatePanel( "Label", tooltip_panel , "Name" );
 		}
 		pos_y = pos_y + 40
 	}
-	
+
 	var Up = $.CreatePanel( "Panel", tooltip_panel , "upgrade" );
 	Up.SetHasClass( "upgrade_button", true );
 	Up.style.position = "220px 50px 0px";
+	var label_Up = $.CreatePanel( "Label", Up , "upgrade_label" );
+	label_Up.SetHasClass( "button_label_unselected", true );
+	label_Up.text = $.Localize("#Upgrade_Skill")
 	Up.SetPanelEvent("onactivate", function(){
 			GameEvents.SendCustomGameEventToServer( "Upgrade_skill", { skillid : skill.ID} );
 			$.Schedule(0.21,function(){create_tool_tip(skillID)})
 		})
+	if (skill.type == "passive"){
+	var Desc = $.CreatePanel( "Label", tooltip_panel , "description" );
+	Desc.SetHasClass( "text", true );
+	Desc.text = $.Localize("#"+skill.file_name+"_desc");
+	Desc.style.position = "10px "+(pos_y)+"px 0px";
+	}
 	if (skill.type == "stats"){
 		pos_y = create_label(skill.hp,pos_y,$.Localize("#Bonus_Health"))
 		pos_y = create_label(skill.hp_regen,pos_y,$.Localize("#Health_Regen"))
@@ -210,9 +280,9 @@ var Name = $.CreatePanel( "Label", tooltip_panel , "Name" );
 		pos_y = create_label(skill.move_speed,pos_y,$.Localize("#Bonus_Move_Speed"))
 		pos_y = create_label(skill.armor,pos_y,$.Localize("#Bonus_Armor"))
 		pos_y = create_label(skill.damage_mult,pos_y,$.Localize("#Bonus_Damage")," %")
-		
+
 		$("#tooltip_panel").style.height = (pos_y + 100) + "px"
-		
+
 		function create_label(stat,pos_y,stat_name,other){
 			if (typeof stat != 'undefined') {
 				if (typeof other == 'undefined') {other = ""}
@@ -232,14 +302,14 @@ var Name = $.CreatePanel( "Label", tooltip_panel , "Name" );
 					if (skill.lvl+1 == i && hero_level >= (skill.min_lvl + (i-1)*skill.lvl_gap) && skill.unlocked == 1 )
 					{
 						Label.style.color = "#FFFF33"
-					} else if (skill.lvl+1 == i) 
+					} else if (skill.lvl+1 == i)
 					{
 						Label.style.color = "#DD33FF"
 					}
 					else if (skill.lvl >= i) {
 						Label.style.color = "#33FF33"
 					}
-					
+
 					else if (hero_level < (skill.min_lvl + (i-1)*skill.lvl_gap)) {
 						Label.style.color = "#FF3333"
 					}
@@ -247,7 +317,7 @@ var Name = $.CreatePanel( "Label", tooltip_panel , "Name" );
 				}
 				return pos_y = pos_y + 15
 			}else{return pos_y }
-			
+
 		}
 	}
 	else if (skill.type == "active" || skill.type == "ultimate")
@@ -265,8 +335,11 @@ var Name = $.CreatePanel( "Label", tooltip_panel , "Name" );
 		if (skill.lvl > 0){
 			var equip = $.CreatePanel( "Panel", tooltip_panel , "equip" );
 			equip.style.position = "100px 400px 0px";
+			var label_equip = $.CreatePanel( "Label", equip , "equip_label" );
+			label_equip.SetHasClass( "button_label_unselected", true );
+			equip.SetHasClass( "upgrade_button", true );
 			if (skill.equip != 1){
-				equip.SetHasClass( "equip_button", true );
+				label_equip.text = $.Localize("#Equip_skill")
 				equip.SetPanelEvent("onactivate", function(){
 					if (skill.type == "active"){
 						equip.visible = false
@@ -275,9 +348,13 @@ var Name = $.CreatePanel( "Label", tooltip_panel , "Name" );
 						var button = $.CreatePanel( "Panel", tooltip_panel , "equip_button"+j );
 							button.style.position = pos_x_but +"px 400px 0px";
 							pos_x_but = pos_x_but + 100
-							button.SetHasClass( "equip_button_"+j, true );
+							button.SetHasClass( "equip_button", true );
 							create_button_effect(j,skillID,button)
-				
+
+						var label_button = $.CreatePanel( "Label", button , "equip_button_label"+j );
+							label_button.SetHasClass( "button_label_unselected", true );
+							label_button.text = $.Localize("#slot") + j
+
 						}
 					}else{
 						GameEvents.SendCustomGameEventToServer( "add_skill", { skillid : skillID,slot : 5} );
@@ -286,14 +363,14 @@ var Name = $.CreatePanel( "Label", tooltip_panel , "Name" );
 						})
 			}
 			else{
-				equip.SetHasClass( "unequip_button", true );
+				label_equip.text = $.Localize("#Unequip_skill")
 				equip.SetPanelEvent("onactivate", function(){
 						GameEvents.SendCustomGameEventToServer( "Unequip_skill", { slot : skill.slot} );
 						$.Schedule(0.21,function(){create_tool_tip(skillID)})
 					})
 			}
 		}
-		
+
 	}
 }
 
@@ -304,6 +381,25 @@ function create_button_effect(i,skillID,panel){
 		})
 }
 
+function tool_tip_respec(Panel){
+	var tooltip_panel = $.CreatePanel( "Panel", $("#tooltip_panel") , "Tooltip" );
+	tooltip_panel.hittest = false
+	var Panel_pos_x = 200
+	var Panel_pos_y = 100
+	tooltip_panel.style.position = Panel_pos_x + "px " + Panel_pos_y +"px 0px";
+	tooltip_panel.SetHasClass( "small_tooltip", true );
+
+	var text = $.CreatePanel( "Label", tooltip_panel , "Name" );
+	text.SetHasClass( "title", true );
+	if (Players.HasCustomGameTicketForPlayerID( ID ) == true){
+		text.text = $.Localize("#respec_free");
+	}else{
+		text.text = $.Localize("#respec_cost")+ "\nXp cost : " + Math.ceil(CustomNetTables.GetTableValue( "info", ("player_" + ID)).MAXHXP*0.05) ;
+	}
+	text.style.position = "5px 10px 0px";
+	text.hittest = false
+}
+
 
 
 function create_fast_tool_tip(Panel,skillID){
@@ -311,31 +407,34 @@ function create_fast_tool_tip(Panel,skillID){
 	var tooltip_panel = $.CreatePanel( "Panel", $("#tooltip_panel") , "Tooltip" );
 	tooltip_panel.hittest = false
 		var Panel_pos_x = Panel.GetPositionWithinWindow()["x"] + 10
-	
+
 		var Panel_pos_y = Panel.GetPositionWithinWindow()["y"] - 200
 		tooltip_panel.style.position = Panel_pos_x + "px " + Panel_pos_y +"px 0px";
 		tooltip_panel.SetHasClass( "tooltip", true );
-		
+
 	var Name = $.CreatePanel( "Label", tooltip_panel , "Name" );
-	Name.SetHasClass( "title", true );
+	Name.SetHasClass( "title_tt", true );
 	Name.text = $.Localize("#"+skill.file_name);
 	Name.style.position = "10px 20px 0px";
 	Name.hittest = false
 	if (skill.unlocked != 1) {
 		Name.style.color = "#AAAAAA"
-	}
-	
+	}else{
+    Name.style.color = "#FF5555"
+    Name.style.brightness = 0.75
+  }
+
 	if (skill.lvl == skill.max_lvl) {
 		Name.style.color = "#FFFF33"
 		Name.style.brightness = 1.5
 	}
-	
+
 	var type = $.CreatePanel( "Label", tooltip_panel , "Name" );
 	type.SetHasClass( "text", true );
 	type.text = $.Localize("#"+skill.type);
 	type.style.position = "10px 50px 0px";
 	type.hittest = false
-	
+
 	var lvl = $.CreatePanel( "Label", tooltip_panel , "Name" );
 	lvl.SetHasClass( "text", true );
 	lvl.text = "Level : " + skill.lvl + " / " + skill.max_lvl;
@@ -364,9 +463,9 @@ function create_fast_tool_tip(Panel,skillID){
 			req_skill.style.color = "#FF0000"
 		}
 	}
-	
-	
-	
+
+
+
 
 }
 
@@ -422,5 +521,5 @@ function destroy_over_bright(Panel,skillID){
 			Unlockedbypanel.RemoveAndDeleteChildren()
 		}
 	}
-	
+
 }

@@ -1,0 +1,436 @@
+﻿"lang"
+{
+        "Language"              "English"
+        "Tokens"
+        {              
+                "addon_game_name"                                                 "Boss Rising"
+
+                "I_Level"                                                 "Required Level"
+
+                "Level"														"Lvl"
+
+                "npc_dota_hero_legion_commander_ebf"                                                 "Legionary Duelist"
+
+
+                "REWARD"                                                                                                          "Reward for completing Round"
+
+                "SUPERREWARD"                                                                                                     "Reward for completing all Rounds"
+
+                "forge_tab_0"														"Soul Infusion"
+                "forge_tab_0_desc"														"Soul Infusion : Transfer power soul into the weapon"
+
+                "forge_tab_1"														"Transmutation"
+                "forge_tab_1_desc"														"Transmutation : Transfer about half of a weapon xp to another one"
+
+
+                "forge_tab_2"														"Crystallization"
+                "forge_tab_2_desc"														"Crystallization : Destroy the weapon to create a soul that keep 20% of the weapon stats"
+
+                "forge_tab_3"														"Evolution"
+                "forge_tab_3_desc"														"Evolution : Allow you to evolve your weapon to a new form if he reach asked stats from souls"
+
+                "add_soul"														"Put Soul"
+
+                "add_weapon_1"														"Put Weapon"
+                "add_weapon_2"														"Put Cousumed weapon"
+
+                "Equip"														"Equip Item"
+                "to_item_bar"														"Add to Item Bar"
+                "Use"														"Use Item"
+                "trade"                                                                                                         "Add to Trade"      
+                "sell"                                                                                                          "Sell Item"
+
+                "Trade_With"                                                                                                         "Trade With"   
+
+                "No_One_Ready"                                                                                                  "Nobody is ready"
+                "Time"                                                                                                          "Time left"
+                "seconds"                                                                                                       "seconds"
+
+                "stats_damage"  "Bonus physical damage from soul : "
+                "stats_m_damage"        "Bonus magical damage from soul : "
+                "stats_range"   "Bonus range from soul : "
+                "stats_loh"     "Bonus life on hit from soul : "
+                "stats_attack_speed"    "Bonus attac kspeed from soul : "
+                "stats_ls"      "Bonus lifesteal from soul : "
+
+                "new_soul_damage"  "Physical Damage of soul : "
+                "new_soul_m_damage"        "Magical Damage of soul : "
+                "new_soul_range"   "Range of soul : "
+                "new_soul_loh"     "Life on Hit of soul : "
+                "new_soul_attack_speed"    "Attack speed of soul : "
+                "new_soul_ls"      "Lifesteal of soul : "
+
+
+                "gold_trade"   "Gold"
+
+                "READY_TRADE"   "I'm Ready"
+                "CANCEL_TRADE"   "Cancel Trade"
+                "CONFIRM_TRADE"   "Confirm"
+                "BACK_TRADE"   "Back"
+
+                "Trade_Ask"   " Want to trade with you"
+                "Accept"   "Accept"
+                "Refuse"   "Reject"
+
+                "REFUSE_TRADE"   " Rejected your trading ask"
+
+
+                "Soul_requirement"      "Bonus Stats from souls required : "
+                "need_level"  "Weapon's Level required : "
+                "need_damage"  "Physical Damage required : "
+                "need_m_damage"        "Magical Damage required : "
+                "need_range"   "Range required : "
+                "need_loh"     "Life on Hit required : "
+                "need_attack_speed"    "Attack speed required : "
+                "need_ls"      "Lifesteal required : "
+                "EVOLVE"       "Evolve Weapon"
+
+                "SOUL_TOO_HIGH_LEVEL"   "The soul required level is higger than weapon"
+                "WEAPON_TOO_HIGH_LEVEL" "the transmuted weapon required level is higger than weapon's receiver"
+                "IS_NOT_WEAPON"         "The item is not a weapon !"
+                "NO_WEAPON"     "There is not weapon !"
+                "NOT_LEVEL_5"   "The weapon must be level 5 to be crystalized"
+                "WEAPON_NO_UPGRADE_SLOT"        "The weapon don't have infusion capacity"
+                "DONT_HAVE_REQUIREMENT"         "The weapon don't meet all requirement for this evolution !"
+                "NOSLOT"     "There is no free space in inventory !"
+                "NOGOLD"     "You don't have enought Gold !"
+                "NO_REQ_LEVEL"  "You don't meet the required level to equip this item"
+                "EMPTY_SLOT"   ""
+                "IN_TRADING"                                                                                                            "You can do this while trading"
+
+                "Xp_gain"      "Total XP gain from Transmutation : "
+
+                "potion_row"                                                                                                         "POTION"
+                "weapon_row"                                                                                                         "WEAPON"
+                "armor_row"                                                                                                         "ARMOR"
+
+                //----------------------------- ITEM NAME AND DESCRIPTION
+
+                "PERFECT"                                                                                                          "PERFECT"
+                "immortal"                                                                                                      "IMMORTAL"
+                "Ancient"                                                                                                      "ANCIENT"
+                "flawless"                                                                                                      "FLAWLESS"
+
+
+                "item_power_soul"                                                                           "Power soul"
+
+                "item_power_soul_desc"                                                                              "A Piece of a powerfull boss' power \ncan either be drop from boss or obtain via Crystallization of powerfull weapon \nUsed to increase power of weapons"
+
+                "item_rust_dagger"										"Rusty Dagger"
+                "item_rust_dagger_desc"										"A old and rusty dagger , not very efficiency but can apply a poison"
+
+                "item_broken_bow"                                                                              "Broken Bow"
+                "item_broken_bow_desc"                                                                         "'You must be the One , Only the One would be able to fire arrow with this crap !' \nYou better find something better , and fast !"
+
+                "item_bow"                                                                              "Bow"
+                "item_bow_desc"                                                                         "A very classic bow , shot fast but don't deal lot of damage"
+
+                "item_long_bow"                                                                              "LongBow"
+                "item_long_bow_desc"                                                                         "A Bow made for longer attack , dealing more attack but take a bit longer to reload"
+
+                "item_fire_long_bow"                                                                              "Fire Enhanced LongBow"
+                "item_fire_long_bow_desc"                                                                         "A Fire Enhanced LongBow , has a chance to burn the target on hit"
+
+                "item_dagger"										"Dagger"
+                "item_dagger_desc"										"A nice and shiny small dagger , have a good balance and sharpness"
+
+                "item_rust_sword"										"Rusty Sword"
+                "item_rust_sword_desc"										"A rusty and damaged sword Doesn't deal lot of damage and inflict a slight poison"
+
+                "item_sword"                                                                               "Sword"
+                "item_sword_desc"                                                                          "A classic and well made Sword, nothing exceptional..."
+
+                "item_curved_sword"                                                                               "Curved Sword"
+                "item_curved_sword_desc"                                                                          "A uncomon sword , his curved blade make it more efficient and easyer to use !"
+
+                "item_skull_sword"                                                                               "Skull Sword"
+                "item_skull_sword_desc"                                                                          "You'll look like a pirate with such a nice sword !"
+
+                "item_skeleton_sword"                                                                               "TombStone Sword"
+                "item_skeleton_sword_desc"                                                                          "A sword which lacerate his ennemy , sometime dealing huge damage"
+
+                "item_dragon_skull_sword"                                                                               "Dragon Skull Sword"
+                "item_dragon_skull_sword_desc"                                                                          "A Strong sword made for the skull of a dragon !"
+
+
+                "item_red_small_potion"                                                                               "Small Red Potion"
+                "item_red_small_potion_desc"                                                                          "A small and tasty potion, health light wound in seconds\nYou will not be able to drink another potion until 15 secondes"
+
+                "item_blue_small_potion"                                                                               "Small Blue Potion"
+                "item_blue_small_potion_desc"                                                                          "A small and weird tasting potion, help mage to increase their concentration for some seconds\nYou will not be able to drink another potion until 15 secondes"
+
+                "item_purple_small_potion"                                                                               "Small Purple Potion"
+                "item_purple_small_potion_desc"                                                                          "This is the strange answer to a famous question: \n"What happen if I mix up two potion ?" \nYou will not be able to drink another potion until 15 secondes"
+
+                "item_purple_potion"                                                                               "Purple Potion"
+                "item_purple_potion_desc"                                                                          "Like the small Purple Potion, Just bigger !\nYou will not be able to drink another potion until 15 secondes"
+
+                "item_red_potion"                                                                               "Red Potion"
+                "item_red_potion_desc"                                                                          "A classic potion, This is a fantasy-type world after all...\nYou will not be able to drink another potion until 15 secondes"
+
+                "item_blue_potion"                                                                               "Blue Potion"
+                "item_blue_potion_desc"                                                                          "A weird tasting potion, help mage to increase their concentration\nYou will not be able to drink another potion until 15 secondes"
+
+                "item_super_potion"                                                                               "SUPER POTION"
+                "item_super_potion_desc"                                                                          "I don't know where you find this, but I guess it's better to taste it\nYou will not be able to drink another potion until 15 secondes"
+
+                "item_leather_vest"										"Leather Vest"
+                "item_leather_vest_desc"										"A warm and nice Vest made of Leather, not realy made for fight"
+
+                "item_leather_hood"										"Leather Hood"
+                "item_leather_hodd_desc"										"Keep your head warm, but still not protected"
+
+                "item_heavy_leather_armor"                                                                             "Hardened Leather Armor"
+                "item_heavy_leather_armor_desc"                                                                                "Quite Heavy, but can effectivly protect you from minor damages"
+
+                "item_bruiser_armor"                                                                             "Bruiser Armor"
+                "item_bruiser_armor_desc"                                                                                "Heavy but strong armor usualy wear by some brutal warior"
+
+                "item_taraske_plate"                                                                             "Tarask Plate"
+                "item_taraske_plate_desc"                                                                                "A Unique armor which heal the wearer and prevent injury"
+
+                "item_mechanical_gloves"                                                                             "Mechanical Gloves"
+                "item_mechanical_gloves_desc"                                                                                "Hard and mechanised Gloves, Very Usefull for fight"
+
+                "item_broken_great_sword"                                                                             "Broken Great Sword"
+                "item_broken_great_sword_desc"                                                                                "Yet another sword full of rust and dust... Where are you finding those craps ?"
+
+                "item_great_sword"                                                                             "Steel Great Sword"
+                "item_great_sword_desc"                                                                                "A great sword, popular for the range and damage it inflict at ennemy, but is very slow"
+
+                "item_cleave_great_sword"                                                                             "Cleave Great Sword"
+                "item_mechanical_vest_I_desc"                                                                                "A Great sword soo big it even hit ennemy you don't !"
+
+                "item_cleave_great_axe"                                                                             "Cleave Great Axe"
+                "item_cleave_great_axe_desc"                                                                                "The Big Brother of the Cleave Great Sword"
+
+                "item_demon_steel_great_sword"                                                                             "Demonic Great Sword"
+                "item_demon_steel_great_sword_desc"                                                                                "A huge sword forged from steel infused fo dark power, don't except much, you can't use it properly"
+
+                "item_dual_blade_great_sword"                                                                             "Double Edge"
+                "item_dual_blade_great_sword_desc"                                                                                "What is better than 1 edge ?\n2 EDGES !!"
+
+                "item_shatered_hero_great_sword"                                                                             "Shatered Hero Great Sword"
+                "item_shatered_hero_great_sword_desc"                                                                                "This is the remains of a hero Great Sword, His power is nothing near his original form"
+
+                "item_sixth_guardian"                                                                             "Sixth Guardian ?"
+                "item_sixth_guardian_desc"                                                                                "This is a copy of one of great sword from the 6 War Guardian who are know as one of the best warrior in this world"
+
+                "item_silver_ruler"                                                                             "Silver Ruler"
+                "item_silver_ruler_desc"                                                                                "The great sword of an old and merely know lord, But it have vary good stats so I'm sure you're gonna use it"
+
+                "item_mechanical_sword"                                                                             "Mechanical sword"
+                "item_mechanical_sword_desc"                                                                                "Here is the result of years of research from one of the greatest scientist !\nYou fell vibration throught the handle"
+
+                "item_mechanoid_sword"                                                                             "Mechanoid sword"
+                "item_mechanoid_sword_desc"                                                                                "No one know who made it ... It may come from the future"
+
+
+                "item_lone_warrior_armor"                                                                             "Lone-Warrior's Armor"
+                "item_lone_warrior_armor_desc"                                                                                "This armor seam to give you impressive sword skill !"
+
+                "item_frost_legion_armor"                                                                             "Armor of the Frost Legion"
+                "item_frost_legion_armor_desc"                                                                                "Give 20% chance to apply 300% critical hit with frost legion weapons"
+
+                "item_frost_general_armor"                                                                             "Armor of the Frost General"
+                "item_frost_general_armor_desc"                                                                                "Give 20% chance to apply 400% critical hit with frost legion weapons"
+
+                "item_frost_general_helmet"                                                                             "Helmet of the Frost General"
+                "item_frost_general_helmet_desc"                                                                                "Give 30% chance to apply 300% critical hit with frost General weapons"
+
+                "item_frost_lord_helmet"                                                                             "Crown of the Frost Lord"
+                "item_frost_lord_helmet_desc"                                                                                "Give 30% chance to apply 400% critical hit with frost Lord weapons"
+
+                "item_frost_lord_gloves"                                                                             "Gauntlet of the Frost Lord"
+                "item_frost_lord_gloves_desc"                                                                                "Gauntlet used by the lord of Frost Legion, an important sign of power for them"
+
+
+                "item_ice_great_sword"                                                                             "Ice Great Sword"
+                "item_ice_great_sword_desc"                                                                                "A very cold and strong great sword"
+
+
+                "item_frost_legion_gs"                                                                             "Great Sword of the frost Legion"
+                "item_frost_legion_gs_desc"                                                                                "Great Sword used by the frost legion, It seam to be more efficiency when wearing their armor"
+
+                "item_frost_legion_sword"                                                                             "Sword of the frost Legion"
+                "item_frost_legion_sword_desc"                                                                                "Sword used by the frost legion, It seam to be more efficiency when wearing their armor"
+
+
+                "item_frost_general_spear"                                                                             "Spear of the frost General"
+                "item_frost_general_spear_desc"                                                                                "Spear used by the general of frost legion, you better wear their helmet"
+
+                "item_frost_general_gs"                                                                             "Great Sword of the frost General"
+                "item_frost_general_gs_desc"                                                                                "Great Sword used by the general of frost legion, you better wear their helmet"
+
+
+                "item_frost_lord_gs"                                                                             "Great Sword of the frost Lord"
+                "item_frost_lord_gs_desc"                                                                                "Great Sword used by the lord of frost legion, you better wear his Crown"
+
+                "item_frost_lord_sword"                                                                             "Sword of the frost Lord"
+                "item_frost_lord_sword_desc"                                                                                "Sword used by the lord of frost legion, you better wear his Crown"
+
+
+
+
+
+
+                "item_mechanical_vest_I"                                                                             "Mech Vest MK.I"
+                "item_mechanical_vest_I_desc"                                                                                "Mechanised Tactical Vest, Protect the wearer from basic danger \nAlso Equiped with a auto-Canon which will fire automaticaly at ennemy"
+                "item_mechanical_vest_II"                                                                             "Mech Vest MK.II"
+                "item_mechanical_vest_II_desc"                                                                                "Some Improvisation to his autocanon , better material and a bit lighter"
+                "item_mechanical_vest_III"                                                                             "Mech Vest MK.III"
+                "item_mechanical_vest_III_desc"                                                                                "'They never stop the progress !'"
+                "item_mechanical_vest_IV"                                                                             "Mech Vest MK.IV"
+                "item_mechanical_vest_IV_desc"                                                                                "huee... another? Is the author as original than Apple ?"
+
+                "item_cursed_necklace"                                                                             "Cursed NeckLace"
+                "item_cursed_necklace_desc"                                                                                "Give lots of power to his owned, but also make him more likely to be victim of thief/agression/murder"
+
+                //----------------------------- PASSIVES NAME AND DESCRIPTION
+
+                "Effect"										"Passives"
+
+                "poison_1"										"Toxine"
+                "poison_1_desc"										"Chance : 15% \nDeal 100% of the damage over 3 seconds (magical)"
+
+                "fire_1"                                                                              "Fire"
+                "fire_1_desc"                                                                         "Chance : 25% \nBurn the ennemy , which Deal 200% of the damage over 5 seconds (physical)\nFire can't stack with himself"
+
+                "fire_2"                                                                              "Frozen Flame"
+                "fire_2_desc"                                                                         "Chance : 25% \nBurn the ennemy with cold fire , which Deal 400% of the damage over 5 seconds (physical)\nFire can't stack with himself"
+
+                "fire_3"                                                                              "Dragon Flame"
+                "fire_3_desc"                                                                         "Chance : 50% \nBurn the ennemy with dragon flame, which Deal 600% of the damage over 5 seconds (physical)\nFire can't stack with himself"
+
+                "critical_I"                                                                           "Critical Hit"
+                "critical_I_desc"                                                                         "Chance : 20% \nHit the ennemy with a critical hit dealing 200% of damage" // + 20% dps
+                "critical_II"                                                                           "Critical Hit"
+                "critical_II_desc"                                                                         "Chance : 25% \nHit the ennemy with a critical hit dealing 250% of damage" // + 37.5% dps
+                "critical_III"                                                                           "Critical Hit"
+                "critical_III_desc"                                                                         "Chance : 30% \nHit the ennemy with a critical hit dealing 300% of damage" // + 60% dps
+
+                "sword_mastery_I"                                                                           "Sword Mastery"
+                "sword_mastery_I_desc"                                                                         "Give you 20% Dodge-rate \nIf you have a melee weapon equiped you'll gain 50 attack-speed and 10% damage"
+
+                "Ice_I"                                                                           "Cold Touch"
+                "Ice_I_desc"                                                                         "Chance : 20% \nSlow the ennemy by 20% of his movement speed for 2 seconds"
+
+                "Ice_II"                                                                           "Frost Legion Benediction"
+                "Ice_II_desc"                                                                         "Chance : 20% \nSlow the ennemy by 25% of his movement speed for 3 seconds\nIf you have the Frost Legion or Frost General Armor equiped you'll have 20% to apply a 300% or 400% critical hit "
+
+                "Ice_III"                                                                           "Frost General Benediction"
+                "Ice_III_desc"                                                                         "Chance : 30% \nSlow the ennemy by 30% of his movement speed for 4 seconds\nIf you have the Frost General or Frost Lord Helmet equiped you'll have 30% to apply a 300% or 400% critical hit "
+
+                "Ice_IV"                                                                           "Frost Lord Curse"
+                "Ice_IV_desc"                                                                         "Chance : 30% \nSlow the ennemy by 35% of his movement speed for 5 seconds\nIf you have the Frost Lord Helmet equiped you'll have 30% to apply a 500% critical hit "
+
+
+                "hidden_power"                                                                           "Hidden Power"
+                "hidden_power_desc"                                                                         "Chance : 11% \nThe Sword will unleach some of his inner power dealing 1000% of damage in one hit" // + 100% dps
+
+
+                "poison_2"										"Poison"
+                "poison_2_desc"										"Chance : 40% \nDeal 150% of the damage over 3 seconds (magical)"
+
+                "poison_3"										"Extreme Posion"
+                "poison_3_desc"										"Chance : 80% \nDeal 200% of the damage over 4 seconds (magical)"
+
+                "tarask_blood"                                                                              "Blood Of Tarask"
+                "tarask_blood_desc"                                                                         "Regen the wearer for 3.5% of his Health per seconds"
+
+                "str_1"                                                 "Superior Strength"
+
+                "hp_1"                                                 "Excelent Vitality"
+                "hp_2"                                                 "Boiling Blood"
+
+                "attack_speed_1"                                                 "Battle Frenzy"
+
+                "armor_1"                                                 "Armored Skin"
+
+                "active_1"												"Test Skill"
+
+                "damage_1"                                                 "Damage Increase"
+
+                "agi_1"                                                 "Wind Benediction"
+
+                "int_1"                                                 "Improved Magical Power"
+
+                "hp_regen_1"                                                 "Increased Regeneration"
+                "hp_regen_2"                                                 "Second Heart"
+
+                "Bonus_Health"												"Bonus Health"
+                "Health_Regen"												"Health Regen"
+                "Bonus_Mana"												"Bonus Mana"
+                "Mana_Regen"												"Mana Regen"
+
+                "Bonus_Strength"												"Bonus Strength"
+                "Bonus_Agility"												"Bonus Agility"
+                "Bonus_Inteligence"												"Bonus Inteligence"
+
+                "Bonus_Damage"												"Bonus Physical Damage for weapon"
+                "Bonus_Armor"												"Bonus Armor"
+
+                "Bonus_Attack_Speed"										"Bonus Attack Speed"
+				"Bonus_Range"												"Bonus Attack Range"
+				"Bonus_Move_Speed"											"Bonus Move Speed"
+
+
+
+
+                "Required_level"											"Required Level"
+
+                "Required_Ability"											"Required Ability"
+
+                "Power_Points"												"Power Points"
+
+                "Skill_Tree"												"Skill Tree"
+
+                "Strength"														"Stength"
+                "Agility"														"Agility"
+                "Inteligence"													"Inteligence"
+
+                "Health"													"Health"
+                "Hp_per_sec"												"HP/Sec"
+                "Mana"														"Mana"
+                "Mp_per_sec"												"MP/Sec"
+
+                "Life_Steal"												"Life Steal"
+                "Life_on_Hit"												"Life On Hit"
+
+                "Damage"													"Physical Damage"
+                "M_Damage"													"Magical Damage"
+                "Attack_Speed"												"Attack Speed"
+                "Attack_Per_Second"												"Attacks Per Second"
+
+                "Armor"														"Armor"
+                "Physical_Ress"												"Physical Ressistance"
+                "Magic_Ress"												"Magical Ressistance"
+
+                "Range"														"Range"
+                "Move_Speed"												"Move Speed"
+
+                "Dodge"														"Dodge rate"
+
+                "Upgrade_slot"												"Infusion capacity"
+                "Available"													"available"
+
+                // BOSS NAME GOES HERE -------------------
+
+
+                "boss_1"                                                                                                 "Lunaris. The beast guardian of moon"
+                "boss_2"                                                                                                 "Aengus. Celtic protector"
+
+
+
+
+
+                // HERE GOES SOME OTHER STUFF
+
+                "DOTA_Tooltip_ability_shield_faith"                        "Shield Of Faith"
+                "DOTA_Tooltip_ability_shield_faith_Description"            "Protect his caster from damage"
+                "DOTA_Tooltip_ability_shield_faith_damage_reduction"          "%DAMAGE ABSORB:
+                "DOTA_Tooltip_ability_shield_faith_duration"               "DURATION:"
+
+
+        }
+}

@@ -43,7 +43,57 @@
 
     "StatusHealth"        "60"                 // Base health.
     "StatusHealthRegen"     "0.1"                 // Health regeneration rate.
-    "StatusMana"        "0"                   // Base mana.
+    "StatusMana"        "5"                   // Base mana.
+    "StatusManaRegen"     "0"                 // Mana regeneration rate.
+
+    "VisionDaytimeRange"    "4500"                  // Range of vision at night time.
+    "VisionNighttimeRange"    "4500"                  // Range of vision at night time.
+  }
+
+  "npc_dota_hero_windrunner_custom"
+  {
+    "AbilityLayout"     "6"
+    "override_hero"     "npc_dota_hero_windrunner"
+    "Ability1"        "" 
+    "Ability2"        "" 
+    "Ability3"        "" 
+    "Ability4"        ""
+    "Ability5"        ""
+    "Ability6"        ""
+
+
+    "ArmorPhysical"       "0"                 // Physical protection.
+    "MagicalResistance"       "5"                 // Magical protection (percentage).
+
+    "AttackDamageMin"     "1"                   // Damage range min.
+    "AttackDamageMax"     "2"                   // Damage range max.
+
+    "AttributePrimary"      "DOTA_ATTRIBUTE_AGILITY"
+    "AttributeBaseStrength"   "0"                   // Base strength
+    "AttributeStrengthGain"   "0"                   // Strength bonus per level.
+    "AttributeBaseIntelligence" "0"                   // Base intelligence
+    "AttributeIntelligenceGain" "0"                   // Intelligence bonus per level.
+    "AttributeBaseAgility"    "0"                   // Base agility
+    "AttributeAgilityGain"    "0"                   // Agility bonus per level.
+
+    "AttackCapabilities"    "DOTA_UNIT_CAP_RANGED_ATTACK"     // Type of attack - melee, ranged, etc.
+    "ProjectileModel"     "particles/units/heroes/hero_windrunner/windrunner_base_attack.vpcf" // Particle system model for projectile.
+    "ProjectileSpeed"     "2500"
+
+    "BountyXP"          "0"                 // Experience earn.
+    "BountyGoldMin"       "0"                   // Gold earned min.
+    "BountyGoldMax"       "0"                   // Gold earned max.
+
+    //"BoundsHullName"      "DOTA_HULL_SIZE_HERO"
+    //"RingRadius"        "70"
+
+    "MovementCapabilities"    "DOTA_UNIT_CAP_MOVE_GROUND"
+    "MovementSpeed"       "280"                 // Speed.
+    "MovementTurnRate"      "1.0"                 // Turning rate.
+
+    "StatusHealth"        "50"                 // Base health.
+    "StatusHealthRegen"     "0.1"                 // Health regeneration rate.
+    "StatusMana"        "10"                   // Base mana.
     "StatusManaRegen"     "0"                 // Mana regeneration rate.
 
     "VisionDaytimeRange"    "4500"                  // Range of vision at night time.

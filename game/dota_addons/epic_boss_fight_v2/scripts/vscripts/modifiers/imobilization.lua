@@ -1,6 +1,6 @@
 imobilization = class({})
 
-function imobilization:OnCreated(keys) 
+function imobilization:OnCreated(keys)
 end
 
 function imobilization:GetAttributes()
@@ -8,14 +8,14 @@ function imobilization:GetAttributes()
 end
 
 function imobilization:IsHidden()
+  return false
+end
+
+function imobilization:IsDebuff()
   return true
 end
 
-function imobilization:IsDebuff() 
-  return true
-end
-
-function imobilization:IsPurgable() 
+function imobilization:IsPurgable()
   return false
 end
 
@@ -23,6 +23,6 @@ function imobilization:CheckState()
   local state = {
   [MODIFIER_STATE_ROOTED] = true
   }
- 
+
   return state
 end

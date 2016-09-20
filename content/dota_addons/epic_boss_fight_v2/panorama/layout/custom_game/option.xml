@@ -1,0 +1,15 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/custom_game/option.css" />
+		 <include src="s2r://panorama/styles/dotastyles.css" />
+	</styles>
+	<scripts>
+		<include src="file://{resources}/scripts/custom_game/option.js" />
+	</scripts>
+	<Panel class="Main" hittest="false">
+		<Panel id="Open_Option" hittest="true" onactivate='Open_Option()'>
+			<Label id="Label_Option" hittest="false" text="test" >
+			</Label>
+		</Panel>
+	</Panel>
+</root>

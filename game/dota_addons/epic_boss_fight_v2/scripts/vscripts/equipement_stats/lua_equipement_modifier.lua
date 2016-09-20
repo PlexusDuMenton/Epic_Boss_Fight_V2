@@ -1,6 +1,18 @@
 if lua_equipement_modifier == nil then
 	lua_equipement_modifier = class({})
 end
+function lua_equipement_modifier:OnCreated()
+	if IsServer() then
+		local hero = self:GetCaster()
+		Timers:CreateTimer(0.5,function()
+			if hero:HasModifier("lua_equipement_modifier") ~= true then
+				hero:AddNewModifier(hero, nil, "lua_equipement_modifier",{})
+			end
+			return 0.5
+		end)
+	end
+end
+
 function lua_equipement_modifier:DeclareFunctions()
 	local funcs = {
 MODIFIER_PROPERTY_BASEATTACK_BONUSDAMAGE ,
@@ -33,12 +45,12 @@ function lua_equipement_modifier:OnAttackLanded(event)
 		if event.attacker==self:GetParent() then
 			local heal = hero.equip_stats.loh
 			hero:SetHealth(hero:GetHealth() + heal)
-			local damage = event.damage 
+			local damage = event.damage
 			local life_steal = hero.equip_stats.ls * damage * 0.01
 			hero:SetHealth(hero:GetHealth() + life_steal)
 
 			if hero.equipement.weapon ~= nil then
-				hero.equipement.weapon.XP = ((math.random(1,3)+ math.ceil(log10(damage)^3) )*0.25) + hero.equipement.weapon.XP
+				hero.equipement.weapon.XP = ((math.random(2,4)+ math.ceil(log10(damage)^3.5) )*0.25) + hero.equipement.weapon.XP
 				inv_manager:weapon_checklevelup(hero)
 				inv_manager:save_inventory(hero)
 			end
@@ -61,8 +73,11 @@ function lua_equipement_modifier:IsHidden()
 	return true
 end
 
+function lua_equipement_modifier:IsDebuff()
+	return false
+end
 
-function lua_equipement_modifier:GetAttributes() 
+function lua_equipement_modifier:GetAttributes()
 	return MODIFIER_ATTRIBUTE_IGNORE_INVULNERABLE + MODIFIER_ATTRIBUTE_PERMANENT
 end
 
@@ -70,7 +85,9 @@ end
 function lua_equipement_modifier:GetModifierBaseAttack_BonusDamage()
 	if IsServer() then
 		if self:GetCaster().equip_stats ~= nil then
-			return self:GetCaster().equip_stats.damage + self:GetCaster().equip_stats.str
+			local damage = self:GetCaster().equip_stats.damage + (self:GetCaster().equip_stats.str + self:GetCaster().hero_stats.str + self:GetCaster().skill_bonus.str)*0.9+((self:GetCaster().equip_stats.agi + self:GetCaster().hero_stats.agi + self:GetCaster().skill_bonus.agi)*0.9)^1.1
+			--print("damage = ",damage)
+			return damage
 		end
 	end
 end
@@ -84,7 +101,7 @@ end
 function lua_equipement_modifier:GetModifierAttackSpeedBonus_Constant()
 	if IsServer() then
 		if self:GetCaster().equip_stats ~= nil then
-		return self:GetCaster().equip_stats.attack_speed + self:GetCaster().equip_stats.agi*0.33
+			return self:GetCaster().equip_stats.attack_speed + self:GetCaster().hero_stats.attack_speed + self:GetCaster().skill_bonus.attack_speed + (self:GetCaster().hero_stats.agi + self:GetCaster().skill_bonus.agi + self:GetCaster().equip_stats.agi)*0.33
 		end
 	end
 end
@@ -116,7 +133,7 @@ end
 function lua_equipement_modifier:GetModifierHealthBonus()
 	if IsServer() then
 		if self:GetCaster().equip_stats ~= nil then
-		return self:GetCaster().equip_stats.hp * (math.log(self:GetCaster().equip_stats.str+self:GetCaster().hero_stats.str+self:GetCaster().skill_bonus.str +10)/math.log(10))
+		return self:GetCaster().hero_stats.hp + self:GetCaster().equip_stats.hp + self:GetCaster().skill_bonus.hp * (math.log(self:GetCaster().equip_stats.str+self:GetCaster().hero_stats.str+self:GetCaster().skill_bonus.str +10)/math.log(10))
 		end
 	end
 end

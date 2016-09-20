@@ -2,9 +2,20 @@
 {
 	height: 64px;
   width: 64px;
-  background-image: url("file://{images}/custom_game/inventory/item_slot_inactive.png");
+  background-image: url("file://{images}/custom_game/inventory/unlocked.png");
 }
-
+.skill_image_unlock
+{
+	height: 64px;
+  width: 64px;
+  background-image: url("file://{images}/custom_game/inventory/to_unlock.png");
+}
+.skill_image_locked
+{
+	height: 64px;
+  width: 64px;
+  background-image: url("file://{images}/custom_game/inventory/locked.png");
+}
 
 .over_bright
 {
@@ -14,9 +25,30 @@
 
 .tooltip
 {
-	background-image: url("file://{images}/custom_game/skill_tree/tooltip.psd");
+	background-image: url("file://{images}/custom_game/small_tooltip.png");
+	background-size: 100% 100%;
 	height: 200px;
   width: 300px;
+}
+
+.small_tooltip
+{
+	background-image: url("file://{images}/custom_game/tool_tip_skill_tree.png");
+	background-size: 100% 100%;
+	height: 120px;
+  width: 500px;
+}
+
+.respec_title
+{
+
+	text-align: center;
+	text-overflow: clip;
+	font-weight: bold;
+  font-size: 30px;
+	margin-left: 10px;
+	margin-top: 25%;
+	color: #AABBDD;
 }
 
 
@@ -34,90 +66,71 @@
 	font-weight: bold;
   font-size: 25px;
 	margin-left: 5px;
+	margin-top: 25px;
+	color: #FFFFFF;
+}
+
+.title_tt
+{
+	text-align: center;
+	text-overflow: clip;
+	font-weight: bold;
+  font-size: 25px;
+	margin-left: 70px;
+	margin-top: 25px;
 	color: #FFFFFF;
 }
 
 .upgrade_button
 {
-background-image: url("file://{images}/custom_game/skill_tree/upgrade_button.psd");
+	background-image: url("file://{images}/custom_game/inventory/big_button.png");
+	background-size: 100% 100%;
   height: 75px;
   width: 220px;
 }
 
 .upgrade_button:hover
 {
-background-image: url("file://{images}/custom_game/skill_tree/upgrade_button_selected.psd");
-}
-
-.unequip_button
-{
-background-image: url("file://{images}/custom_game/skill_tree/unequip_button.psd");
-  height: 75px;
-  width: 220px;
-}
-
-.unequip_button:hover
-{
-background-image: url("file://{images}/custom_game/skill_tree/unequip_button_hover.psd");
+background-image: url("file://{images}/custom_game/inventory/big_button_hover.png");
+brightness: 2.0;
 }
 
 .equip_button
 {
-background-image: url("file://{images}/custom_game/skill_tree/equip_button.psd");
+	background-image: url("file://{images}/custom_game/inventory/big_button.png");
+	background-size: 100% 100%;
   height: 75px;
-  width: 220px;
+  width: 94px;
 }
 
 .equip_button:hover
 {
-background-image: url("file://{images}/custom_game/skill_tree/equip_button_hover.psd");
+background-image: url("file://{images}/custom_game/inventory/big_button_hover.png");
+brightness: 2.0;
+}
+
+.button_label_unselected
+{
+
+	text-align: center;
+	text-overflow: clip;
+	font-weight: bold;
+  font-size: 30px;
+	margin-left: 10%;
+	margin-top: 25%;
+	color: #AABBDD;
 }
 
 
-
-.equip_button_1
+.button_label_hover
 {
-background-image: url("file://{images}/custom_game/skill_tree/equip_button_1.psd");
-  height: 75px;
-  width: 94px;
-}
-
-.equip_button_1:hover
-{
-background-image: url("file://{images}/custom_game/skill_tree/equip_button_1_hover.psd");
-}
-.equip_button_2
-{
-background-image: url("file://{images}/custom_game/skill_tree/equip_button_2.psd");
-  height: 75px;
-  width: 94px;
-}
-
-.equip_button_2:hover
-{
-background-image: url("file://{images}/custom_game/skill_tree/equip_button_2_hover.psd");
-}
-.equip_button_3
-{
-background-image: url("file://{images}/custom_game/skill_tree/equip_button_3.psd");
-  height: 75px;
-  width: 94px;
-}
-
-.equip_button_3:hover
-{
-background-image: url("file://{images}/custom_game/skill_tree/equip_button_3_hover.psd");
-}
-.equip_button_4
-{
-background-image: url("file://{images}/custom_game/skill_tree/equip_button_4.psd");
-  height: 75px;
-  width: 94px;
-}
-
-.equip_button_4:hover
-{
-background-image: url("file://{images}/custom_game/skill_tree/equip_button_4_hover.psd");
+	text-align: center;
+	text-overflow: clip;
+	font-weight: bold;
+  font-size: 26px;
+	margin-left: 5px;
+	color: #CCDDFF;
+	brightness: 2.0;
 }
 
 
@@ -130,11 +143,12 @@ background-image: url("file://{images}/custom_game/skill_tree/equip_button_4_hov
   margin-top: 15px;
   height: 40px;
   width: 40px;
-  
+
 }
 .Close:hover
 {
 	background-image: url("file://{images}/custom_game/inventory/Close_button_hover.png");
+	brightness: 2.0;
 }
 
 
@@ -164,15 +178,35 @@ background-image: url("file://{images}/custom_game/skill_tree/equip_button_4_hov
 {
 	height: 64px;
   width: 64px;
+	brightness: 1.5;
 }
+.skill_image_unlock
+{
+	margin-top: 7px;
+  margin-left: 7px;
+	height: 50px;
+  width: 50px;
+	brightness: 1.2;
+}
+
+.skill_image_locked
+{
+	margin-top: 12px;
+	margin-left: 12px;
+	height: 40px;
+  width: 40px;
+	brightness: 0.4;
+}
+
 
 .text
 {
-	text-align: center;
+	text-align: right;
 	text-overflow: clip;
 	font-weight: thin;
   font-size: 20px;
-	margin-left: 5px;
+	margin-top: 25px;
+	margin-left: 20px;
 	color: #FFFFFF;
 }
 
@@ -182,7 +216,8 @@ background-image: url("file://{images}/custom_game/skill_tree/equip_button_4_hov
 	text-overflow: clip;
 	font-weight: thin;
   font-size: 15px;
-	margin-left: 5px;
+	margin-top: 25px;
+	margin-left: 25px;
 	color: #FFFFFF;
 }
 
@@ -191,20 +226,20 @@ background-image: url("file://{images}/custom_game/skill_tree/equip_button_4_hov
 {
   margin-top: 80px;
   margin-left: 50px;
-  
-  
+
+
   background-image: url("file://{images}/custom_game/skill_tree/Skill_tree_BG.psd");
-  
+
   height: 900px;
   width: 1820px;
 }
 
 #skill_tree_main
 {
- 
+
   margin-top: 20px;
   margin-left: 20px;
-  
+
   height: 860px;
   width: 1260px;
   overflow: scroll;
@@ -214,25 +249,25 @@ background-image: url("file://{images}/custom_game/skill_tree/equip_button_4_hov
 {
   height: 860px;
   width: 1260px;
-  
+
 }
 
 #skill_tree_panel
 {
   height: 860px;
   width: 1260px;
-  
+
 }
 
 #skill_info_main
 {
- 
+
   margin-top: 20px;
   margin-left: 1300px;
   height: 860px;
   width: 500px;
   overflow: scroll scroll;
-  
+
 }
 #skill_tree_info
 {
@@ -256,5 +291,3 @@ background-image: url("file://{images}/custom_game/skill_tree/panel.psd");
   height: 860px;
   width: 1260px;
 }
-
-

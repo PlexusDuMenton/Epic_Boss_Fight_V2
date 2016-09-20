@@ -15,7 +15,17 @@ end
 
 
 
- 
+
+
+function lua_hero_effect_critical_III_hit:OnAttackLanded(event)
+ 	if IsServer() then
+		local hero = self:GetCaster()
+		local target = event.target
+		if event.attacker==self:GetParent() then
+			hero:RemoveModifierByName("lua_hero_effect_critical_III_hit") 
+		end
+	end
+end 
 
 
 

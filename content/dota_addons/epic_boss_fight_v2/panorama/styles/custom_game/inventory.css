@@ -2,7 +2,7 @@
 	background-image: url("file://{images}/custom_game/inventory/item_slot_simple.png");
 	height: 64px;
   width: 64px;
-  background-size: 64px 64px; 
+  background-size: 64px 64px;
 }
 .ItemImage{
 	height: 64px;
@@ -31,7 +31,7 @@
   margin-top: 15px;
   height: 40px;
   width: 40px;
-  
+
 }
 .Close:hover
 {
@@ -40,7 +40,7 @@
 }
 .Inventory_Menu
 {
-  height: 160px;
+  height: 200px;
   width: 200px;
 }
 .Inventory_Button
@@ -64,14 +64,14 @@
   margin-bottom: 15px;
   height: 30px;
   width: 100px;
-  
+
 }
 .Skill_tree:hover
 {
   background-image: url("file://{images}/custom_game/inventory/button_hover.png");
   height: 30px;
   width: 100px;
-  
+
 }
 
 .Text_entry_place_holder
@@ -183,10 +183,10 @@ background-image: url("file://{images}/custom_game/inventory/Item_bar_keys.png")
 .HeroPanel
 {
 background-image: url("file://{images}/custom_game/inventory/hero_panel_base.png");
-  margin-left: 50px;
-  margin-top: 50px;
-  height: 751px;
-  width: 678px;
+  margin-left: 30px;
+  margin-top: 25px;
+  height: 770px;
+  width: 700px;
 }
 
 .InventoryPanel
@@ -198,53 +198,6 @@ background-image: url("file://{images}/custom_game/inventory/inventory_Panel.png
   horizontal-align: right;
   height: 400px;
   width: 640px;
-}
-.inv_but
-{
-  background-image: url("file://{images}/custom_game/inventory/inventory_button.png");
-  horizontal-align: left;
-    vertical-align: bottom;
-	margin-left: 240px;
-	margin-bottom: 180px;
-  height: 75px;
- width: 75px;
-}
-.inv_but:hover
-{
-  background-image: url("file://{images}/custom_game/inventory/inventory_button_hover.png");
-  brightness: 1.8;
-}
-
-.hero_but
-{
-  background-image: url("file://{images}/custom_game/inventory/inventory_button.png");
-  horizontal-align: left;
-    vertical-align: bottom;
-	margin-left: 340px;
-	margin-bottom: 180px;
-  height: 75px;
- width: 75px;
-}
-.hero_but:hover
-{
-  background-image: url("file://{images}/custom_game/inventory/inventory_button_hover.png");
-	brightness: 1.8;
- }
-
-.skill_but
-{
-  background-image: url("file://{images}/custom_game/inventory/inventory_button.png");
-  horizontal-align: left;
-    vertical-align: bottom;
-	margin-left: 440px;
-	margin-bottom: 180px;
-  height: 75px;
- width: 75px;
-}
-.skill_but:hover
-{
-  background-image: url("file://{images}/custom_game/inventory/inventory_button_hover.png");
-  brightness: 1.8;
 }
 
 

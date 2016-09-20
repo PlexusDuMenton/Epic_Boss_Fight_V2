@@ -15,7 +15,15 @@ end
 
 
 
- 
+function lua_hero_effect_hidden_power_hit:OnAttackLanded(event)
+ 	if IsServer() then
+		local hero = self:GetCaster()
+		local target = event.target
+		if event.attacker==self:GetParent() then
+			hero:RemoveModifierByName("lua_hero_effect_hidden_power_hit") 
+		end
+	end
+end
 
 
 

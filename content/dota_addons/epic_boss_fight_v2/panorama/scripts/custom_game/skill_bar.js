@@ -60,8 +60,8 @@ function change_ability_tooltip(name,panel)
 		$.DispatchEvent('DOTAShowAbilityTooltipForEntityIndex', panel,name,Ent_ID)
 	})
 }
-	
-	
+
+
 function update_skill_bar()
 {
 	for (i = 1; i < 6; i++) {
@@ -82,9 +82,9 @@ function update_skill_bar()
 		$("#button"+i).text = KeyBind
 		if (CD == 0){ $("#skill_CD"+i).text = ""}
 		else {$("#skill_CD"+i).text = CD}
-		
-		
+
+
 		//$.Msg("ability Number : ",i," ability ID : ", ability , "level : ",level,"  CD : ",CD,"  KeyBind : ",KeyBind)
-		
+
 	}
 }

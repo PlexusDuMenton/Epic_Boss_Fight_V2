@@ -9,7 +9,9 @@ end
 ISCHEATALLOWED = 0
 --ISCHEATALLOWED = FCVAR_CHEAT
 
-
+Difficulty_Vote_Score = 0
+difficulty_vote = 0
+DIFFICULTY_VOTE_IN_PROGRESS = false
 PRE_GAME_TIME = 30
 
 difficulty_multiplier = {}
@@ -64,15 +66,10 @@ Storage:SetApiKey("1a632e691765ceac74723d73de5d72abb6374146") -- TBD : load this
 
 --require('ebf_boss_manager')
 
-XP_PER_LEVEL_TABLE = {} 
-REAL_XP_TABLE = {}
-for i=0,MAX_LEVEL do 
-  XP_PER_LEVEL_TABLE[i] = math.floor(i*40 + (1*i^3.5) + (2 * i^2)) - i*3
-  if i > 0 then
-    REAL_XP_TABLE[i] = XP_PER_LEVEL_TABLE[i] - XP_PER_LEVEL_TABLE[i-1]
-  end
+function Get_Xp_To_Next_Level(Level)
+  local xp = (math.floor(Level*40 + (1*Level^3.5) + (2 * Level^2)) - Level*3 )- (math.floor((Level-1)*40 + (1*(Level-1)^3.5) + (2 * (Level-1)^2)) - (Level-1)*3 )
+  return xp
 end
-REAL_XP_TABLE[0] = 0
 
 function epic_boss_fight:OnEntityKilled(event)
   local killed_unit = EntIndexToHScript( event.entindex_killed )
@@ -84,11 +81,11 @@ function epic_boss_fight:OnEntityKilled(event)
     tombstone:SetContainedItem( newItem )
     tombstone:SetAngles( 0, RandomFloat( 0, 360 ), 0 )
     FindClearSpaceForUnit( tombstone, killed_unit:GetAbsOrigin(), true )
-  end 
+  end
 end
 
 function epic_boss_fight:PostLoadPrecache()
-  DebugPrint("[BAREBONES] Performing Post-Load precache")    
+  DebugPrint("[BAREBONES] Performing Post-Load precache")
 
 end
 
@@ -113,46 +110,52 @@ function epic_boss_fight:OnGameInProgress()
   Timers:CreateTimer(30, -- Start this timer 30 game-time seconds later
     function()
       DebugPrint("This function is called 30 seconds after the game begins, and every 30 seconds thereafter")
-      return 30.0 -- Rerun this timer every 30 game-time seconds 
+      return 30.0 -- Rerun this timer every 30 game-time seconds
     end)
 end
 
 function epic_boss_fight:Check_Hero_lvlup(hero)
-  while hero.XP >= REAL_XP_TABLE[hero.Level] and hero.Level < MAX_LEVEL do
-    hero.XP = hero.XP-REAL_XP_TABLE[hero.Level]
+  while hero.XP >= Get_Xp_To_Next_Level(hero.Level) and hero.Level < MAX_LEVEL do
+    hero.XP = hero.XP-Get_Xp_To_Next_Level(hero.Level)
     epic_boss_fight:OnHeroLevelUp(hero)
   end
 end
 
-function epic_boss_fight:Update_stat(hero)
-  hero.Level = hero.Level + 1
+function epic_boss_fight:Update_stat(hero,lvl)
+  local level = 0
   local Primary = hero:GetPrimaryAttribute()
-  local level = hero.Level
-   if Primary == 0 then
-      hero.hero_stats.hp = hero.hero_stats.hp + math.ceil(100*(level^0.75)*5)/100
-      hero.hero_stats.str = hero.hero_stats.str + math.ceil(100*(level^0.4))/100
-      hero.hero_stats.agi = hero.hero_stats.agi +  math.ceil(100*(0.2*level^0.025))/100
-      hero.hero_stats.hp_regen = hero.hero_stats.hp_regen + math.ceil(100*(level^0.2)*0.15)/100
+  if lvl ~= nil then
+    hero.Level = lvl
+    level = lvl
   else
-      hero.hero_stats.hp = hero.hero_stats.hp + math.ceil(100*(level^0.7)*3.5)/100
-      hero.hero_stats.str = hero.hero_stats.str + math.ceil(100*(level^0.3))/100
-      hero.hero_stats.hp_regen = hero.hero_stats.hp_regen + math.ceil(100*(level^0.1)*0.10)/100
+    hero.Level = hero.Level + 1
+    level = hero.Level
+  end
+   if Primary == 0 then
+      hero.hero_stats.hp = math.ceil(100*(level^1.75)*5)/100
+      hero.hero_stats.str = math.ceil(100*(level^1.1)*2)/100
+      hero.hero_stats.agi = math.ceil(100*(0.2*level^0.025))/100
+      hero.hero_stats.hp_regen = math.ceil(100*(level^0.2)*0.15)/100
+  else
+      hero.hero_stats.hp = math.ceil(100*(level^1.65)*4.5)/100
+      hero.hero_stats.str = math.ceil(100*(level^0.9)*1.8)/100
+      hero.hero_stats.hp_regen = math.ceil(100*(level^0.2)*0.10)/100
   end
   if Primary == 2 then
-      hero.hero_stats.mp = hero.hero_stats.mp + math.ceil(100*(level^0.75)*5)/100
-      hero.hero_stats.int = hero.hero_stats.int + math.ceil(100*(level^0.4))/100
-      hero.hero_stats.mp_regen = hero.hero_stats.mp_regen + math.ceil(100*(level^0.25)*0.03)/100
+      hero.hero_stats.mp = math.ceil(100*(level^1.70)*5)/100
+      hero.hero_stats.int = math.ceil(100*(level^1.1)*2)/100
+      hero.hero_stats.mp_regen = math.ceil(100*(level^0.30)*0.15)/100
   else
-      hero.hero_stats.mp = hero.hero_stats.mp + math.ceil(100*(level^0.7)*2)/100
-      hero.hero_stats.int = hero.hero_stats.int + math.ceil(100*(level^0.3))/100
-      hero.hero_stats.mp_regen = hero.hero_stats.mp_regen + math.ceil(100*(level^0.15)*0.15)/100
+      hero.hero_stats.mp = math.ceil(100*(level^1.60)*4)/100
+      hero.hero_stats.int = math.ceil(100*(level^0.9)*1.8)/100
+      hero.hero_stats.mp_regen = math.ceil(100*(level^0.20)*0.15)/100
   end
   if Primary == 1 then
-      hero.hero_stats.armor = hero.hero_stats.armor + math.ceil(100*(level^0.2))/100
-      hero.hero_stats.agi = hero.hero_stats.agi + math.ceil(100*(level^0.4))/100
+      hero.hero_stats.armor = math.ceil(100*(level^1.15))/100
+      hero.hero_stats.agi = math.ceil(100*(level^1.1)*2)/100
   else
-      hero.hero_stats.armor = hero.hero_stats.armor + math.ceil(100*(level^0.1))/100
-      hero.hero_stats.agi = hero.hero_stats.agi + math.ceil(100*(level^0.3))/100
+      hero.hero_stats.armor = math.ceil(100*(level^1.05))/100
+      hero.hero_stats.agi = math.ceil(100*(level^0.9)*1.8)/100
   end
   inv_manager:Calculate_stats(hero)
 end
@@ -165,47 +168,55 @@ function epic_boss_fight:OnHeroLevelUp(hero)
   Timers:CreateTimer(1,function()
     ParticleManager:DestroyParticle(lvlup_effect, false)
   end)
-  hero:SetAbilityPoints(0) 
+  hero:SetAbilityPoints(0)
   hero.stats_points = hero.stats_points + 1
- 
+
 
 end
 
 
 
+
 -------------------------------------------------------------------  MULTIPLIER CALCULATOR
-function epic_boss_fight:Calculate_Multiplier() --Will calculate difficulty based on all player level and 
+function epic_boss_fight:Calculate_Multiplier() --Will calculate difficulty based on all player level and
   Timers:CreateTimer(2,function()
     if GameRules:State_Get() >= DOTA_GAMERULES_STATE_PRE_GAME then
       local difficulty = 1
       local Actual_Max_Level = 0
       local player_ammount = 0
-      for i=0,PlayerResource:GetPlayerCount()-1 do
-        local hero = PlayerResource:GetSelectedHeroEntity(i) 
-        if hero~=nil then
-          if hero.inventory ~= nil then
-            if PlayerResource:GetConnectionState(i) == 2 then
-              player_ammount = player_ammount +1
-              if hero.Level > Actual_Max_Level then
-                Actual_Max_Level = hero.Level
+      local hero_pool = {}
+      for i = 0, DOTA_MAX_TEAM_PLAYERS-1 do
+        if PlayerResource:GetTeam( i ) == DOTA_TEAM_GOODGUYS then
+          if PlayerResource:HasSelectedHero( i ) then
+            local hero = PlayerResource:GetSelectedHeroEntity(i)
+            if hero~=nil then
+              if hero.inventory ~= nil then
+                if PlayerResource:GetConnectionState(i) == 2 then
+                  player_ammount = player_ammount +1
+                  hero_pool[player_ammount-1] = hero
+                  if hero.Level > Actual_Max_Level then
+                    Actual_Max_Level = hero.Level
+                  end
+                end
               end
             end
           end
         end
       end
-      difficulty = (0.75*Actual_Max_Level) ^1.25 * (player_ammount^0.1) 
+      GameRules.hero_pool = hero_pool
+      difficulty = (0.85*Actual_Max_Level) ^1.33 * (player_ammount^0.1)
       if difficulty < 1 then difficulty = 1 end
-      if type(difficulty) ~= "number" then difficulty = 1 end 
+      if type(difficulty) ~= "number" then difficulty = 1 end
       GameRules.Actual_Max_Level = Actual_Max_Level
-      if difficulty_multiplier[GameRules.player_difficulty] == nil then 
-        if GameRules.player_difficulty < 0 then GameRules.player_difficulty = 0 
+      if difficulty_multiplier[GameRules.player_difficulty] == nil then
+        if GameRules.player_difficulty < 0 then GameRules.player_difficulty = 0
         else
           difficulty_multiplier[GameRules.player_difficulty] = (GameRules.player_difficulty-1)^2
         end
       end
       GameRules.difficulty = difficulty * difficulty_multiplier[GameRules.player_difficulty]
-      if loot_difficulty[GameRules.player_difficulty] == nil then 
-        if GameRules.player_difficulty < 0 then GameRules.player_difficulty = 0 
+      if loot_difficulty[GameRules.player_difficulty] == nil then
+        if GameRules.player_difficulty < 0 then GameRules.player_difficulty = 0
         else
           loot_difficulty[GameRules.player_difficulty] = (GameRules.player_difficulty)*1.5
         end
@@ -217,8 +228,16 @@ function epic_boss_fight:Calculate_Multiplier() --Will calculate difficulty base
     end
   return 2
   end)
-
 end
+
+
+
+
+
+
+
+
+
 
 
 function epic_boss_fight:InitGameMode()
@@ -243,13 +262,13 @@ function epic_boss_fight:InitGameMode()
   GameMode:SetThink( "OnThink", self, "GlobalThink", 2 )
   GameRules.Actual_Max_Level = 0
 
-  GameMode:SetFogOfWarDisabled(true) 
+  GameRules.hero_pool = {}
+
+  GameMode:SetFogOfWarDisabled(true)
   GameMode:SetLoseGoldOnDeath(false)
   GameMode:SetBuybackEnabled(false)
-  --GameMode:SetCameraDistanceOverride(2300)  
+  --GameMode:SetCameraDistanceOverride(2300)
   GameMode:SetRecommendedItemsDisabled(true)
-  GameMode:SetCustomHeroMaxLevel(MAX_LEVEL) 
-  GameMode:SetCustomXPRequiredToReachNextLevel(XP_PER_LEVEL_TABLE) 
   GameMode:SetCustomGameForceHero( "npc_dota_hero_wisp" )
   GameMode:SetUseCustomHeroLevels ( true )
 
@@ -261,10 +280,10 @@ function epic_boss_fight:InitGameMode()
   GameRules:SetSameHeroSelectionEnabled(true)
   GameRules:SetCustomGameTeamMaxPlayers( DOTA_TEAM_GOODGUYS, 6 )
   GameRules:SetCustomGameTeamMaxPlayers( DOTA_TEAM_BADGUYS, 0 )
-  GameRules:SetHeroRespawnEnabled(false) 
+  GameRules:SetHeroRespawnEnabled(false)
   GameRules:SetGoldPerTick(0)
-  GameRules:SetFirstBloodActive(false)  
-  GameRules:SetHideKillMessageHeaders(true) 
+  GameRules:SetFirstBloodActive(false)
+  GameRules:SetHideKillMessageHeaders(true)
   GameRules:SetStartingGold(0)
   boss_manager:Start()
 
@@ -274,11 +293,15 @@ function epic_boss_fight:InitGameMode()
   HeroSelection:Start()
   item_list_init = {}
   Timers:CreateTimer(0.05,function()
-    for i=0,PlayerResource:GetPlayerCount()-1 do
-      local hero = PlayerResource:GetSelectedHeroEntity(i) 
-      if hero~=nil then
-        epic_boss_fight:update_net_table(hero,i)
-      end
+    for i = 0, DOTA_MAX_TEAM_PLAYERS-1 do
+        if PlayerResource:GetTeam( i ) == DOTA_TEAM_GOODGUYS then
+            if PlayerResource:GetConnectionState(i) == 2 then
+              local hero = PlayerResource:GetSelectedHeroEntity(i)
+              if hero~= nil then
+                epic_boss_fight:update_net_table(hero,i)
+              end
+            end
+        end
     end
     return 0.025
   end)
@@ -319,7 +342,7 @@ function epic_boss_fight:InitGameMode()
       weapon_list[k].bonus_ls = 0
     end
   end
-  item_list_init = { weapon_evolution = LoadKeyValues("scripts/kv/w_evolution.kv") , weapon_list = weapon_list } 
+  item_list_init = { weapon_evolution = LoadKeyValues("scripts/kv/w_evolution.kv") , weapon_list = weapon_list }
 
   CustomGameEventManager:RegisterListener( "Use_Item", Dynamic_Wrap(epic_boss_fight, 'Use_Item'))
   CustomGameEventManager:RegisterListener( "Unequip_Item", Dynamic_Wrap(epic_boss_fight, 'Unequip_Item'))
@@ -335,7 +358,13 @@ function epic_boss_fight:InitGameMode()
   CustomGameEventManager:RegisterListener( "crystalize_weapon", Dynamic_Wrap(epic_boss_fight, 'crystalize_weapon'))
   CustomGameEventManager:RegisterListener( "evolve_weapon", Dynamic_Wrap(epic_boss_fight, 'evolve_weapon'))
 
+  CustomGameEventManager:RegisterListener( "reforge", Dynamic_Wrap(epic_boss_fight, 'reforge'))
+  CustomGameEventManager:RegisterListener( "reforge_equipement", Dynamic_Wrap(epic_boss_fight, 'reforge_equipement'))
+
+
   CustomGameEventManager:RegisterListener( "skill_bar", Dynamic_Wrap(epic_boss_fight, 'open_skill_bar'))
+
+  CustomGameEventManager:RegisterListener( "respec", Dynamic_Wrap(epic_boss_fight, 'respec'))
 
   CustomGameEventManager:RegisterListener( "Upgrade_skill", Dynamic_Wrap(epic_boss_fight, 'Upgrade_skill'))
   CustomGameEventManager:RegisterListener( "Unequip_skill", Dynamic_Wrap(epic_boss_fight, 'unset_skill'))
@@ -357,10 +386,12 @@ function epic_boss_fight:InitGameMode()
   CustomGameEventManager:RegisterListener( "accept_confirmation", Dynamic_Wrap(epic_boss_fight, 'accept_confirmation'))
   CustomGameEventManager:RegisterListener( "cancel_trading", Dynamic_Wrap(epic_boss_fight, 'cancel_trading'))
 
+  CustomGameEventManager:RegisterListener( "Change_Difficulty_Vote", Dynamic_Wrap(epic_boss_fight, 'Change_Difficulty_Vote'))
+  CustomGameEventManager:RegisterListener( "Get_Diff_Vote", Dynamic_Wrap(epic_boss_fight, 'Get_Diff_Vote'))
 
 
-
-
+  CustomGameEventManager:RegisterListener( "get_save", Dynamic_Wrap(epic_boss_fight, 'get_save'))
+  CustomGameEventManager:RegisterListener( "delete_slot", Dynamic_Wrap(epic_boss_fight, 'delete_slot'))
 
 
 
@@ -399,15 +430,15 @@ function epic_boss_fight:InitGameMode()
 
   Convars:RegisterCommand("ebf_save", function(...) return self:save( ... ) end, "save your current character to a slot", 0)
   --disabled Save for now
-  Timers:CreateTimer(1,function()  
+  Timers:CreateTimer(1,function()
     if GameRules:State_Get() >= DOTA_GAMERULES_STATE_GAME_IN_PROGRESS then
       GameRules.PlayerAmmount = 0
       for i=0,PlayerResource:GetPlayerCount()-1 do
-        local hero = PlayerResource:GetSelectedHeroEntity(i) 
+        local hero = PlayerResource:GetSelectedHeroEntity(i)
         if hero~=nil then
           if hero.inventory ~= nil then
             if PlayerResource:GetConnectionState(i) == 2 then
-              GameRules.PlayerAmmount = 1 + GameRules.PlayerAmmount 
+              GameRules.PlayerAmmount = 1 + GameRules.PlayerAmmount
             end
           end
         end
@@ -416,8 +447,109 @@ function epic_boss_fight:InitGameMode()
     return 1
   end)
 
-  GameRules:GetGameModeEntity():SetThink( "OnThink", round_manager, 0.025 ) 
+  GameRules:GetGameModeEntity():SetThink( "OnThink", round_manager, 0.025 )
 end
+
+function epic_boss_fight:Get_Diff_Vote(data)
+  Difficulty_Vote_Score = Difficulty_Vote_Score + data.Vote
+end
+
+function epic_boss_fight:update_difficulty()
+  print("Vote ended",DIFFICULTY_VOTE_IN_PROGRESS,Difficulty_Vote_Score)
+  if DIFFICULTY_VOTE_IN_PROGRESS == true and Difficulty_Vote_Score>0 then
+    DIFFICULTY_VOTE_IN_PROGRESS = false
+    GameRules.player_difficulty = tonumber(difficulty_vote)
+    CustomGameEventManager:Send_ServerToPlayer(player,"Update_Difficulty_HUD", {difficulty = difficulty_vote})
+  end
+end
+
+function epic_boss_fight:Change_Difficulty_Vote(data)
+    local PID = data.PlayerID
+    local hero = PlayerResource:GetPlayer(PID)
+    print("why soo much hate ?",data.difficulty)
+    if GameRules.PlayerAmmount>1 then
+      if DIFFICULTY_VOTE_IN_PROGRESS == false and hero.vote_CD_Diff ~=true and GameRules.STATES == GAME_STATE_LOBBY then
+        hero.vote_CD_Diff = true
+        DIFFICULTY_VOTE_IN_PROGRESS = true
+        Difficulty_Vote_Score = 0
+        Timers:CreateTimer(3,function()
+          if DIFFICULTY_VOTE_IN_PROGRESS == true then
+            Difficulty_Vote_Score = Difficulty_Vote_Score + 1
+          end
+        end)
+        Timers:CreateTimer(60,function()
+          hero.vote_CD_Diff = false
+        end)
+        difficulty_vote = data.difficulty
+        CustomGameEventManager:Send_ServerToPlayer(player,"Send_Vote_Diff", {difficulty = difficulty_vote,voter_ID = PID})
+        Timers:CreateTimer(20,function()
+          epic_boss_fight:update_difficulty()
+        end)
+      else
+        if hero.vote_CD_Diff==true then
+          Notifications:Inventory(hero:GetPlayerID(), {text="#WAIT_60_AFTER_VOTE",duration=2,color="FFFFFF"})
+        elseif DIFFICULTY_VOTE_IN_PROGRESS == true then
+          Notifications:Inventory(hero:GetPlayerID(), {text="#DIFF_VOTE_IN_PROGRESS",duration=2,color="FFFFFF"})
+        elseif GameRules.STATES ~= GAME_STATE_LOBBY then
+          Notifications:Inventory(hero:GetPlayerID(), {text="#CANT_VOTE_IN_FIGHT",duration=2,color="FFFFFF"})
+        end
+    	end
+    else
+      DIFFICULTY_VOTE_IN_PROGRESS = false
+      difficulty_vote = data.difficulty
+      GameRules.player_difficulty = tonumber(difficulty_vote)
+      CustomGameEventManager:Send_ServerToPlayer(player,"Update_Difficulty_HUD", {difficulty = difficulty_vote})
+    end
+end
+
+function epic_boss_fight:delete_slot(data)
+    local PID = data.PlayerID
+    local slot = data.Slot
+		delete_save(PID,slot)
+  end
+
+function epic_boss_fight:save_mute(data)
+  local PID = data.PlayerID
+  Storage:Get( PlayerResource:GetSteamAccountID(PID), function( resultTable, successBool )
+    if successBool then
+      local data_table = {}
+      data_table.data = {}
+      if resultTable	~= nil and resultTable.data	~= nil then
+        data_table = resultTable
+      end
+      data_table.data["option"] = {
+            mute_music = data.mute
+          }
+      Storage:Put( PlayerResource:GetSteamAccountID(PID), data_table, function( resultTable, successBool )
+      end)
+    end
+  end)
+end
+
+function epic_boss_fight:get_save(data)
+    local PID = data.PlayerID
+		local data_table = {}
+		Storage:Get( PlayerResource:GetSteamAccountID(PID), function( resultTable, successBool )
+			if successBool then
+				if resultTable ~= nil then
+					data_table = resultTable.data
+				end
+			elseif successBool == false then
+				Notifications:Save(PID, {text="acess to server failed",duration=3,color="FF2222"})
+			end
+		end)
+    local player = PlayerResource:GetPlayer(PID)
+    if data_table ~= nil and data_table["option"] ~= nil then
+      if data_table["option"].mute_music == true then
+        CustomGameEventManager:Send_ServerToPlayer(player,"mute_music", {})
+      end
+      data_table["option"] = nil
+    end
+
+
+    local hero_list = LoadKeyValues("scripts/kv/hero_list.kv")
+		CustomGameEventManager:Send_ServerToPlayer(player,"update_slot", {data = data_table,hero_list = hero_list})
+  end
 
 
 function epic_boss_fight:set_trade_gold(data)
@@ -426,24 +558,24 @@ function epic_boss_fight:set_trade_gold(data)
     if ammount == nil then ammount = 0 end
     local hero = PlayerResource:GetSelectedHeroEntity( PID )
     inv_manager:Set_trade_gold(hero,ammount)
-    
+
   end
 
 function epic_boss_fight:send_confirmation(data)
     local PID = data.PlayerID
     local contactPID = data.trading_with
     local player_TW = PlayerResource:GetPlayer(contactPID)
-    CustomGameEventManager:Send_ServerToPlayer(player_TW,"enter_confirmation", {ask_ID = data.PlayerID }) 
+    CustomGameEventManager:Send_ServerToPlayer(player_TW,"enter_confirmation", {ask_ID = data.PlayerID })
   end
 
   function epic_boss_fight:cancel_confirmation(data)
     local PID = data.PlayerID
     local contactPID = data.trading_with
     local player_TW = PlayerResource:GetPlayer(contactPID)
-    CustomGameEventManager:Send_ServerToPlayer(player_TW,"stop_confirmation", {ask_ID = data.PlayerID }) 
+    CustomGameEventManager:Send_ServerToPlayer(player_TW,"stop_confirmation", {ask_ID = data.PlayerID })
     local hero_1 = PlayerResource:GetSelectedHeroEntity( PID )
     local hero_2 = PlayerResource:GetSelectedHeroEntity( contactPID )
-    Timers:CreateTimer(0.2,function()  
+    Timers:CreateTimer(0.2,function()
       hero_1.confirm_trade = nil
       hero_2.confirm_trade = nil
     end)
@@ -461,8 +593,8 @@ function epic_boss_fight:send_confirmation(data)
       hero_2.confirm_trade = nil
       local player_1 = PlayerResource:GetPlayer(PID)
       local player_2 = PlayerResource:GetPlayer(contactPID)
-      CustomGameEventManager:Send_ServerToPlayer(player_1,"stop_trading", {}) 
-      CustomGameEventManager:Send_ServerToPlayer(player_2,"stop_trading", {}) 
+      CustomGameEventManager:Send_ServerToPlayer(player_1,"stop_trading", {})
+      CustomGameEventManager:Send_ServerToPlayer(player_2,"stop_trading", {})
     end
   end
 
@@ -478,7 +610,7 @@ function epic_boss_fight:ask_trading(data)
   local PID = data.PlayerID
   local contactPID = data.trading_with
   local player_TW = PlayerResource:GetPlayer(contactPID)
-  CustomGameEventManager:Send_ServerToPlayer(player_TW,"asked_trading", {ask_ID = data.PlayerID }) 
+  CustomGameEventManager:Send_ServerToPlayer(player_TW,"asked_trading", {ask_ID = data.PlayerID })
 end
 function epic_boss_fight:accept_trading(data)
   local PID_2 = data.PlayerID
@@ -498,17 +630,18 @@ function epic_boss_fight:accept_trading(data)
   inv_manager:save_inventory(hero_1)
   inv_manager:save_inventory(hero_2)
 
-  --SAVE HERO 1 AND 2 ON SERVER
+  save(hero_1)
+  save(hero_2)
 
-  CustomGameEventManager:Send_ServerToPlayer(player_1,"start_trading", {ask_ID = PID_2 }) 
-  CustomGameEventManager:Send_ServerToPlayer(player_2,"start_trading", {ask_ID = PID_1 }) 
+  CustomGameEventManager:Send_ServerToPlayer(player_1,"start_trading", {ask_ID = PID_2 })
+  CustomGameEventManager:Send_ServerToPlayer(player_2,"start_trading", {ask_ID = PID_1 })
 end
 
 function epic_boss_fight:refuse_trading(data)
   local hero = PlayerResource:GetSelectedHeroEntity( data.PlayerID )
   local PID = hero:GetPlayerID()
   local contactPID = data.trading_with
-   
+
   Notifications:Player_interaction(contactPID, {PID = PID,text="#REFUSE_TRADE",duration=2,color="FFFFFF  "})
 end
 function epic_boss_fight:add_to_trade(data)
@@ -541,7 +674,7 @@ function epic_boss_fight:Get_Vote(param)
         round_manager.vote_time = 60
         CustomNetTables:SetTableValue( "KVFILE","time", { vote_time = round_manager.vote_time } )
       else
-        round_manager.vote_time = 5 
+        round_manager.vote_time = 5
         CustomNetTables:SetTableValue( "KVFILE","time", { vote_time = round_manager.vote_time } )
       end
       Timers:CreateTimer(1.00,function()
@@ -557,14 +690,16 @@ function epic_boss_fight:Get_Vote(param)
               for nPlayerID = 0, DOTA_MAX_TEAM_PLAYERS-1 do
               if PlayerResource:GetTeam( nPlayerID ) == DOTA_TEAM_GOODGUYS then
                 if PlayerResource:HasSelectedHero( nPlayerID ) then
-                  local hero = PlayerResource:GetSelectedHeroEntity( nPlayerID )
-                  if hero~= nil then
-                    FindClearSpaceForUnit(hero,ARENA_VECTOR, true) 
-                    Timers:CreateTimer(0.1,function()
-                      CustomGameEventManager:Send_ServerToAllClients("center_on_hero", {} )
-                    end)
-                    PlayerResource:SetCameraTarget(nPlayerID, hero)
-                    PlayerResource:SetCameraTarget(nPlayerID, nil)
+                  if PlayerResource:GetConnectionState(nPlayerID) == 2 then
+                    local hero = PlayerResource:GetSelectedHeroEntity( nPlayerID )
+                    if hero~= nil then
+                      FindClearSpaceForUnit(hero,ARENA_VECTOR, true)
+                      Timers:CreateTimer(0.1,function()
+                        CustomGameEventManager:Send_ServerToAllClients("center_on_hero", {} )
+                      end)
+                      PlayerResource:SetCameraTarget(nPlayerID, hero)
+                      PlayerResource:SetCameraTarget(nPlayerID, nil)
+                    end
                   end
                 end
               end
@@ -572,13 +707,13 @@ function epic_boss_fight:Get_Vote(param)
             CustomNetTables:SetTableValue( "KVFILE","time", { vote_time = nil } )
             round_manager.countdown = DEFAULT_COUNTDOWN_TIME
             GameRules.STATES = GAME_STATE_PREPARE_TIME
-            return 
+            return
             end
           return 1
       end)
-    else 
+    else
       print ("reduced time from"..round_manager.vote_time .."to".. round_manager.vote_time - (round_manager.vote_time/(GameRules.PlayerAmmount-1) ) )
-      round_manager.vote_time = round_manager.vote_time - (round_manager.vote_time/(GameRules.PlayerAmmount-1) ) 
+      round_manager.vote_time = round_manager.vote_time - (round_manager.vote_time/(GameRules.PlayerAmmount-1) )
     end
   elseif param.context == "reward" then
     print ("shoudl display")
@@ -629,7 +764,7 @@ function epic_boss_fight:Level_UP (com_name,level)
     print (hero.Level,MAX_LEVEL)
     if hero.Level < MAX_LEVEL then
       epic_boss_fight:OnHeroLevelUp(hero)
-    else 
+    else
       return
     end
   end
@@ -643,34 +778,46 @@ end
 
 function epic_boss_fight:infuse_soul(data)
   local hero = PlayerResource:GetSelectedHeroEntity( data.PlayerID )
-  weapon_slot = tonumber( data.main_slot ) 
+  weapon_slot = tonumber( data.main_slot )
   soul_slot = tonumber( data.secondary_slot )
   inv_manager:up_weapon(hero,soul_slot,weapon_slot)
 end
 
 function epic_boss_fight:transmute_weapon(data)
   local hero = PlayerResource:GetSelectedHeroEntity( data.PlayerID )
-  weapon_slot = tonumber( data.main_slot ) 
+  weapon_slot = tonumber( data.main_slot )
   transmuted_slot = tonumber( data.secondary_slot )
   inv_manager:transmutation(hero,transmuted_slot,weapon_slot)
 end
 
 function epic_boss_fight:crystalize_weapon(data)
   local hero = PlayerResource:GetSelectedHeroEntity( data.PlayerID )
-  weapon_slot = tonumber( data.main_slot ) 
+  weapon_slot = tonumber( data.main_slot )
   print (weapon_slot)
   inv_manager:crystalyze(hero,weapon_slot)
 end
 
 function epic_boss_fight:evolve_weapon(data)
   local hero = PlayerResource:GetSelectedHeroEntity( data.PlayerID )
-  slot_weap = tonumber( data.main_slot ) 
-  evolution_way = tonumber( data.way ) 
+  slot_weap = tonumber( data.main_slot )
+  evolution_way = tonumber( data.way )
   inv_manager:make_evolution(hero,evolution_way,slot_weap)
 end
 
 
+function epic_boss_fight:reforge(data)
+  print ("why ?T.T ?")
+  local hero = PlayerResource:GetSelectedHeroEntity( data.PlayerID )
+  slot = tonumber( data.Slot )
+  inv_manager:reforge_com(hero,slot)
+end
 
+function epic_boss_fight:reforge_equipement(data)
+  print ("wtf ?")
+  local hero = PlayerResource:GetSelectedHeroEntity( data.PlayerID )
+  slot = data.Slot
+  inv_manager:reforge_equipement(hero,slot)
+end
 
 function epic_boss_fight:ebf_transmute_weapon(com_name,transmuted_slot,weapon_slot)
   local hero = Convars:GetCommandClient():GetAssignedHero()
@@ -697,11 +844,29 @@ function epic_boss_fight:ebf_skill_list()
 end
 
 function epic_boss_fight:open_skill_bar (data)
-  local player = PlayerResource:GetPlayer(data.PlayerID) 
-  CustomGameEventManager:Send_ServerToPlayer(player,"open_skill_bar", {}) 
+  local player = PlayerResource:GetPlayer(data.PlayerID)
+  CustomGameEventManager:Send_ServerToPlayer(player,"open_skill_bar", {})
 end
 
-
+function epic_boss_fight:respec (data)
+  local hero = PlayerResource:GetSelectedHeroEntity( data.PlayerID )
+  if hero.stats_points == hero.Level - 1 then
+    Notifications:Inventory(hero:GetPlayerID(), {text="#RESPEC_USELESS",duration=2,color="FFAAAA"})
+  else
+    if hero.XP >= 0 then
+      hero.stats_points = hero.Level - 1
+      for i=1,5 do
+        skill_manager:unequip_skill (hero,i)
+      end
+      if PlayerResource:HasCustomGameTicketForPlayerID( data.PlayerID ) == false then
+        hero.XP = hero.XP-math.ceil(Get_Xp_To_Next_Level(hero.Level)*0.05)
+      end
+      skill_manager:create_skill_tree(hero)
+    else
+      Notifications:Inventory(hero:GetPlayerID(), {text="#NEGATIVE_XP",duration=2,color="FFAAAA"})
+    end
+  end
+end
 
 function epic_boss_fight:add_skill (data)
   local ID = tonumber( data.skillid )
@@ -741,12 +906,29 @@ end
 function epic_boss_fight:save(com_name,save_slot)
   local slot = save_slot
   local hero = Convars:GetCommandClient():GetAssignedHero()
-  save(hero,slot,true,false)
+  save(hero)
 end
 
-function epic_boss_fight:print_info()
+function epic_boss_fight:print_info(com_name,advanced)
   local hero = Convars:GetCommandClient():GetAssignedHero()
-  DeepPrintTable (hero)
+  if advanced == nil then
+    DeepPrintTable (hero)
+  end
+  print ('=====================================================================================================================================================================================================================================================')
+  if advanced ~= nil then
+    for k,v in pairs(hero:FindAllModifiers()) do
+      print(k)
+      if v~= nil then
+        print(v:GetName())
+      end
+    end
+    print ('=====================================================================================================================================================================================================================================================')
+    for i = 0,hero:GetAbilityCount() do
+      print(i)
+      print(hero:GetAbilityByIndex(i):GetName())
+      print ('=====================================================================================================================================================================================================================================================')
+    end
+  end
 end
 
 
@@ -760,7 +942,7 @@ function epic_boss_fight:print_inv_info()
       else
         print("       ",hero.item_bar[i].Name)
       end
-    else 
+    else
       print ('       Empty')
     end
   end
@@ -772,7 +954,7 @@ function epic_boss_fight:print_inv_info()
       else
         print("       ",hero.inventory[i].Name)
       end
-    else 
+    else
       print ('       Empty')
     end
   end
@@ -890,7 +1072,7 @@ end
 
 function epic_boss_fight:ebf_upgrade(com_name,soul_slot,weapon_slot)
   local hero = Convars:GetCommandClient():GetAssignedHero()
-  soul_slot = tonumber( soul_slot ) 
+  soul_slot = tonumber( soul_slot )
   weapon_slot = tonumber( weapon_slot )
   inv_manager:up_weapon(hero,soul_slot,weapon_slot)
 end
@@ -931,10 +1113,10 @@ function epic_boss_fight:OnThink( )
   return 0.1
 end
 
-function epic_boss_fight:_CreateItem(item_name,owner) --a function to create an item from name , will be used over "CreateItem" because 
+function epic_boss_fight:_CreateItem(item_name,owner) --a function to create an item from name , will be used over "CreateItem" because
   --it'll make the change we need on items
   print("step 2")
-  Item = CreateItem(item_name, owner, owner) 
+  Item = CreateItem(item_name, owner, owner)
   Item = inv_manager:Create_Item(Item)
   return Item
 end
@@ -942,7 +1124,7 @@ end
 function epic_boss_fight:OnItemPickUp(event)
   pID = event.PlayerID
   local player = PlayerResource:GetPlayer(pID)
-  local hero = player:GetAssignedHero() 
+  local hero = player:GetAssignedHero()
   for itemSlot = 0, 5, 1 do
     local Item = hero:GetItemInSlot( itemSlot )
     if Item ~= nil and Item:IsItem() then
@@ -961,16 +1143,31 @@ function epic_boss_fight:update_net_table(hero,ID)
       inv_manager:cancel_trade(hero,hero.trade_with)
     end
   else
+    local modifier_list = {}
+    local list_size = 0
+    if hero:GetUnitName()~= "npc_dota_hero_wisp" then
+      for k,v in pairs(hero:FindAllModifiers()) do
+        local modifier_name = v:GetName()
+        local modifier = hero:FindModifierByName(modifier_name)
+        if modifier:IsHidden() ~= nil then
+          if not modifier:IsHidden() then
+            local modifier_table = {}
+            modifier_table.name = modifier_name
+            modifier_table.debuff = modifier:IsDebuff()
+            modifier_list[list_size] = modifier_table
+            list_size = list_size+1
+          end
+        end
+      end
+    end
     local current_XP = hero.XP
     if hero.equipement~=nil then
-      if hero.equipement.weapon ~= nil then  
-        CustomNetTables:SetTableValue( "info",key, {gold = math.floor(hero.gold) ,CD = hero.CD,Name = hero:GetUnitName(),inforge = hero.Isinforge,inshop = hero.Isinshop,LVL = hero.Level ,WName = hero.equipement.weapon.item_name, WLVL = hero.equipement.weapon.level ,HP = hero:GetHealth(),MAXHP = hero:GetMaxHealth(),MP = hero:GetMana(),MAXMP = hero:GetMaxMana(),HXP =current_XP,MAXHXP = REAL_XP_TABLE[hero.Level],WXP = hero.equipement.weapon.XP,MAXWXP = hero.equipement.weapon.Next_Level_XP  } )
+      if hero.equipement.weapon ~= nil then
+        CustomNetTables:SetTableValue( "info",key, {damage_mult = hero.final_damage_multiplier,admin = hero.admin,gold = math.floor(hero.gold) ,CD = hero.CD,Name = hero:GetUnitName(),inforge = hero.Isinforge,inshop = hero.Isinshop,LVL = hero.Level ,WName = hero.equipement.weapon.item_name, WLVL = hero.equipement.weapon.level ,HP = hero:GetHealth(),MAXHP = hero:GetMaxHealth(),MP = hero:GetMana(),MAXMP = hero:GetMaxMana(),HXP =current_XP,MAXHXP = Get_Xp_To_Next_Level(hero.Level),WXP = hero.equipement.weapon.XP,MAXWXP = hero.equipement.weapon.Next_Level_XP  } )
       else
-        CustomNetTables:SetTableValue( "info",key, {gold = math.floor(hero.gold) ,CD = hero.CD,Name = hero:GetUnitName(),inforge = hero.Isinforge,inshop = hero.Isinshop,LVL = hero.Level ,WName = "Fist", WLVL = 0 ,HP = hero:GetHealth(),MAXHP = hero:GetMaxHealth(),MP = hero:GetMana(),MAXMP = hero:GetMaxMana(),HXP = current_XP,MAXHXP = REAL_XP_TABLE[hero.Level],WXP = 0,MAXWXP = 0  } )
+        CustomNetTables:SetTableValue( "info",key, {damage_mult = hero.final_damage_multiplier,admin = hero.admin,gold = math.floor(hero.gold) ,CD = hero.CD,Name = hero:GetUnitName(),inforge = hero.Isinforge,inshop = hero.Isinshop,LVL = hero.Level ,WName = "Fist", WLVL = 0 ,HP = hero:GetHealth(),MAXHP = hero:GetMaxHealth(),MP = hero:GetMana(),MAXMP = hero:GetMaxMana(),HXP = current_XP,MAXHXP = Get_Xp_To_Next_Level(hero.Level),WXP = 0,MAXWXP = 0  } )
       end
+      CustomNetTables:SetTableValue( "KVFILE","modifier_"..key, {modifier_list = modifier_list} )
     end
   end
 end
-
-
-

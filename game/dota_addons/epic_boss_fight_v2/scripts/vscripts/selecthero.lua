@@ -17,10 +17,14 @@ function HeroSelection:Start()
 	CustomGameEventManager:RegisterListener("Load_Hero", Dynamic_Wrap( HeroSelection, 'Load'))
 end
 
+
+
 function HeroSelection:NewHero(table)
 	print ("create_hero")
 	local player = PlayerResource:GetPlayer(table.PID)
+	local slot = table.Slot
 	local hero = PlayerResource:ReplaceHeroWith( table.PID, table.Hero_Name, 0, 0 )
+	hero.slot = slot
 	local heroent = player:GetAssignedHero()
 	if heroent == nil then
 		Timers:CreateTimer(0.5,function()
@@ -36,7 +40,8 @@ function HeroSelection:NewHero(table)
 
 		PlayerResource:SetCameraTarget(table.PID, hero)
 		PlayerResource:SetCameraTarget(table.PID, nil)
-		CustomGameEventManager:Send_ServerToPlayer(player,"Display_Bar", {}) 
+		save(hero)
+		CustomGameEventManager:Send_ServerToPlayer(player,"Display_Bar", {})
 	end
 end
 
@@ -44,36 +49,36 @@ function HeroSelection:Load(table)
 	load(table.PID,table.Slot)
 end
 
-function HeroSelection:load_hero(table,PID)
+function HeroSelection:load_hero(table,PID,slot)
 	print ('load hero')
-	
+
 	local player = PlayerResource:GetPlayer(PID)
-	if table == nil or table.inventory == nil then 
-		CustomGameEventManager:Send_ServerToPlayer(player,"load_fail", {}) 
+	if table == nil or table.inventory == nil then
+		CustomGameEventManager:Send_ServerToPlayer(player,"load_fail", {})
 		Notifications:Save(PID, {text="#Empty",duration=2,color="FF2222"})
 		return
 	end
 	local oldhero = player:GetAssignedHero()
 	local Hero_Name = table.hero_name
 	local hero = PlayerResource:ReplaceHeroWith( PID, Hero_Name, 0, 0 )
+	hero.slot = slot
 	inv_manager:Create_Inventory(hero)
+	hero.stats_points = table.stats_points
 	skill_manager:load_skill_tree(hero,table.skill_tree,table.active_list)
 	hero.inventory = table.inventory
-	hero.equipement = table.equipement 
-	if table.level > 1 then
-		for i=2,table.level do
-			epic_boss_fight:Update_stat(hero)
-		end
+	hero.equipement = table.equipement
+	epic_boss_fight:Update_stat(hero,table.level)
+	hero.unlocked_skill = {}
+	for k,v in pairs (table.unlocked_skill) do
+		hero.unlocked_skill[tonumber(k)] = copy(v)
 	end
-	hero.xp = table.XP
+	hero.XP = table.xp
 	hero.item_bar = table.item_bar
 
 	hero.gold = table.gold
-	hero.stats_points = table.stats_points
-	DeepPrintTable(table)
 	inv_manager:update_effect (hero)
 	hero:AddAbility('lua_equipement')
 	hero:AddAbility('lua_hero_stats')
+	CustomGameEventManager:Send_ServerToPlayer(player,"Display_Bar", {})
 
-	CustomGameEventManager:Send_ServerToPlayer(player,"Display_Bar", {}) 
 end

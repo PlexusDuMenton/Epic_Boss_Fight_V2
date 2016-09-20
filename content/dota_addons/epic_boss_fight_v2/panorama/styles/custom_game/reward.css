@@ -12,7 +12,7 @@ background-image: url("file://{images}/custom_game/reward_panel.psd");
   width: 680px;
   horizontal-align: left;
     vertical-align: bottom;
-  margin-left: 30%;
+  margin-left: 60%;
   margin-bottom: 20%;
 
 }
@@ -31,4 +31,26 @@ background-image: url("file://{images}/custom_game/reward_panel.psd");
 background-image: url("file://{images}/custom_game/inventory/slot.psd");
 	height: 64px;
   width: 64px;
+}
+
+.close_button
+{
+	background-image: url("file://{images}/custom_game/inventory/big_button.png");
+	horizontal-align: left;
+    vertical-align: top;
+	margin-left: 30%;
+  margin-top: 80%;
+  height: 75px;
+  width: 200px;
+}
+
+.close_button:hover
+{
+	background-image: url("file://{images}/custom_game/inventory/big_button_hover.png");
+	horizontal-align: left;
+    vertical-align: top;
+	margin-left: 30%;
+  margin-top: 80%;
+  height: 75px;
+  width: 200px;
 }

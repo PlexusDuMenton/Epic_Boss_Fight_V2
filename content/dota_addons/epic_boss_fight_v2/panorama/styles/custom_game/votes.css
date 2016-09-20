@@ -43,9 +43,10 @@ background-size: 100% 100%;
 .button2
 {
 	background-image: url("file://{images}/custom_game/inventory/big_button.png");
+	background-size: 100% 100%;
 	horizontal-align: left;
     vertical-align: top;
-	background-size: 100% 100%;
+	
   height: 75px;
   width: 225px;
 }

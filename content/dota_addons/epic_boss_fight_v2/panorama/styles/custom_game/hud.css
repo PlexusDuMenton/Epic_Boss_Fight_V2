@@ -4,324 +4,459 @@
     height: 100%;
     overflow: clip;
 }
+ .main
+{
+  width: 100%;
+  height: 100%;
+    overflow: clip;
+}
+
+ .tooltip_panel
+{
+  width: 100%;
+  height: 100%;
+}
+.small_tooltip
+{
+	background-image: url("file://{images}/custom_game/tool_tip_skill_tree.png");
+	background-size: 100% 100%;
+	height: 120px;
+  width: 250px;
+}
+
+
 #PortaitImage_cut {
 	vertical-align: center;
 	vertical-align: center;
 
 	width: 198px;
-  height: 195px;
-  
+  height: 198px;
+
   margin-left: 26px;
-  margin-top: -1px;
+  margin-top: 0px;
   border-radius: 50%;
-
-
 }
 
-#PortaitImage {
-	vertical-align: center;
-	vertical-align: center;
 
-
-}
-
-#Bar_BG
+.modifier_container
 {
-	horizontal-align: left;
-    vertical-align: bottom;
-	width: 803px;
-  height: 227px;
-}
-#Bar_OL
-{
-	horizontal-align: left;
-    vertical-align: bottom;
-	width: 803px;
-  height: 227px;
-}
-#hp_bar_parent
-{
-	horizontal-align: left;
-    vertical-align: bottom;
-	width: 803px;
-  height: 227px;
-}
-#mp_bar_parent
-{
-	horizontal-align: left;
-    vertical-align: bottom;
-	width: 803px;
-  height: 227px;
-}
-#hxp_bar_parent
-{
-	horizontal-align: left;
-    vertical-align: bottom;
-	width: 803px;
-  height: 227px;
-}
-#wxp_bar_parent
-{
-	horizontal-align: left;
-    vertical-align: bottom;
-	width: 803px;
-  height: 227px;
-}
-
-#bar_general
-{
-  horizontal-align: left;
+  width: 385px;
+  height: 220px;
+  margin-left: 835px;
   vertical-align: bottom;
-  width: 803px;
-  height: 227px;
- }
- 
- #bar_bg
- {
-    horizontal-align: right;
-    vertical-align: top;
- }
- 
-#hp_bar
-{
-	horizontal-align: left;
-    vertical-align: bottom;
-	width: 803px;
-  height: 227px;
+  margin-bottom: 137px;
 }
-#mp_bar
+.sub_container_extended
 {
-	horizontal-align: left;
-    vertical-align: bottom;
-	width: 803px;
-  height: 227px;
+  width: 385px;
+  height: 220px;
+  vertical-align: bottom;
 }
-#hxp_bar
+.sub_container
 {
-	horizontal-align: left;
-    vertical-align: bottom;
-	width: 803px;
-  height: 227px;
+  width: 480px;
+  height: 50px;
+  vertical-align: bottom;
 }
-#hero_icon
-{
-	horizontal-align: left;
-    vertical-align: bottom;
-	width: 803px;
-  height: 227px;
-}
-#icon
-{
-	horizontal-align: left;
-    vertical-align: bottom;
-	width: 803px;
-  height: 227px;
-}
-#wxp_bar
-{
-	horizontal-align: left;
-    vertical-align: bottom;
-	width: 803px;
-  height: 227px;
-}
-#no_weapon
-{
-	horizontal-align: left;
-    vertical-align: bottom;
-	width: 803px;
-  height: 227px;
-}
-#no_mana
-{
-	horizontal-align: left;
-    vertical-align: bottom;
-	width: 803px;
-  height: 227px;
-}
- 
- #hp_bar_current
-{
-	margin-right: 230px;
-	font-size: 25px;
-	margin-top: 172px;
-    font-weight: bold;
-	color: #FFFFFF;
-	horizontal-align: right;
- }
-  #hp_bar_slash
-{
-	margin-left: 530px;
-	font-size: 25px;
-	margin-top: 172px;
-    font-weight: bold;
-	color: #FFFFFF;
- }
-  #hp_bar_total
-{
-	margin-left: 550px;
-	font-size: 25px;
-	margin-top: 172px;
-    font-weight: bold;
-	color: #FFFFFF;
- }
 
-  #mp_bar_current
+.extender
 {
-	margin-right: 230px;
-	font-size: 20px;
-	margin-top: 143px;
-    font-weight: bold;
-	color: #FFFFFF;
-	horizontal-align: right;
- }
-  #mp_bar_slash
+  margin-left: 490px;
+  vertical-align: bottom;
+  margin-bottom: 0px;
+  width: 44px;
+  height: 44px;
+  background-image: url("file://{images}/custom_game/extender.png");
+  background-size: 100% 100%;
+}
+
+.hero_icon
 {
-	margin-left: 530px;
-	font-size: 20px;
-	margin-top: 143px;
-    font-weight: bold;
-	color: #FFFFFF;
- }
-  #mp_bar_total
+  margin-left: 109px;
+  vertical-align: bottom;
+  margin-bottom: 18px;
+  width: 173px;
+  height: 173px;
+  background-image: url("file://{images}/custom_game/HUD/hero_icon/unknow.png");
+  background-size: 100% 100%;
+}
+
+.small_button
 {
-	margin-left: 550px;
-	font-size: 20px;
-	margin-top: 143px;
-    font-weight: bold;
-	color: #FFFFFF;
- }
- 
-   #hxp_bar_current
+  vertical-align: bottom;
+  width: 32px;
+  height: 64px;
+}
+.small_button:hover
 {
-	margin-right: 230px;
-	font-size: 20px;
-	margin-top: 110px;
-    font-weight: bold;
-	color: #FFFFFF;
-	horizontal-align: right;
- }
-  #hxp_bar_slash
+  width: 32px;
+  height: 64px;
+  background-image: url("file://{images}/custom_game/HUD/small_button_hover.png");
+  background-size: 100% 100%;
+}
+
+
+.reducer
 {
-	margin-left: 530px;
-	font-size: 20px;
-	margin-top: 110px;
-    font-weight: bold;
-	color: #FFFFFF;
- }
-  #hxp_bar_total
+  margin-left: 490px;
+  vertical-align: bottom;
+  margin-bottom: 0px;
+  width: 44px;
+  height: 44px;
+  background-image: url("file://{images}/custom_game/reducer.png");
+  background-size: 100% 100%;
+}
+
+.modifier_image
 {
-	margin-left: 550px;
-	font-size: 20px;
-	margin-top: 110px;
-    font-weight: bold;
-	color: #FFFFFF;
- }
- 
-	#gold_icon
-	{
-	height: 64px;
- width: 64px;
- horizontal-align: right;
-	margin-top: -25px;
-	margin-right: 0px;
-	}
-	
-	#gold_ammount
-	{
-	height: 40px;
- horizontal-align: right;
-	margin-top: -10px;
-	margin-right: 80px;
-	text-align: right;
+  border-radius: 10%;
+  width: 44px;
+  height: 44px;
+  margin-left: 3px;
+  margin-top: 3px;
+  background-image: url("file://{images}/custom_game/CD_Mask.png");
+  background-size: 100% 100%;
+}
+.buff
+{
+  border-radius: 10%;
+  width: 50px;
+  height: 50px;
+  background-image: url("file://{images}/custom_game/buff.png");
+  background-size: 100% 100%;
+}
+.debuff
+{
+  border-radius: 10%;
+  width: 50px;
+  height: 50px;
+  background-image: url("file://{images}/custom_game/debuff.png");
+  background-size: 100% 100%;
+}
+.modifier_main
+{
+  width: 50px;
+  height: 50px;
+}
+
+
+
+.Parent_panel_ally
+{
+  height: 60px;
+  width: 200px;
+}
+
+.Label
+{
 	text-overflow: clip;
 	font-weight: thin;
-  font-size: 40px;
-	color: #FFEE55;
-	}
+	font-size: 15px;
+	color: #AACCFF;
+	text-shadow: 1px 1px 1px 2.0 #333333b0;
+}
+.admin_label
+{
+	text-overflow: clip;
+	font-weight: thin;
+	font-size: 15px;
+	color: #FFDDAA;
+	text-shadow: 1px 1px 2px 3.0 #885533b1;
+	brightness: 3.0;
+}
 
-	#Gold
-	{
-	margin-top: 40px;
-	height: 100%;
-	width: 100%;
-	}
-	
-   #wxp_bar_current
+
+.name
 {
-	margin-right: 230px;
-	font-size: 18px;
-	margin-top: 87px;
-    font-weight: bold;
-	color: #FFFFFF;
-	horizontal-align: right;
- }
-  #wxp_bar_slash
-{
-	margin-left: 530px;
-	font-size: 18px;
-	margin-top: 87px;
-    font-weight: bold;
-	color: #FFFFFF;
- }
-  #wxp_bar_total
-{
-	margin-left: 550px;
-	font-size: 18px;
-	margin-top: 87px;
-    font-weight: bold;
-	color: #FFFFFF;
- }
- 
-   #wlevel
-{
-	margin-left: 562px;
-	font-size: 25px;
-	margin-top: 60px;
-    font-weight: bold;
-	color: #FFFFFF;
- }
-   #wlevellab
-{
-	margin-left: 480px;
-	font-size: 25px;
-	margin-top: 60px;
-    font-weight: bold;
-	color: #FFFFFF;
- }
-   #wname
-{
-	margin-right: 280px;
+	text-overflow: clip;
+	font-weight: thin;
 	font-size: 20px;
-	margin-top: 60px;
-    font-weight: bold;
-	color: #FFFFFF;
-	horizontal-align: right;
- }
- 
-   #name
+	color: #AACCFF;
+	text-shadow: 1px 1px 1px 3.0 #333333b0;
+}
+.self_name
 {
-	margin-right: 500px;
+	text-overflow: clip;
+	font-weight: thin;
 	font-size: 20px;
-	margin-top: 128px;
-    font-weight: bold;
-	color: #FFFFFF;
-	horizontal-align: center;
- }
-    #level
+	color: #FFDDAA;
+	text-shadow: 1px 1px 2px 3.0 #885533b1;
+	brightness: 3.0;
+}
+
+.admin_name
 {
-	margin-right: 500px;
-	font-size: 30px;
-	margin-top: 80px;
-    font-weight: bold;
-	color: #FFFFFF;
-	horizontal-align: center;
- }
-    #space
-{
-	margin-left: 750px;
+	text-overflow: clip;
+	font-weight: thin;
 	font-size: 20px;
-	margin-top: 144px;
+	color: #FFDDAA;
+	text-shadow: 1px 1px 2px 3.0 #885533b1;
+	brightness: 3.0;
+}
+
+.BG
+{
+	margin-top: 8px;
+	background-image: url("file://{images}/custom_game/HUD/ally_back_ground.png");
+  background-size: 100% 100%;
+  height: 45px;
+  width: 150px;
+
+}
+
+.health_bar
+{
+	background-image: url("file://{images}/custom_game/HUD/ally_health.png");
+margin-top: 8px;
+  height: 45px;
+  width: 150px;
+  background-size: 100% 100%;
+}
+
+.mana_bar
+{
+margin-top: 8px;
+	background-image: url("file://{images}/custom_game/HUD/ally_mana.png");
+  height: 45px;
+  width: 150px;
+  background-size: 100% 100%;
+}
+
+.Over_Line
+{
+margin-top: 8px;
+	background-image: url("file://{images}/custom_game/HUD/ally_outline.png");
+  height: 45px;
+  width: 150px;
+  background-size: 100% 100%;
+}
+
+
+.hud_foreground
+{
+  vertical-align: bottom;
+background-image: url("file://{images}/custom_game/HUD/Hud_Overlay.png");
+  height: 220px;
+  width: 1280px;
+}
+
+.hud_manabar
+{
+
+background-image: url("file://{images}/custom_game/HUD/Hud_Manabar.png");
+  height: 12px;
+  width: 758px;
+  margin-left: 300px;
+  margin-top: 112px;
+}
+
+.mp_value
+{
+  font-size: 17px;
+  height: 18px;
+  width: 761px;
+  margin-left: 289px;
+  margin-top: 109px;
+  text-align: center;
+  font-weight: bold;
+	color: #FFFFFF;
+}
+
+.hud_healthbar
+{
+
+background-image: url("file://{images}/custom_game/HUD/Hud_Healthbar.png");
+  height: 18px;
+  width: 761px;
+  margin-left: 289px;
+  margin-top: 90px;
+}
+
+.hp_value
+{
+  font-size: 19px;
+  height: 18px;
+  width: 761px;
+  margin-left: 289px;
+  margin-top: 89px;
+  text-align: center;
+  font-weight: bold;
+	color: #FFFFFF;
+}
+
+.hud_xpbar
+{
+
+background-image: url("file://{images}/custom_game/HUD/Hud_XP.png");
+  height: 150px;
+  width: 54px;
+  margin-left: 95px;
+  margin-top: 26px;
+}
+
+.hero_level
+{
+  font-size: 22px;
+  margin-left: 87px;
+  margin-top: 182px;
+  text-align: center;
+  font-weight: bold;
+	color: #FFFFFF;
+}
+.weapon_level
+{
+  font-size: 22px;
+  margin-left: 265px;
+  margin-top: 182px;
+  text-align: center;
+  font-weight: bold;
+	color: #FFFFFF;
+}
+
+
+.hud_wxpbar
+{
+
+background-image: url("file://{images}/custom_game/HUD/Hud_WXP.png");
+  height: 150px;
+  width: 54px;
+  margin-left: 241px;
+  margin-top: 26px;
+}
+
+.hero_name
+{
+  font-size: 20px;
+  margin-left: 292px;
+  margin-top: 60px;
+  text-align: left;
+  font-weight: bold;
+	color: #FFFFFF;
+}
+
+.gold_value
+{
+  font-size: 22px;
+  margin-left: 1115px;
+  margin-top: 183px;
+  text-align: left;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px 2.0 #100502;
+	color: #cc9538;
+}
+
+.hud_background
+{
+
+  vertical-align: bottom;
+background-image: url("file://{images}/custom_game/HUD/Hud_background.png");
+  height: 220px;
+  width: 1280px;
+}
+
+.Inventory_Menu
+{
+  height: 200px;
+  width: 200px;
+}
+.Inventory_Button
+{
+  background-image: url("file://{images}/custom_game/inventory/button_menu.png");
+  height: 40px;
+  width: 200px;
+}
+.Inventory_Button:hover
+{
+  background-image: url("file://{images}/custom_game/inventory/button_menu_hover.png");
+  brightness: 1.5;
+}
+
+
+
+
+
+#hud_hero
+{
+  margin-left: 320px;
+  vertical-align: bottom;
+  margin-bottom: 0px;
+  height: 220;
+  width: 1280;
+  overflow: clip;
+}
+
+
+
+
+
+.item_panel
+{
+  vertical-align: bottom;
+	height: 64px;
+  width: 64px;
+}
+.Inventory_Label
+{
+  font-size: 15px;
+  margin-top: 30px;
+	margin-left: 15px;
+    font-weight: bold;
+	text-shadow: 1px 1px 2px 1.0 #000000;
+	color: #FFFFFF;
+}
+
+
+.mask
+{
+	height: 64px;
+  width: 64px;
+}
+
+
+.skill_image
+{
+  vertical-align: bottom;
+	height: 64px;
+  width: 64px;
+}
+
+.Inventory_Label
+{
+  font-size: 25px;
+	margin-left: 10px;
     font-weight: bold;
 	color: #FFFFFF;
- }
- 
+}
+
+
+.Label_CD
+{
+  font-size: 20px;
+  margin-top: 30px;
+	margin-left: 15px;
+    font-weight: bold;
+	text-shadow: 1px 1px 2px 1.0 #000000;
+	color: #FFFFFF;
+}
+
+.button_item
+{
+  vertical-align: bottom;
+  font-size: 18px;
+  margin-top: 5px;
+	margin-left: 21px;
+    font-weight: bold;
+	text-shadow: 1px 1px 2px 3.0 #000000;
+	color: #FFFFFF;
+}
+
+.button
+{
+  vertical-align: bottom;
+  font-size: 18px;
+  margin-top: 5px;
+	margin-left: 26px;
+    font-weight: bold;
+	text-shadow: 1px 1px 2px 3.0 #000000;
+	color: #FFFFFF;
+}

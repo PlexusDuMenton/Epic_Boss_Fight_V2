@@ -11,49 +11,53 @@ margin-left: 600px;
   margin-top: 0px;
 
   height: 200px;
-  width: 1300px;
+  width: 1244px;
   overflow: clip;
 }
 
 .BG
 {
-background-image: url("file://{images}/custom_game/boss_Health_Bar_base.png");
-
-  height: 200px;
-  width: 1300px;
+background-image: url("file://{images}/custom_game/boss/boss_Health_Bar_base.png");
+  margin-top: 25px;
+  height: 50px;
+  width: 1244px;
   overflow: clip;
 }
 
 .HB
 {
-background-image: url("file://{images}/custom_game/boss_Health_Bar.png");
+background-image: url("file://{images}/custom_game/boss/boss_Health_Bar.png");
 
-  height: 200px;
-  width: 1300px;
+  margin-top: 25px;
+height: 50px;
+width: 1244px;
   overflow: clip;
 }
 
 .overlay
 {
-
-  height: 200px;
-  width: 1300px;
+  background-image: url("file://{images}/custom_game/boss/layout.png");
+  margin-top: 25px;
+  height: 50px;
+  width: 1244px;
   overflow: clip;
 }
 
 .second
 {
-	background-image: url("file://{images}/custom_game/secondary.png");
-  height: 200px;
-  width: 1300px;
+	background-image: url("file://{images}/custom_game/boss/secondary.png");
+  margin-top: 25px;
+  height: 50px;
+  width: 1244px;
   overflow: clip;
 }
 
 .main
 {
-	background-image: url("file://{images}/custom_game/Main.png");
-  height: 200px;
-  width: 1300px;
+	background-image: url("file://{images}/custom_game/boss/Main.png");
+  margin-top: 25px;
+  height: 50px;
+  width: 1244px;
   overflow: clip;
 }
 

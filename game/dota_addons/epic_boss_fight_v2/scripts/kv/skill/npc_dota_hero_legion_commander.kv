@@ -1,45 +1,46 @@
-"Skills" 
+"Skills"
 {
     "-5"
-    { 
+    {
         "ID" "-5"
         "name" "empty5"
         "type" "ultimate"
     }
 	"-4"
-    { 
+    {
         "ID" "-4"
         "name" "empty4"
         "type" "active"
     }
 
     "-3"
-    { 
+    {
         "ID" "-3"
         "name" "empty3"
         "type" "active"
     }
 
     "-2"
-    { 
+    {
         "ID" "-2"
         "name" "empty2"
         "type" "active"
     }
 
     "-1"
-    { 
+    {
         "ID" "-1"
         "name" "empty1"
         "type" "active"
     }
 
     "0"
-    { 
+    {
         "ID" "0"
         "type" "stats"
         "file_name" "hp_1"
-        "hp" 
+        "stat_name" "hp"
+        "hp"
         {
         "0" "0"
         "1" "15"
@@ -75,11 +76,12 @@
     }
 
     "1"
-    { 
+    {
         "ID" "1"
         "type" "stats"
         "file_name" "str_1"
-        "str" 
+        "stat_name" "str"
+        "str"
         {
         "0" "0"
         "1" "2"
@@ -107,14 +109,14 @@
     }
 
     "2"
-    { 
+    {
         "ID" "2"
         "type" "active"
-        "file_name" "active_1"
-        "max_lvl" "4"
+        "file_name" "courage_call"
+        "max_lvl" "1"
         "lvl_gap" "5"
-        "min_lvl" "1"
-        "name" "example_ability"
+        "min_lvl" "3"
+        "name" "courage_call"
         "unlocked" "false"
         "unlock_id"
             {
@@ -124,11 +126,12 @@
     }
 
     "3"
-    { 
+    {
         "ID" "3"
         "type" "stats"
         "file_name" "hp_regen_1"
-        "hp_regen" 
+        "stat_name" "hp_regen"
+        "hp_regen"
         {
         "0" "0"
         "1" "1.0"
@@ -144,7 +147,7 @@
         }
         "max_lvl" "10"
         "lvl_gap" "4"
-        "min_lvl" "2"
+        "min_lvl" "7"
         "unlocked" "false"
         "unlock_id"
             {
@@ -153,11 +156,12 @@
     }
 
     "4"
-    { 
+    {
         "ID" "4"
         "type" "stats"
         "file_name" "armor_1"
-        "armor" 
+        "stat_name" "armor"
+        "armor"
         {
         "0" "0"
         "1" "1"
@@ -173,7 +177,7 @@
         }
         "max_lvl" "10"
         "lvl_gap" "5"
-        "min_lvl" "5"
+        "min_lvl" "12"
         "unlocked" "false"
         "unlock_id"
             {
@@ -182,11 +186,12 @@
     }
 
     "5"
-    { 
+    {
         "ID" "5"
         "type" "stats"
         "file_name" "damage_1"
-        "damage_mult" 
+        "stat_name" "damage_mult"
+        "damage_mult"
         {
         "0" "0"
         "1" "2"
@@ -210,25 +215,36 @@
             }
     }
     "6"
-    { 
+    {
         "ID" "6"
-        "type" "active"
-        "file_name" "magnataur_skewer"
-        "max_lvl" "4"
-        "lvl_gap" "7"
-        "min_lvl" "5"
-        "name" "magnataur_skewer"
+        "type" "stats"
+        "file_name" "move_speed_1"
+        "stat_name" "move_speed_1"
+        "movespeed"
+        {
+        "0" "0"
+        "1" "15"
+        "2" "30"
+        "3" "45"
+        "4" "60"
+        "5" "75"
+        }
+        "max_lvl" "5"
+        "lvl_gap" "10"
+        "min_lvl" "7"
         "unlocked" "false"
         "unlock_id"
             {
+            "1" "11"
             }
     }
     "7"
-    { 
+    {
         "ID" "7"
         "type" "stats"
         "file_name" "attack_speed_1"
-        "attack_speed" 
+        "stat_name" "attack_speed"
+        "attack_speed"
         {
         "0" "0"
         "1" "10"
@@ -248,15 +264,16 @@
         "unlocked" "false"
         "unlock_id"
             {
-
+            "1" "12"
             }
     }
     "8"
-    { 
+    {
         "ID" "8"
         "type" "stats"
         "file_name" "hp_2"
-        "hp" 
+        "stat_name" "hp"
+        "hp"
         {
         "0" "0"
         "1" "500"
@@ -276,15 +293,17 @@
         "unlocked" "false"
         "unlock_id"
             {
-            "1" "9"
+            "1" "10"
+            "2" "9"
             }
     }
     "9"
-    { 
+    {
         "ID" "9"
         "type" "stats"
         "file_name" "hp_regen_2"
-        "hp_regen" 
+        "stat_name" "hp_regen"
+        "hp_regen"
         {
         "0" "0"
         "1" "20"
@@ -301,6 +320,63 @@
         "max_lvl" "10"
         "lvl_gap" "10"
         "min_lvl" "25"
+        "unlocked" "false"
+        "unlock_id"
+            {
+            }
+    }
+    "10"
+    {
+        "ID" "10"
+        "type" "active"
+        "file_name" "shield_faith"
+        "max_lvl" "4"
+        "lvl_gap" "10"
+        "min_lvl" "25"
+        "name" "shield_faith"
+        "unlocked" "false"
+        "unlock_id"
+            {
+            }
+    }
+    "11"
+    {
+        "ID" "11"
+        "type" "active"
+        "file_name" "unshakable_charge" //TBD : change this skill with a true dodge skill
+        "max_lvl" "5"
+        "lvl_gap" "8"
+        "min_lvl" "10"
+        "name" "unshakable_charge"
+        "unlocked" "false"
+        "unlock_id"
+            {
+            }
+    }
+
+    "12"
+    {
+        "ID" "12"
+        "type" "stats"
+        "file_name" "str_2"
+        "stat_name" "str"
+        "str"
+        {
+        "0" "0"
+        "1" "100"
+        "2" "150"
+        "3" "200"
+        "4" "300"
+        "5" "450"
+        "6" "600"
+        "7" "800"
+        "8" "1000"
+        "9" "1250"
+        "10" "1500"
+        }
+        "max_lvl" "10"
+        "lvl_gap" "13"
+        "min_lvl" "20"
         "unlocked" "false"
         "unlock_id"
             {

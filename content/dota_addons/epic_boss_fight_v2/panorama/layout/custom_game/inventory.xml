@@ -10,38 +10,20 @@
 			<Button class="Close" onactivate='close_inventory()'/>
 			<Image hittest="false" id="Inventory_BG" src="file://{images}/custom_game/inventory/BG.png" />
 			<Panel id="Items">
-				
 			</Panel>
 		</Panel>
 		<Panel id = "hero_panel" class="HeroPanel">
 			<Button class="Close" onactivate='close_hero()'/>
 			<Panel id="equipement">
-				
-			</Panel>
-		</Panel>
-		
-		<Panel id = "item_main_bar" class="item_bar_main">
-			<Panel id="item_bar" class="item_bar">
-				
-			</Panel>
-		</Panel>
-		
-		<Panel id="Info" hittest="false">
-				
-		</Panel>
-		<Button id="inventory_button" onactivate='Open_Inventory()' class ="inv_but">
-			<Image hittest="false" id="inv_icon" src="file://{images}/custom_game/inventory/inventory_icon.psd"/>
-		</Button>
-		<Button id="hero_button" onactivate='Open_Hero_Panel()' class ="hero_but">
-			<Image hittest="false" id="hero_icon" src="file://{images}/custom_game/inventory/hero_icon.psd"/>
-		</Button>
-		<Button id="skill_button" onactivate='Open_Skill_Tree()' class ="skill_but">
-			<Image hittest="false" id="st_icon" src="file://{images}/custom_game/inventory/skill_icon.psd"/>
-		</Button>
-		
-		
 
-		<Panel id="Menu" hittest="false"/>
-		<Panel id="Menu_h" hittest="false"/>
+			</Panel>
+		</Panel>
+		<Panel id="Info" hittest="false">
+
+		</Panel>
+		<Panel id="Menu" hittest="false">
+		</Panel>
+		<Panel id="Menu_h" hittest="false">
+		</Panel>
 	</Panel>
 </root>

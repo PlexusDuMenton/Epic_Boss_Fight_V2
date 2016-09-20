@@ -8,6 +8,7 @@ require('libraries/animations')
 MOVE_SPEED = math.log(GameRules.difficulty+10)/math.log(10) * 25 + 200
 function Spawn( entityKeyValues )
 	thisEntity:SetBaseMoveSpeed(MOVE_SPEED)
+	LinkLuaModifier( "immunity", "modifiers/immunity.lua", LUA_MODIFIER_MOTION_NONE )
 	thisEntity:SetContextThink( "Boss_2_think", Boss_2_think, THINK_TIME )
 	thisEntity:SetContextThink( "change_target", change_target, 2 )
 
@@ -32,7 +33,7 @@ function KnockBack(radius,center,distance,team,space)
 		v:AddNewModifier(v, nil, "knock_back", {duration=0.5})
 		local time = 0
 		local duration = 0.5
-		
+
 		vDiff = v:GetAbsOrigin() - center
 		local v_distance = 0
 		if distance> 0 then
@@ -57,16 +58,16 @@ function KnockBack(radius,center,distance,team,space)
 		    	time = time + 0.02
 		    	local z_movement = movement_z_per_frame * ((duration/2) - time)
 		    	movement = Vector(movement_x_per_frame,movement_y_per_frame,z_movement)
-		    	v:SetAbsOrigin(v:GetAbsOrigin() + movement) 
+		    	v:SetAbsOrigin(v:GetAbsOrigin() + movement)
 		    	if time >= duration then
 		    		v:SetAttackCapability(DOTA_UNIT_CAP_MELEE_ATTACK)
 		    		v:SetMoveCapability(DOTA_UNIT_CAP_MOVE_GROUND)
-		    		FindClearSpaceForUnit(v, v:GetAbsOrigin(), false) 
+		    		FindClearSpaceForUnit(v, v:GetAbsOrigin(), false)
 		    	else
 		    		return 0.02
 		    	end
 		    else
-		    	ParticleManager:DestroyParticle(target_particle, true) 
+		    	ParticleManager:DestroyParticle(target_particle, true)
 		    end
 	    end)
 	end
@@ -144,7 +145,7 @@ function projectile_dectection(origin,speed,duration,origin_size,final_size,team
 				end
 				if f_is_allready == false then
 					Damage_Table.victim = v
-					ApplyDamage(Damage_Table) 
+					ApplyDamage(Damage_Table)
 					if modifier_name ~= nil then
 						LinkLuaModifier( modifier_name, "modifiers/"..modifier_name..".lua", LUA_MODIFIER_MOTION_NONE )
 					end
@@ -222,16 +223,17 @@ function spell_6()
 			--damage all player who are in front of him
 	end)
 end
+
 HEAL_AMMOUNT = 0
 function spell_4()
 	print("do spell 4")
-	spell_4_CD = 40/CD_DIVISER + 20
+	spell_4_CD = 40/CD_DIVISER + 20 + HEAL_AMMOUNT * 60
 	boss_state = "spell_4"
 	local x = -6400
 	local y = -200
 	local found_safe = false
 	local base_HPR = thisEntity:GetBaseHealthRegen()
-	found_safe = true 
+	found_safe = true
 	thisEntity:Stop()
 	StartAnimation(thisEntity, {duration=999, activity=ACT_DOTA_DEFEAT , rate=0.25})
 	thisEntity:SetAttackCapability(DOTA_UNIT_CAP_NO_ATTACK)
@@ -239,7 +241,11 @@ function spell_4()
 	nCasterFX = ParticleManager:CreateParticle( "particles/healing_ring.vpcf",  PATTACH_ABSORIGIN , thisEntity )
 	KnockBack(800,thisEntity:GetAbsOrigin(),500,DOTA_TEAM_GOODGUYS)
 	thisEntity:SetBaseHealthRegen(thisEntity:GetMaxHealth()/15)
-	Timers:CreateTimer(0.5,function()
+	thisEntity:AddNewModifier(thisEntity, nil, "immunity", {})
+	Timers:CreateTimer(1.5,function()
+		thisEntity:RemoveModifierByName("immunity")
+	end)
+	Timers:CreateTimer(1.5,function()
 		if Is_Unit_Close(500,thisEntity:GetAbsOrigin()) or thisEntity:GetHealth() >= thisEntity:GetMaxHealth()*(0.9 - HEAL_AMMOUNT/5) then
 			EndAnimation(thisEntity)
 			ParticleManager:DestroyParticle(nCasterFX, false)
@@ -271,7 +277,7 @@ function spell_2()
 
 		local time = 0
 		local duration = 0.5
-		
+
 		vDiff = target:GetAbsOrigin() - thisEntity:GetAbsOrigin()
 		v_distance = -vDiff:Length2D()
 		duration = - v_distance/2500
@@ -288,21 +294,21 @@ function spell_2()
 		    	time = time + 0.02
 		    	local z_movement = movement_z_per_frame * ((duration/2) - time)
 		    	movement = Vector(movement_x_per_frame,movement_y_per_frame,z_movement)
-		    	target:SetAbsOrigin(target:GetAbsOrigin() + movement) 
+		    	target:SetAbsOrigin(target:GetAbsOrigin() + movement)
 		    	if time >= duration then
 		    		target:SetAttackCapability(DOTA_UNIT_CAP_MELEE_ATTACK)
 		    		target:SetMoveCapability(DOTA_UNIT_CAP_MOVE_GROUND)
-		    		FindClearSpaceForUnit(target, target:GetAbsOrigin(), false) 
+		    		FindClearSpaceForUnit(target, target:GetAbsOrigin(), false)
 		    	else
 		    		return 0.02
 		    	end
 		    else
-		    	ParticleManager:DestroyParticle(target_particle, true) 
+		    	ParticleManager:DestroyParticle(target_particle, true)
 		    end
 	    end)
 
 
-	
+
 
 end
 
@@ -310,7 +316,7 @@ end
 function spell_1()
 	print("do spell 1")
 	spell_1_CD = 5/CD_DIVISER + 5
-	thisEntity:SetBaseMoveSpeed(MOVE_SPEED*2) 
+	thisEntity:SetBaseMoveSpeed(MOVE_SPEED*2)
 	local nCasterFX = ParticleManager:CreateParticle( "particles/units/heroes/hero_ursa/ursa_enrage_buff.vpcf",  PATTACH_POINT , thisEntity )
 	Timers:CreateTimer(3,function()
 		thisEntity:SetBaseMoveSpeed(MOVE_SPEED)
@@ -343,8 +349,8 @@ function Boss_2_think()
 				else
 					thisEntity:MoveToTargetToAttack(boss_target)
 				end
-			else 
-					if HPP <25 and spell_4_CD == 0 then 
+			else
+					if HPP <25 and spell_4_CD == 0 then
 						spell_4()
 					elseif HPP < 90 and spell_6_CD == 0 then
 						spell_6()
@@ -370,7 +376,7 @@ function Boss_2_think()
 			    	time = time + 0.02
 			    	local z_movement =  10 * ((1) - time)
 			    	local movement = Vector(0,0,z_movement)
-			    	thisEntity:SetAbsOrigin(thisEntity:GetAbsOrigin() + movement) 
+			    	thisEntity:SetAbsOrigin(thisEntity:GetAbsOrigin() + movement)
 			    	if time >= 1 then
 			    		LinkLuaModifier( "transform", "modifiers/transform.lua", LUA_MODIFIER_MOTION_NONE )
 						thisEntity:AddNewModifier(thisEntity, nil, "transform", {})
@@ -379,7 +385,7 @@ function Boss_2_think()
 			    		EndAnimation(thisEntity)
 			    		thisEntity:SetAttackCapability(DOTA_UNIT_CAP_MELEE_ATTACK)
 			    		thisEntity:SetMoveCapability(DOTA_UNIT_CAP_MOVE_GROUND)
-			    		FindClearSpaceForUnit(thisEntity, thisEntity:GetAbsOrigin(), false) 
+			    		FindClearSpaceForUnit(thisEntity, thisEntity:GetAbsOrigin(), false)
 			    		ParticleManager:DestroyParticle(nCasterFX, false)
 			    		boss_state = "idle"
 			    		thisEntity:RemoveModifierByName("immunity")
@@ -409,7 +415,7 @@ function Is_Unit_Close(radius,origin)
                               false)
 	if #enemy > 0 then
 		return true
-	else 
+	else
 		return false
 	end
 end

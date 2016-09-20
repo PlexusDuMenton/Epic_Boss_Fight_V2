@@ -13,9 +13,16 @@ function lua_hero_effect_critical_II_hit:DeclareFunctions()
     return funcs
 end
 
+function lua_hero_effect_critical_II_hit:OnAttackLanded(event)
+ 	if IsServer() then
+		local hero = self:GetCaster()
+		local target = event.target
+		if event.attacker==self:GetParent() then
+			hero:RemoveModifierByName("lua_hero_effect_critical_II_hit") 
+		end
+	end
+end 
 
-
- 
 
 
 

@@ -4,6 +4,20 @@ if inv_manager == nil then
     print ("CREATED INVENTORY MANAGER")
 end
 
+--[[
+
+ʕ•ᴥ•ʔ Hello There ! ʕ•ᴥ•ʔ
+So you want to know how this inventory System work ? (͡ ͡° ͜ つ ͡͡°)
+
+This Code is a real mess , almost unintentional obfuscation ¯\(°_o)/¯
+
+
+(•_•) ( •_•)>⌐■-■ (⌐■_■)
+ＧＯＯＤ ＬＵＣＫ ＳＯＮ
+┬┴┬┴┬┴┬┴┬┴┬┴┤ ͜ʖ ͡*) ├┬┴┬┴┬┴┬┴┬┴┬┴
+]]
+
+
 INVENTORY_SIZE = 30
 INVENTORY_PASS_SIZE = 40
 QUALITY_POWER  ={ }
@@ -75,8 +89,11 @@ function copy(obj, seen)
   return res
 end
 
- --INVENTORY MANAGER IS WHAT MAKE ALL THE INVENTORY SYSTEM WORK , FROM CREATION OF ITEM  TO REPAIR ,UPGRADE, AND STATS CALCULATION
+ --[[INVENTORY MANAGER IS WHAT MAKE ALL THE INVENTORY SYSTEM WORK , FROM CREATION OF ITEM
+ TO REPAIR(even if not implemented cause it would be annoying and don't add realy interesing deep),
+ UPGRADE, AND STATS CALCULATION
 
+]]
 inv_manager.XP_Table = {}
 inv_manager.XP_Table[0] = 0
 for i=1,200 do
@@ -107,27 +124,27 @@ function inv_manager:to_inv(hero,inv_slot)
                     inv_manager:sort( hero )
                     inv_manager:save_inventory(hero)
                     return
-                elseif i==size and #inventory<size+1 then 
+                elseif i==size and #inventory<size+1 then
                     print ("item added to inventory")
                     table.insert(hero.inventory,item)
                     hero.item_bar[inv_slot] = nil
                     inv_manager:sort( hero )
                     inv_manager:save_inventory(hero)
                     return
-                elseif i==size and #inventory>=size+1 then 
+                elseif i==size and #inventory>=size+1 then
                     print ("item bar is full")
                     Notifications:Inventory(hero:GetPlayerID(), {text="#NOSLOT_BAR",duration=2,color="FFAAAA"})
                     return
                 end
             else
-                if i==size and #inventory<size+1 then 
+                if i==size and #inventory<size+1 then
                     print ("item added to inventory")
                     table.insert(hero.inventory,item)
                     hero.item_bar[inv_slot] = nil
                     inv_manager:sort( hero )
                     inv_manager:save_inventory(hero)
                     return
-                elseif i==size and #inventory>=size+1 then 
+                elseif i==size and #inventory>=size+1 then
                     print ("item bar is full")
                     Notifications:Inventory(hero:GetPlayerID(), {text="#NOSLOT_BAR",duration=2,color="FFAAAA"})
                     return
@@ -157,74 +174,135 @@ function inv_manager:to_item_bar(hero,inv_slot,bar_slot)
                         inv_manager:sort( hero )
                         inv_manager:save_inventory(hero)
                         return
-                    elseif i==size and #item_bar<size+1 then 
+                    elseif i==size and #item_bar<size+1 then
                         print ("item added to item_bar")
                         table.insert(hero.item_bar,item)
                         hero.inventory[inv_slot] = nil
                         inv_manager:sort( hero )
                         inv_manager:save_inventory(hero)
                         return
-                    elseif i==size and #item_bar>=size+1 then 
+                    elseif i==size and #item_bar>=size+1 then
                         print ("item bar is full")
                         Notifications:Inventory(hero:GetPlayerID(), {text="#NOSLOT_BAR",duration=2,color="FFAAAA"})
                         return
                     end
                 else
-                    if i==size and #item_bar<size+1 then 
+                    if i==size and #item_bar<size+1 then
                         print ("item added to item_bar")
                         table.insert(hero.item_bar,item)
                         hero.inventory[inv_slot] = nil
                         inv_manager:sort( hero )
                         inv_manager:save_inventory(hero)
                         return
-                    elseif i==size and #item_bar>=size+1 then 
+                    elseif i==size and #item_bar>=size+1 then
                         print ("item bar is full")
                         Notifications:Inventory(hero:GetPlayerID(), {text="#NOSLOT_BAR",duration=2,color="FFAAAA"})
                         return
                     end
                 end
-            
+
         end
         CustomGameEventManager:Send_ServerToPlayer(hero:GetPlayerOwner(), "clean_forge", {} )
     end
 end
 
-function inv_manager:reforge(weapon)
-    local item_list = GameRules.items
-    local item_info = item_list[weapon.item_name]
-    if item_info == nil then 
-        print ("No kv file")
-        return weapon
+function inv_manager:reforge_com(hero,slot)
+    local equipement = nil
+    if slot ~= nil then
+        equipement = hero.inventory[slot]
+    else
+        print ("slot is nil")
+        return
     end
-    item = copy(weapon)
 
+    if equipement ~= nil then
+        equipement = inv_manager:reforge(equipement,hero)
+    end
+    print (equipement.hp)
+    hero.inventory[slot] = equipement
+    inv_manager:Calculate_stats(hero)
+    inv_manager:save_inventory(hero)
+end
+
+function inv_manager:reforge_equipement(hero,eq_slot)
+    local equipement = nil
+    print (eq_slot,type(eq_slot))
+    if eq_slot == nil or type(eq_slot) ~= "string" then return end
+    if hero.equipement[eq_slot]~= nil then
+        equipement = hero.equipement[eq_slot]
+    else
+        print ("slot is nil")
+        return
+    end
+
+    if equipement ~= nil then
+        equipement = inv_manager:reforge(equipement,hero)
+    end
+    print (equipement.hp)
+    hero.equipement[eq_slot] = equipement
+    inv_manager:Calculate_stats(hero)
+    inv_manager:save_inventory(hero)
+end
+
+function inv_manager:reforge(item_reforge,hero)
+    local item_list = GameRules.items
+    local item_info = item_list[item_reforge.item_name]
+    if item_info == nil then
+        print ("No kv file")
+        return item_reforge
+    end
+    item = copy(item_reforge)
 
     if item.Equipement == true then
-        if item.damage ~= nil then item.damage = math.ceil(item_info.damage + math.random(0,item_info.damage*0.35)*quality_improvement[item.difficulty]) end
-        if item.m_damage ~= nil then item.m_damage = math.ceil(item_info.m_damage + math.random(0,item_info.m_damage*0.35)*quality_improvement[item.difficulty]) end
-        if item.range ~= nil then item.range = math.ceil(item_info.range + math.random(0,item_info.range*0.05)*(0.7 + 0.3*quality_improvement[item.difficulty])) end
-        if item.loh ~= nil then item.loh = math.ceil(item_info.loh + math.random(0,item_info.loh*0.35)*quality_improvement[item.difficulty]) end
-        if item.attack_speed ~= nil then item.attack_speed = math.ceil(item_info.attack_speed + math.random(0,item_info.attack_speed*0.35)*quality_improvement[item.difficulty]) end
-        if item.armor ~= nil then item.armor = math.ceil(item_info.armor + math.random(0,item_info.armor*0.35)*quality_improvement[item.difficulty]) end
-        if item.hp ~= nil then item.hp = math.ceil(item_info.hp + math.random(0,item_info.hp*0.35)*quality_improvement[item.difficulty]) end
-        if item.movespeed ~= nil then item.movespeed = math.ceil(item_info.movespeed + math.random(0,item_info.movespeed*0.35)*quality_improvement[item.difficulty]) end
-        if item.hp_regen ~= nil then item.hp_regen = math.ceil(item_info.hp_regen + math.random(0,item_info.hp_regen*0.35)) end
-        if item.mp ~= nil then item.mp = math.ceil(item_info.mp + math.random(0,item_info.mp*0.35)*quality_improvement[item.difficulty]) end
-        if item.mp_regen ~= nil then item.mp_regen = math.ceil(item_info.mp_regen + math.random(0,item_info.mp_regen*0.35)*quality_improvement[item.difficulty]) end
-
-        if item.cat == "weapon" then
-            item.Next_Level_XP = inv_manager.XP_Table[item.level]
-            if item.reforgable == true then
-                item.reforgable = nil
-            else 
-                item.XP = item.XP * 0.98
+            if item.cat ~= "weapon"  and item.reforgable ~= true then
+                Notifications:Inventory(hero:GetPlayerID(), {text="#NO_WEAP_CANT_BE_REFORGE",duration=2,color="FFAAAA"})
+                return item
             end
-        end
-        return item
+            item.qualifier = nil
+            if item.damage ~= nil then item.damage = math.ceil(item_info.damage + math.random(0,item_info.damage*0.35)*quality_improvement[item.difficulty]) end
+            if item.m_damage ~= nil then item.m_damage = math.ceil(item_info.m_damage + math.random(0,item_info.m_damage*0.35)*quality_improvement[item.difficulty]) end
+            if item.range ~= nil then item.range = math.ceil(item_info.range + math.random(0,item_info.range*0.05)*(0.7 + 0.3*quality_improvement[item.difficulty])) end
+            if item.loh ~= nil then item.loh = math.ceil(item_info.loh + math.random(0,item_info.loh*0.35)*quality_improvement[item.difficulty]) end
+            if item.attack_speed ~= nil then item.attack_speed = math.ceil(item_info.attack_speed + math.random(0,item_info.attack_speed*0.35)*quality_improvement[item.difficulty]) end
+            if item.armor ~= nil then item.armor = math.ceil(item_info.armor + math.random(0,item_info.armor*0.35)*quality_improvement[item.difficulty]) end
+            if item.hp ~= nil then item.hp = math.ceil(item_info.hp + math.random(0,item_info.hp*0.35)*quality_improvement[item.difficulty]) end
+            if item.movespeed ~= nil then item.movespeed = math.ceil(item_info.movespeed + math.random(0,item_info.movespeed*0.35)*quality_improvement[item.difficulty]) end
+            if item.hp_regen ~= nil then item.hp_regen = math.ceil(item_info.hp_regen + math.random(0,item_info.hp_regen*0.35)) end
+            if item.mp ~= nil then item.mp = math.ceil(item_info.mp + math.random(0,item_info.mp*0.35)*quality_improvement[item.difficulty]) end
+            if item.mp_regen ~= nil then item.mp_regen = math.ceil(item_info.mp_regen + math.random(0,item_info.mp_regen*0.35)*quality_improvement[item.difficulty]) end
 
+            if item.damage == nil and item.dmg_grow ~= nil and item.dmg_grow > 0  then item.damage=0 end
+            if item.damage ~= nil and item.dmg_grow ~= nil and item.dmg_grow > 0 then
+                item.damage = item.damage + (item.dmg_grow *item.level)
+            end
+            if item.m_damage == nil and item.m_dmg_grow ~= nil and item.m_dmg_grow > 0  then item.m_damage=0 end
+            if item.m_damage ~= nil and item.m_dmg_grow ~= nil and item.m_dmg_grow > 0 then
+                item.m_damage = item.m_damage + (item.m_dmg_grow *item.level)
+            end
+            if item.attack_speed == nil and item.as_grow ~= nil and item.as_grow > 0  then item.attack_speed=0 end
+            if item.attack_speed ~= nil and item.as_grow ~= nil and item.as_grow > 0 then
+                item.attack_speed = item.attack_speed + (item.as_grow *item.level)
+            end
+            if item.range == nil and item.range_grow ~= nil and item.range_grow > 0  then item.range=0 end
+            if item.range ~= nil and item.range_grow ~= nil and item.range_grow > 0 then
+                item.range = item.range + (item.range_grow *item.level)
+            end
+
+            print ("reforge should has done right")
+            print (item.hp)
+            if item.cat == "weapon" then
+                if item.level >= 3 then
+                    item.Next_Level_XP = math.floor(inv_manager.XP_Table[item.level]*(item.Ilevel^0.3))
+                    item.XP = math.ceil(item.XP * 0.90)
+                 else
+                    Notifications:Inventory(hero:GetPlayerID(), {text="#MUST_BE_LEVEL_3",duration=2,color="FFAAAA"})
+                end
+            end
+            item.reforgable = nil
+            return item
     else
         print ("this is not a piece of equipement")
-        return weapon 
+        return item_reforge
     end
 
 
@@ -236,7 +314,7 @@ function inv_manager:Create_Item(Item)
     local item = Item
     local item_list = GameRules.items
     local item_info = item_list[Item:GetName()]
-    if item_info == nil then 
+    if item_info == nil then
         print ("no kv file")
         return Item
     end
@@ -302,14 +380,14 @@ function inv_manager:Create_Item(Item)
         elseif power <= QUALITY_POWER[8]  then
             item.quality = "Mythical"
             power = power + QUALITY_POWER[7]
-        else 
+        else
             item.quality = "Godlike"
             power = power + QUALITY_POWER[8]
         end
 
         local rng = math.random() - (1/(10/power_mult)-0.1)
         if rng<0.63 then
-            item.damage = math.floor(power *0.8* (0.4 + math.random()/1.667)* 3) 
+            item.damage = math.floor(power *0.8* (0.4 + math.random()/1.667)* 3)
             power = power - (item.damage/3)
         elseif rng < 0.8 then
             item.damage = math.ceil(power * (0.8 + math.random()/5)* 3)
@@ -318,7 +396,7 @@ function inv_manager:Create_Item(Item)
         if power >0 then
             rng = math.random() - (1/(10/power_mult)-0.1)
             if rng<0.63 then
-                item.m_damage = math.floor(power *0.8* (0.4 + math.random()/1.667)* 3) 
+                item.m_damage = math.floor(power *0.8* (0.4 + math.random()/1.667)* 3)
                 power = power - (item.m_damage/3)
             elseif rng < 0.8 then
                 item.m_damage = math.ceil(power * (0.8 + math.random()/5)* 3)
@@ -328,7 +406,7 @@ function inv_manager:Create_Item(Item)
         if power > 0 then
             rng = math.random() - (1/(10/power_mult)-0.1)
             if rng<0.63 then
-                item.loh = math.ceil(power * 0.95* (0.4 + math.random()/1.667)* 2) 
+                item.loh = math.ceil(power * 0.95* (0.4 + math.random()/1.667)* 2)
                 power = power - (item.loh/2)
             elseif rng < 0.8 then
                 item.loh = math.ceil(power*(0.5 + math.random()/2)* 2)
@@ -356,7 +434,7 @@ function inv_manager:Create_Item(Item)
             end
         end
 
-        if power < 1 then 
+        if power < 1 then
             power = 0
             item.ls = 0
         else
@@ -372,14 +450,15 @@ function inv_manager:Create_Item(Item)
         if item.range == 0 then item.range = nil end
         if item.damage == 0 then item.damage = nil end
         if item.m_damage == 0 then item.m_damage = nil end
-        
+
 
     end
 
     if item.Equipement == true then
+        item.reforgable = true
         item.difficulty = GameRules.player_difficulty
-        if item.Ilevel == nil then 
-                    print ("ilevel of weapon is nil , replace it by 0") 
+        if item.Ilevel == nil then
+                    print ("ilevel of weapon is nil , replace it by 0")
                     item.Ilevel = 0
                 end
         if item.Ilevel>MAX_LEVEL then item.Ilevel = MAX_LEVEL end
@@ -388,12 +467,11 @@ function inv_manager:Create_Item(Item)
         if item.cat == "weapon" then
             item.level = 1
             item.XP = 0
-            item.reforgable = true
             item.upgrade_point = 0
 
             item.upgrade_level = 0
 
-            item.Next_Level_XP = inv_manager.XP_Table[item.level]
+            item.Next_Level_XP = math.floor(inv_manager.XP_Table[item.level]*(item.Ilevel^0.3))
         end
             if item.Ilevel >= 100 then
                 random_number = math.random(10,(10000/log10(GameRules.loot_multiplier/5))/(quality_improvement[GameRules.player_difficulty]))/10
@@ -425,20 +503,20 @@ function inv_manager:Create_Item(Item)
         if item.agi ~= nil then item.agi = math.ceil(item_info.agi*multiplier_power + math.random(0,item_info.agi*0.35)*quality_improvement[GameRules.player_difficulty]) end
         if item.int ~= nil then item.int = math.ceil(item_info.int*multiplier_power + math.random(0,item_info.int*0.35)*quality_improvement[GameRules.player_difficulty]) end
 
-        
+
     end
 
     return item
 end
 
 function inv_manager:calc_damage_mutliplier(item_multiplier,hero_multiplier,hero)
-    if item_multiplier == nil then item_multiplier = 0 end 
+    if item_multiplier == nil then item_multiplier = 0 end
     if hero_multiplier == nil then hero_multiplier = 0 end
     hero.dmg_mult = hero_multiplier + item_multiplier + 100
 end
 
 function inv_manager:calc_stat_item(equipement,stats,hero)
-    
+
     local eq_slot = copy(equipement)
 
     --[[i check if a value is nil , if it's the case i set it to 0, i prefer use this way than put in each item those basic value
@@ -508,7 +586,7 @@ function inv_manager:calc_stat_item(equipement,stats,hero)
     stats.int = stats.int + eq_slot.int
 
     --Armor/magic ress
-    
+
     stats.armor = stats.armor + eq_slot.armor
     stats.m_ress = 100*(1-((1 - 0.01*stats.m_ress) * (1 - 0.01*eq_slot.m_ress)))
     stats.dodge = stats.dodge + eq_slot.dodge
@@ -529,10 +607,17 @@ function inv_manager:calc_stat_item(equipement,stats,hero)
         inv_manager:calc_damage_mutliplier( stats.damage_mult,hero.skill_bonus.damage_mult,hero)
 
         if hero ~= nil then damage_multiplier =  damage_multiplier * (hero.dmg_mult/100) end
-        if eq_slot.ranged == true then damage_multiplier = damage_multiplier*0.8 end
+        if eq_slot.ranged == true then
+            print(hero:HasModifier("lua_hero_effect_cancel_ranged_malus"))
+            if hero:HasModifier("lua_hero_effect_cancel_ranged_malus") == false then
+                print ("damage is reduced")
+                damage_multiplier = damage_multiplier*0.8 end
+            else
+                print ("damage is NOT reduced")
+            end
         if eq_slot.ranged == true then
             hero.item_agro = 0
-            hero:SetAttackCapability(DOTA_UNIT_CAP_RANGED_ATTACK) 
+            hero:SetAttackCapability(DOTA_UNIT_CAP_RANGED_ATTACK)
             if eq_slot.magical == true then
                 if eq_slot.projectile_name == nil then eq_slot.projectile_name = "particles/units/heroes/hero_leshrac/leshrac_base_attack.vpcf" end
                 hero:SetRangedProjectileName(eq_slot.projectile_name)
@@ -547,7 +632,7 @@ function inv_manager:calc_stat_item(equipement,stats,hero)
         else
             hero.item_agro = 1
             hero:SetRangedProjectileName("")
-            hero:SetAttackCapability(DOTA_UNIT_CAP_MELEE_ATTACK) 
+            hero:SetAttackCapability(DOTA_UNIT_CAP_MELEE_ATTACK)
             stats.damage = (stats.damage + eq_slot.upgrade_damage + eq_slot.bonus_damage) * damage_multiplier
         end
         stats.m_damage = (stats.m_damage + eq_slot.m_damage + eq_slot.m_damage) * damage_multiplier
@@ -573,7 +658,7 @@ end
 
 
 function inv_manager:update_effect (hero)
-    Timers:CreateTimer(1, function()
+    Timers:CreateTimer(0.2, function()
         hero.total_effect = {}
         local order = 0
         --self:GetCaster().equip_stats.effect
@@ -589,7 +674,7 @@ function inv_manager:update_effect (hero)
                 hero.total_effect[order] = v
                 order = order + 1
             end
-        end 
+        end
 
         for k,v in pairs(hero.total_effect) do
             LinkLuaModifier( "lua_hero_effect_"..v, "effect/"..v..".lua", LUA_MODIFIER_MOTION_NONE )
@@ -597,9 +682,9 @@ function inv_manager:update_effect (hero)
                 hero:AddNewModifier(hero, nil, "lua_hero_effect_"..v, nil)
                 Timers:CreateTimer(1, function()
                     if have_effect(hero.total_effect,v) == false then
-                        hero:RemoveModifierByName("lua_hero_effect_"..v) 
+                        hero:RemoveModifierByName("lua_hero_effect_"..v)
                     else
-                        return 1.0 -- Rerun this timer every 30 game-time seconds 
+                        return 0.2 -- Rerun this timer every 30 game-time seconds
                     end
                 end)
             end
@@ -607,7 +692,7 @@ function inv_manager:update_effect (hero)
 
         --then add modifier for each effect
 
-        return 1.0 -- Rerun this timer every 30 game-time seconds 
+        return 0.2 -- Rerun this timer every 30 game-time seconds
     end)
 
 
@@ -634,7 +719,7 @@ function tableMerge(t2, t1)
         end
     end
     return t1
-    
+
 end
 
 function inv_manager:Calculate_stats(hero) -- call this when equipement is modified (equip new item , load caracter , weapon broke down)
@@ -676,7 +761,7 @@ function inv_manager:Calculate_stats(hero) -- call this when equipement is modif
     --stats = self:calc_stat_item(hero.equipement.earring2,stats)
 
 
-    stats = self:calc_stat_item(hero.equipement.weapon,stats,hero) --put it at the end since it'll affect all magical damage and range 
+    stats = self:calc_stat_item(hero.equipement.weapon,stats,hero) --put it at the end since it'll affect all magical damage and range
 
     if hero.equipement.weapon == nil and stats.range > 500 then stats.range = 500 end
 
@@ -684,7 +769,7 @@ function inv_manager:Calculate_stats(hero) -- call this when equipement is modif
     --to add : a function that add hero side stats (levels...) and apply them
     local key = "player_"..hero:GetPlayerID()
     inv_manager:save_inventory(hero)
-    CreateItem("item_void", hero, hero) 
+    CreateItem("item_void", hero, hero)
     Timers:CreateTimer(0.25,function()
         CustomNetTables:SetTableValue( "stats",key, {effect_bonus = hero.effect_bonus,equip_stats = hero.equip_stats,skill_stats = hero.skill_bonus,hero_stats = hero.hero_stats,Name = hero:GetUnitName(),LVL = hero.Level,stats_points = hero.stats_points  } )
     end)
@@ -692,8 +777,8 @@ function inv_manager:Calculate_stats(hero) -- call this when equipement is modif
     Timers:CreateTimer(1.0,function()
         CustomNetTables:SetTableValue( "stats",key, {effect_bonus = hero.effect_bonus,equip_stats = hero.equip_stats,skill_stats = hero.skill_bonus,hero_stats = hero.hero_stats,Name = hero:GetUnitName(),LVL = hero.Level,stats_points = hero.stats_points  } )
     end)
-    
-    
+
+
 end
 
 function inv_manager:Init_Hero_Stat()
@@ -720,19 +805,19 @@ function inv_manager:Init_Hero_Stat()
 end
 
 function inv_manager:Create_Inventory(hero) -- call this when the hero entity is created
-    
 
+    GameRules.Admin_List = LoadKeyValues("scripts/kv/admin.kv")
     CustomGameEventManager:Send_ServerToPlayer(hero:GetPlayerOwner(), "item_list", item_list_init )
     hero.inventory = {}
     hero.equipement = {}
     hero.item_bar = {}
     hero.trade = {}
     hero.agro = 0
-    hero.item_agro = 0 
+    hero.item_agro = 0
     hero.base_agro = 0
     hero.trading = false
     hero.trade_gold = 0
-    hero.Level = 1
+    hero.Level = 0
     hero.stats_points = 0
     hero.XP = 0
     hero.CD = 0
@@ -740,8 +825,17 @@ function inv_manager:Create_Inventory(hero) -- call this when the hero entity is
     inv_manager:update_effect (hero)
     inv_manager:Calculate_stats(hero)
     hero.hero_stats = inv_manager:Init_Hero_Stat()
+    epic_boss_fight:Update_stat(hero)
     inv_manager:Calculate_stats(hero)
     inv_manager:save_inventory(hero)
+    local Steam_ID = PlayerResource:GetSteamAccountID(hero:GetPlayerID())
+    hero.admin= false
+    for k,v in pairs (GameRules.Admin_List) do
+        if v == Steam_ID then
+            hero.admin = true
+            print("you are an admin")
+        end
+    end
     local Item = nil
     if hero:GetUnitName() == "npc_dota_hero_legion_commander" then
         Item = epic_boss_fight:_CreateItem("item_rust_dagger",hero)
@@ -883,7 +977,7 @@ function inv_manager:Send_trading(hero,slot,ammount,hero_2) -- call this when th
             else
                 if #hero_2.inventory + #hero.trade + 1 <= size_2 then
                     local flag = false
-                    for i = 0,9 do 
+                    for i = 0,9 do
                         if flag == false and hero.trade[i] == nil then
                             hero.trade[i] = hero.inventory[slot]
                             flag = true
@@ -894,13 +988,13 @@ function inv_manager:Send_trading(hero,slot,ammount,hero_2) -- call this when th
                     Notifications:Inventory(hero:GetPlayerID(), {text="#OTHER_DONT_HAVE_SPACE",duration=2,color="FFAAAA"})
                 end
             end
-        end 
+        end
     else
         Notifications:Inventory(hero:GetPlayerID(), {text="#CANT_TRADE_MORE",duration=2,color="FFAAAA"})
     end
     inv_manager:save_inventory(hero)
     local key = "trade_player_"..hero:GetPlayerID()
-    CustomNetTables:SetTableValue( "info",key, {trade_gold = hero.trade_gold , trade = hero.trade} ) 
+    CustomNetTables:SetTableValue( "info",key, {trade_gold = hero.trade_gold , trade = hero.trade} )
     DeepPrintTable(CustomNetTables:GetTableValue("info", key ))
 end
 
@@ -922,7 +1016,7 @@ function inv_manager:withdraw_trading(hero,slot,ammount) -- call this when the h
             inv_manager:Add_Item(hero,hero.trade[slot])
             hero.trade[slot] = nil
         end
-     end 
+     end
     inv_manager:save_inventory(hero)
     local key = "trade_player_"..hero:GetPlayerID()
     CustomNetTables:SetTableValue( "info",key, {trade_gold = hero.trade_gold , trade = hero.trade} )
@@ -991,7 +1085,7 @@ function inv_manager:Add_Item(hero,item) --will be called when a item is purshas
                     end
                 end
             end
-        
+
         else
             if item == nil then print ("item is nil")
             else print ("error , item not item (LOGIC BITCH)")
@@ -1011,7 +1105,7 @@ function inv_manager:sort( hero )
             for j = 0,size-1 do
                 if hero.inventory[size-j] ~= nil and empty ==true then
                     empty = false
-                    hero.inventory[i] = hero.inventory[size-j] 
+                    hero.inventory[i] = hero.inventory[size-j]
                     hero.inventory[size-j] = nil
                 end
             end
@@ -1022,7 +1116,7 @@ end
 
 function inv_manager:drop(item,pos)
 
-            local Item = CreateItem(item.item_name, owner, owner) 
+            local Item = CreateItem(item.item_name, owner, owner)
             local drop = CreateItemOnPositionForLaunch(pos, Item )
             pos = pos+RandomVector(RandomFloat(150,200))
             Item:LaunchLoot(false, 200, 0.75,pos)
@@ -1122,15 +1216,15 @@ function inv_manager:Use_Item(hero,inv_slot,IB) --also equip item
         print ("ok")
         item = hero.item_bar[inv_slot]
     else
-        item = hero.inventory[inv_slot] 
+        item = hero.inventory[inv_slot]
     end
     if inv_slot > 0 and inv_slot <= size then
         if item ~= nil then
             print ("equip/use item")
             print (item.Equipement)
             if item.Equipement == true then
-                if item.Ilevel == nil then 
-                    print ("ilevel of weapon is nil , replace it by 0") 
+                if item.Ilevel == nil then
+                    print ("ilevel of weapon is nil , replace it by 0")
                     item.Ilevel = 0
                 end
                 if item.Ilevel <= hero.Level then
@@ -1210,7 +1304,7 @@ function inv_manager:Use_Item(hero,inv_slot,IB) --also equip item
                         end
                     end
                     inv_manager:sort( hero )
-                else 
+                else
                     print ("need more level")
                     Notifications:Inventory(hero:GetPlayerID(), {text="#NO_REQ_LEVEL",duration=2,color="FFAAAA"})
 
@@ -1253,7 +1347,7 @@ function inv_manager:Use_Item(hero,inv_slot,IB) --also equip item
     end
 end
 
-function inv_manager:Use_consumable(hero,item)   
+function inv_manager:Use_consumable(hero,item)
     print ("TEST")
     local time = 0
     hero.CD = 15
@@ -1339,7 +1433,7 @@ function inv_manager:Sell_Item(hero,inv_slot,ammount) --sell item if the player 
         print ("Slot number is invalid or inventory don't exist")
     end
 end
- 
+
 function inv_manager:make_evolution(hero,evolution_slot,slot)
     local item = nil
     if evolution_slot == nil then return end
@@ -1362,7 +1456,7 @@ function inv_manager:evolve_weapon(hero,item,evolution_slot)
     for k,v in pairs(evolution) do
         if v.way == evolution_slot then print (k) evolution_name = k end
     end
-    if evolution_name == nil then print ("no evolution on this way") return item end 
+    if evolution_name == nil then print ("no evolution on this way") return item end
     if item.upgrade_level >= evolution[evolution_name].level and weapon.upgrade_damage >= evolution[evolution_name].damage and weapon.upgrade_m_damage >= evolution[evolution_name].m_damage and weapon.upgrade_range >= evolution[evolution_name].range and weapon.upgrade_loh >= evolution[evolution_name].loh and weapon.upgrade_attack_speed >= evolution[evolution_name].attack_speed and weapon.upgrade_ls >= evolution[evolution_name].ls then
         print ("evolveweapon")
         New_Weapon = epic_boss_fight:_CreateItem(evolution_name,hero)
@@ -1377,8 +1471,8 @@ function inv_manager:evolve_weapon(hero,item,evolution_slot)
 
 
         function add_stats (weapon_stats , stats)
-            if weapon_stats ~= nil then 
-                stats = weapon_stats + stats 
+            if weapon_stats ~= nil then
+                stats = weapon_stats + stats
             end
             return stats
         end
@@ -1426,7 +1520,7 @@ function inv_manager:evolve_weapon(hero,item,evolution_slot)
             New_Weapon.bonus_attack_speed = math.ceil(bonus_attack_speed)*0.4
         end
         return New_Weapon
-    else Notifications:Inventory(hero:GetPlayerID(), {text="#DONT_HAVE_REQUIREMENT",duration=2,color="FFAAAA"}) return item end 
+    else Notifications:Inventory(hero:GetPlayerID(), {text="#DONT_HAVE_REQUIREMENT",duration=2,color="FFAAAA"}) return item end
 end
 
 function inv_manager:crystalyze_weapon(hero,item)
@@ -1443,7 +1537,7 @@ function inv_manager:crystalyze_weapon(hero,item)
 
 
         function add_stats (weapon_stats , stats)
-            if weapon_stats ~= nil then 
+            if weapon_stats ~= nil then
                 stats = weapon_stats + stats
             end
             return stats
@@ -1495,22 +1589,22 @@ function inv_manager:crystalyze_weapon(hero,item)
 
     local power = 0
     if soul.damage ~= nil then
-        power = power +soul.damage/3 
+        power = power +soul.damage/3
     end
     if soul.m_damage ~= nil then
         power = power +soul.m_damage/2
     end
     if soul.loh ~= nil then
-        power = power +soul.loh/2 
+        power = power +soul.loh/2
     end
     if soul.ls ~= nil then
         power = power +soul.ls^3
     end
     if soul.range ~= nil then
-        power = power +soul.range 
+        power = power +soul.range
     end
     if soul.attack_speed ~= nil then
-        power = power +soul.attack_speed 
+        power = power +soul.attack_speed
     end
         if power <= QUALITY_POWER[0] then
             print (power)
@@ -1531,7 +1625,7 @@ function inv_manager:crystalyze_weapon(hero,item)
             soul.quality = "Legendary"
         elseif power <= QUALITY_POWER[8]  then
             soul.quality = "Mythical"
-        else 
+        else
             soul.quality = "Godlike"
         end
         print (power)
@@ -1542,10 +1636,10 @@ end
 
 function inv_manager:crystalyze(hero,slot_weap)
     local weapon = nil
-    if slot_weap ~= nil then 
-        weapon = hero.inventory[slot_weap] 
-    else 
-        return 
+    if slot_weap ~= nil then
+        weapon = hero.inventory[slot_weap]
+    else
+        return
     end
 
     if weapon ~= nil then
@@ -1574,8 +1668,8 @@ function inv_manager:upgrade_weapon(hero,weapon,soul) --will be called when a we
                     weapon.upgrade_range = weapon.upgrade_range + soul.range
                 end
 
-                if soul.loh ~= nil  then 
-                if weapon.upgrade_loh == nil then weapon.upgrade_loh = 0 end  
+                if soul.loh ~= nil  then
+                if weapon.upgrade_loh == nil then weapon.upgrade_loh = 0 end
                     weapon.upgrade_loh = weapon.upgrade_loh + soul.loh
                 end
 
@@ -1590,15 +1684,15 @@ function inv_manager:upgrade_weapon(hero,weapon,soul) --will be called when a we
                 weapon.upgrade_point = weapon.upgrade_point - 1
     return weapon
 end
- 
+
 function inv_manager:up_weapon(hero,soul_slot,weapon_slot)
-    local soul = nil 
+    local soul = nil
     local weapon =  nil
     if soul_slot == nil then return end
     soul = hero.inventory[soul_slot]
     if soul == nil then return end
     if soul.Soul ~= true then print ("soul is not a soul") return end
-    if weapon_slot ~= nil then 
+    if weapon_slot ~= nil then
         weapon = hero.inventory[weapon_slot]
     else
         weapon = hero.equipement.weapon
@@ -1617,11 +1711,11 @@ function inv_manager:up_weapon(hero,soul_slot,weapon_slot)
         Notifications:Inventory(hero:GetPlayerID(), {text="#WEAPON_NO_UPGRADE_SLOT",duration=2,color="FFAAAA"})
     end
 
-    if weapon_slot ~= nil then 
+    if weapon_slot ~= nil then
         hero.inventory[weapon_slot] = weapon
     else
         hero.equipement.weapon = weapon
-    end 
+    end
     inv_manager:Calculate_stats(hero)
     inv_manager:save_inventory(hero)
 end
@@ -1646,7 +1740,7 @@ function inv_manager:item_checklevelup(item)
         if item.range ~= nil then
             item.range = item.range + item.range_grow
         end
-        item.Next_Level_XP = inv_manager.XP_Table[item.level]
+        item.Next_Level_XP = math.floor(inv_manager.XP_Table[item.level]*(item.Ilevel^0.3))
         item.reforgable = true
         item = inv_manager:item_checklevelup(item)
         return item
@@ -1655,7 +1749,7 @@ function inv_manager:item_checklevelup(item)
         return item
     end
 end
-    
+
 function inv_manager:weapon_checklevelup(hero)
     hero.equipement.weapon = inv_manager:item_checklevelup(hero.equipement.weapon)
     inv_manager:Calculate_stats(hero)
@@ -1674,8 +1768,8 @@ function inv_manager:transmute_weapon(hero,transmuted,weapon) --will be called w
 
 
         function add_stats (weapon_stats , stats)
-            if weapon_stats ~= nil then 
-                stats = weapon_stats + stats 
+            if weapon_stats ~= nil then
+                stats = weapon_stats + stats
             end
             return stats
         end
@@ -1704,18 +1798,19 @@ function inv_manager:transmute_weapon(hero,transmuted,weapon) --will be called w
         bonus_attack_speed = add_stats(transmuted.bonus_attack_speed,bonus_attack_speed)
         print (math.ceil(2+ bonus_m_damage * 2),(2+bonus_damage * 2) , (2+bonus_range * 0.2) , (2+bonus_attack_speed) , (2+bonus_loh), (2+bonus_ls^1.5))
     local xp = math.ceil(transmuted.XP/3 + ( log10(2 + transmuted.XP/2) + 5*transmuted.level^1.2) * ( 1 + (0.1*(0.1 + log10(2+ bonus_m_damage * 2)+ log10(2+bonus_damage * 2) + log10(2+bonus_range * 0.2) + log10(2+bonus_attack_speed) + log10(2+bonus_loh) + log10(2+bonus_ls^1.5) * 10) )) )
+    xp = xp *(transmuted.Ilevel^0.3)
     weapon.XP = math.ceil(weapon.XP + xp)
     weapon = inv_manager:item_checklevelup(weapon)
     return weapon
 end
 
 function inv_manager:transmutation(hero,transmuted_slot,weapon_slot)
-    local transmuted = nil 
+    local transmuted = nil
     local weapon =  nil
     if transmuted_slot == nil then return end
     transmuted = hero.inventory[transmuted_slot]
 
-    if weapon_slot ~= nil then 
+    if weapon_slot ~= nil then
         weapon = hero.inventory[weapon_slot]
     else
         weapon = hero.equipement.weapon
@@ -1737,11 +1832,11 @@ function inv_manager:transmutation(hero,transmuted_slot,weapon_slot)
         Notifications:Inventory(hero:GetPlayerID(), {text="#NO_WEAPON",duration=2,color="FFAAAA"})
     end
 
-    if weapon_slot ~= nil then 
+    if weapon_slot ~= nil then
         hero.inventory[weapon_slot] = weapon
     else
         hero.equipement.weapon = weapon
-    end 
+    end
     inv_manager:Calculate_stats(hero)
     inv_manager:save_inventory(hero)
 end

@@ -57,5 +57,17 @@
             "Command"   "+Close_ALL"
             "Name"      "Close All Panel"
         }
+        "09"
+        {
+            "Key"       "O"
+            "Command"   "+Option_Key"
+            "Name"      "Option Panel"
+        }
+        "10"
+        {
+            "Key"       "K"
+            "Command"   "+Ready"
+            "Name"      "Is Ready"
+        }
     }
 }

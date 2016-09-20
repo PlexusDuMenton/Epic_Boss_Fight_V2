@@ -13,21 +13,21 @@ background-image: url("file://{images}/custom_game/inventory/forge_panel_base.pn
  horizontal-align: right;
   height: 500px;
   width: 680px;
-  
+
 }
 
 #windows_tabs
 {
   height: 42px;
   width: 680px;
-  
+
 }
 #display
 {
 	margin-top: 42px;
   height: 708px;
   width: 680px;
-  
+
 }
 
 .normal_label
@@ -93,6 +93,7 @@ background-image: url("file://{images}/custom_game/inventory/forge_panel_base.pn
 	margin-left: 5px;
 	color: #AACCFF;
 	brightness: 2.0;
+	sound: "whoosh_in";
 }
 
 .unselected_button_label
@@ -100,7 +101,7 @@ background-image: url("file://{images}/custom_game/inventory/forge_panel_base.pn
 	text-align: center;
 	text-overflow: clip;
 	font-weight: thin;
-	font-size: 30px;
+	font-size: 20px;
 	margin-left: 5px;
 	opacity: 0.8;
 	color: #5588AA;

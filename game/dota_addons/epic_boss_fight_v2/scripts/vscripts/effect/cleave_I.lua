@@ -18,7 +18,7 @@ function lua_hero_effect_cleave_I:OnAttackLanded( params )
 			if self:GetParent():PassivesDisabled() then
 				return 0
 			end
- 
+
 			local target = params.target
 			if target ~= nil and target:GetTeamNumber() ~= self:GetParent():GetTeamNumber() then
 				local cleaveDamage = ( 20 * params.damage ) / 100.0
@@ -26,12 +26,10 @@ function lua_hero_effect_cleave_I:OnAttackLanded( params )
 			end
 		end
 	end
- 
+
 	return 0
 end
 
-
 function lua_hero_effect_cleave_I:GetAttributes()
-	return MODIFIER_ATTRIBUTE_NONE 
+	return MODIFIER_ATTRIBUTE_NONE
 end
-

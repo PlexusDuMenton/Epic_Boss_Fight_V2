@@ -70,163 +70,174 @@
   }
 }
 
-#BG
+.background_slot
 {
-
-}
-#menu
-{
-  margin-top: 250px;
-  margin-left: 460px;
-}
-#new
-{
-  margin-top: 250px;
-  margin-left: 460px;
-}
-#load
-{
-  margin-top: 250px;
-  margin-left: 460px;
+  margin-left: 1400px;
+  margin-top: 50px;
+  height: 925px;
+  width: 430px;
+  background-image: url("file://{images}/custom_game/hero/Hero_selection_menu.png");
 }
 
-#hero_1
+.slot_unselected
 {
-  margin-top: 100px;
-  height: 100px;
-  width: 600px;
+  brightness: 1.5;
+  margin-left: 5px;
+  height: 120px;
+  width: 420px;
+  background-image: url("file://{images}/custom_game/hero/unselected_hero_button.png");
 }
-#slot_1
+
+.slot_unselected:hover
 {
-  margin-top: 100px;
-  height: 100px;
-  width: 600px;
+  brightness: 2.0;
+  margin-left: 5px;
+  height: 120px;
+  width: 420px;
+  background-image: url("file://{images}/custom_game/hero/hover_hero_button.png");
 }
-#New_Hero
+
+.slot_selected
 {
-  margin-top: 100px;
-  height: 100px;
-  width: 600px;
+  brightness: 1.5;
+  margin-left: 5px;
+  height: 120px;
+  width: 420px;
+  background-image: url("file://{images}/custom_game/hero/selected_hero_button.png");
+}
+.slot_selected:hover
+{
+  brightness: 2.5;
+  margin-left: 5px;
+  height: 120px;
+  width: 420px;
+  background-image: url("file://{images}/custom_game/hero/selected_hero_button.png");
+}
+.Label_Desc
+{
+  margin-left: 5px;
+  margin-top: 19px;
+
+  width: 420px;
+  text-align: left;
+	text-overflow: clip;
+	font-weight: thin;
+	font-size: 25px;
+	color: #AACCFF;
+}
+.Create_NH
+{
+  margin-left: 120px;
+  margin-top: 40px;
+  height: 64px;
+  width: 300px;
+  text-align: left;
+	text-overflow: clip;
+	font-weight: thin;
+	font-size: 35px;
+	color: #AACCFF;
+}
+.unknow_icon
+{
+  margin-left: 27.5px;
+  margin-top: 27.5px;
+  height: 64px;
+  width: 64px;
+  background-image: url("file://{images}/custom_game/hero/new_hero.png");
+}
+.icon
+{
+  margin-left: 27.5px;
+  margin-top: 27.5px;
+  height: 64px;
+  width: 64px;
+  background-image: url("file://{images}/custom_game/hero/new_hero.png");
+}
+.XPBG_Bars
+{
+  margin-left: 120px;
+  margin-top: -50px;
+  height: 300px;
+  width: 300px;
+  background-size: 100% 100%;
+  background-image: url("file://{images}/custom_game/HUD/ally_back_ground_XP.png");
+}
+
+.XP_Bars
+{
+  margin-left: 120px;
+  margin-top: -50px;
+  height: 300px;
+  width: 300px;
+  background-size: 100% 100%;
+  background-image: url("file://{images}/custom_game/HUD/ally_XP.png");
 }
 
 
-#hero_2
+.hero_name
 {
-  margin-top: 300px;
-  height: 100px;
-  width: 600px;
-}
-#slot_2
-{
-  margin-top: 300px;
-  height: 100px;
-  width: 600px;
-}
-#Load_hero
-{
-  margin-top: 300px;
-  height: 100px;
-  width: 600px;
+  margin-left: 120px;
+  margin-top: 23px;
+  height: 64px;
+  width: 300px;
+  text-align: left;
+	text-overflow: clip;
+	font-weight: thin;
+	font-size: 22px;
+	color: #AACCFF;
 }
 
-#hero_3
+.hero_level
 {
-  margin-top: 500px;
-  height: 100px;
-  width: 600px;
-}
-#slot_3
-{
-  margin-top: 500px;
-  height: 100px;
-  width: 600px;
-}
-
-#back
-{
-  margin-top: 700px;
-  height: 100px;
-  width: 600px;
+  margin-left: 121px;
+  margin-top: 80px;
+  height: 64px;
+  width: 300px;
+  text-align: left;
+	text-overflow: clip;
+	font-weight: thin;
+	font-size: 30px;
+	color: #AACCFF;
 }
 
-#nht
+.hero_xp
 {
-	font-size: 50px;
-	margin-top: 25px;
-	margin-left: 30px;
-    font-weight: bold;
-	color: #FFFFFF;
-}
-#ldt
-{
-	font-size: 50px;
-	margin-top: 25px;
-	margin-left: 30px;
-    font-weight: bold;
-	color: #FFFFFF;
-}
-#c1t
-{
-	font-size: 50px;
-	margin-top: 25px;
-	margin-left: 30px;
-    font-weight: bold;
-	color: #FFFFFF;
-}
-#c2t
-{
-	font-size: 50px;
-	margin-top: 25px;
-	margin-left: 30px;
-    font-weight: bold;
-	color: #FFFFFF;
-}
-#c3t
-{
-	font-size: 50px;
-	margin-top: 25px;
-	margin-left: 30px;
-    font-weight: bold;
-	color: #FFFFFF;
-}
-#bbt
-{
-	font-size: 50px;
-	margin-top: 25px;
-	margin-left: 30px;
-    font-weight: bold;
-	color: #FFFFFF;
-}
-#st1
-{
-	font-size: 50px;
-	margin-top: 25px;
-	margin-left: 30px;
-    font-weight: bold;
-	color: #FFFFFF;
-}
-#st2
-{
-	font-size: 50px;
-	margin-top: 25px;
-	margin-left: 30px;
-    font-weight: bold;
-	color: #FFFFFF;
-}
-#st3
-{
-	font-size: 50px;
-	margin-top: 25px;
-	margin-left: 30px;
-    font-weight: bold;
-	color: #FFFFFF;
+  margin-left: 121px;
+  margin-top: 52px;
+  height: 64px;
+  width: 300px;
+  text-align: left;
+	text-overflow: clip;
+	font-weight: thin;
+	font-size: 18px;
+	color: #DDEEFF;
+  padding-left: 8px;
+  text-shadow: 1px 1px 1px 3 #112255b0;
 }
 
-#question
+
+.parent_hero_choice
 {
-font-size: 50px;
-	margin-left: 0px;
-	margin-top: 0px;
-    font-weight: bold;
-	color: #FFFFFF;
+  margin-left: 500px;
+  margin-top: 50px;
+  height: 925px;
+  width: 860px;
+  background-image: url("file://{images}/custom_game/hero/Hero_selection_menu.png");
+}
+.parent_load_choice
+{
+  margin-left: 500px;
+  margin-top: 50px;
+  height: 925px;
+  width: 430px;
+  background-image: url("file://{images}/custom_game/hero/Hero_selection_menu.png");
+}
+
+
+.sub_parent
+{
+  margin-left: 0px;
+  margin-top: 0px;
+  height: 925px;
+  width: 430px;
 }

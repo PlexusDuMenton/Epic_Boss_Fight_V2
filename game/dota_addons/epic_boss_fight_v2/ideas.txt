@@ -1,0 +1,198 @@
+(づ ͠° ͟ل͜ ͡°)づ Come here Little Boy (╯°□°)╯
+
+
+TO MAKE :
+Modifier List (with icon) on Hud (6 per line , ability to display all or only the first line)
+
+
+
+Boss Idea :
+
+
+
+Late-game (after beta)
+	-Frost legion (3 rounds ) :
+		frost Legions : 
+			Low damage , high hp , slow on hit , 2% to immobilize
+		frost archer : 
+			Medium damage , low hp , slow on hit , long range
+
+		Frost General : (can spawn 1-3 frost legion or 1-2 frost archer at a time)
+			High damage , high hp , big slow on hit , 10% to imobilize
+		Frost General(Var 2 , ranged) : (can spawn 1-2 frost legion or 1-3 frost archer at a time)
+			High damage , medium hp , slow on hit , 4% to imobilize
+
+		Frost Lord : 
+			Very high damage , slow attack speed , Huge ammount of Hp , can spawn 1 general (4 max)
+		
+
+		maybe : 
+			Frost Spirit :
+				Huge tankiness (hp pool of a general) , no damage (can't attack), slow and prevent hp regen when nearby (to force player to attack them)
+
+
+	-Mechanical Invasion
+		Parasyte : ( models/heroes/weaver/weaver_bug.vmdl )
+			very small ennemy , fast movement speed,very low hp , huge ammount , VERY low damage, attach to player to slow and reduce armor for 5 sec then die 
+		Minichimal : ( models/heroes/tinker/mom.vmdl )
+			small ennemy , low hp , low damage , will repair other allies (never parasyte, focus on war machine , then other minichimal then rocket robot)
+			if no ally robot to repair then attack ennemy
+
+		rocket Robot : ( models/heroes/rattletrap/rattletrap.vmdl )
+			Medium ennmy , run all around launching missile at ennemy , are medium speed so easy to take down , damage of missile are high
+
+		War-Machine : ( rattletraps with forge_warrior_steam_exoskeleton )
+			Huge ennemy , slow movement speed and attack speed , AoE damage , High damage And Very High Hp
+
+		??Robot factory : ( models/items/rattletrap/clockmaster_cog/clockmaster_cog.vmdl )
+			Huge Hp , move VERY slovely , don't attack , spawn all other ennemy above (3 parasyte every 5 sec , 1 minichinal every 5 sec;  1 rocket robot every 10 sec and 1 war machine every 30 sec )
+
+
+
+
+
+
+
+-Boss 4: 
+	Earth Shaker ( Guardian of the red mountain )$
+	Name : 
+	Skill : 
+		1 - Huge jump over one of the player stunning him for 3 seconds : range 300
+
+		2 - Push his totem into ground , making the ground shake : fissure randomly apear arround him
+
+		3 - Focus his power then jump deal high damage on ground (jump over his own position) range : 600
+	Attack priority : higger damage output
+	basehp : 
+
+
+-Boss 5 :
+			Tiny (classic)
+
+			Focus rule : Random (aggro don't affect him too)
+
+			one rockling make the boss lose 5% of his hp , but heal him for 10% except for his ultimate which don't consume health
+			never launch an rockling if his hp are lower than 10%
+
+			4 form :
+				Base :
+					skill : (30 Basehp)
+						1-launch 1-3 rock into air falling on players (1 fall on players , other are random)
+						
+						2-launch 1 rock in front of him toward a player
+
+						3-launch a player toward another player
+
+
+				2th :
+					skill : (50 Basehp)
+						1-launch 2-5 rock into air ( 75% to be randomly arround player , else on the player)
+						
+						2-lanch one rockling toward player
+
+						3-lanch one rockling into air , falling to player
+
+					(rockling can return to the boss to heal him)
+
+				3th :  4.167%hp(/2) lose per rockling , 8.33% health gain (* hp left on the rockling) /2
+					skill : (60 Basehp)
+						1- launch 4-7 rock into air (50% de be randomly near)
+						
+						2- lauch 2-3 rockling in front of him (different angle) 
+
+						3- launch 2-3 rockling in airs , falling on player then returning to him
+
+
+				final form : 5% hp lose per rockling (big) , 10% health gain (big) , small heal only 3%
+					skill : (100 Basehp)
+						1- 15-20 rock will fall from sky , 20% to aim player ,else random
+						
+						2- launch rock all arround him
+
+						3 (if a player is - 300 unit arround) - burry player in ground blocking his movement for 3 sec
+
+						4- lauching rockling towward him
+
+						(ULTIMATE , ONLY ONCE, when hp are <20%) 5- immunity , Rockling rain all arround him (10-20 rockling) damage player when touching the ground 
+
+
+
+
+Spell : 
+Archer : 
+
+Arrow Rain:
+Arrow rain over an area for a short duration
+--untest 
+
+Homming Arrow:
+Shoot 3-5-7-9-11-13-15 arrows in a short time at random enemy in range, can target many time the same enenmy
+--untest 
+
+
+Arrow Stream:
+Shoot 10-15-20-25-30-35-40 arrows on an ennemy during the channel time (10 arrows/sec)
+(long range)
+--untest 
+
+Explosive Arrow:
+For 5 seconds, all arrows will deal damage over an area arround the target
+(apply to skills ???)
+--untested
+
+Quick Dash
+make a (medium) dash in a dirrection (no cast time)
+--to make
+Jump Dash
+make an (huge) dash in a direction (0.2s cast time)
+--to make
+
+Arrows Dash : 
+(medium) Dash in an direction and launching arrows while dashing , launch arrows at random enemy in range, can target many time the same enenmy
+--to make
+
+
+
+
+
+Ult : 
+
+MarksMans Shoter :
+Launch an powerfull and previs arrows to all enemy in the attack range
+--to make
+
+Unlimited Arrows :
+Archer become invisible/incontrolable
+Launch Lot of Arrows from all dirrection
+--to make
+
+Last Chance's Dodge :
+Dodge in an huge area behind her, launch arrows while dodge, add Arrow Rain to all ennemy position in the area
+--to make
+
+
+Duelist :
+
+
+
+WhirlWind
+
+Issen Style attack on one Enemy (travel to the oposite of the ennemy , same distance)
+
+Linear ShockWave (line Aoe Attack)
+
+ShockWave (Aoe Attack)
+
+Mark - Mark ennemy with a sigle , slighty reducing attack speed and damage
+
+
+Ult : 
+
+"FIGHT ME !" - Reduce taken damage (50 - 66 - 75 - 80) , all boss will attack ONLY you for the duration (6-9-12-15 sec)
+
+
+
+(mage) Caster : 
+
+
+live : [FR/ENG] Praise The Sun ... or maybe not  ! #Digital #FR #Drawing #Painting #DarkSoul

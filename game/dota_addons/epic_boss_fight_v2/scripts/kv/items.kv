@@ -1,5 +1,5 @@
-"Items" 
-{ 
+"Items"
+{
 
 
 
@@ -15,14 +15,14 @@
 
 
 
-    //           __        _______    _    ____   ___  _   _             
-    // _____ ____\ \      / / ____|  / \  |  _ \ / _ \| \ | |_____ _____ 
+    //           __        _______    _    ____   ___  _   _
+    // _____ ____\ \      / / ____|  / \  |  _ \ / _ \| \ | |_____ _____
     //|_____|_____\ \ /\ / /|  _|   / _ \ | |_) | | | |  \| |_____|_____|
     //|_____|_____|\ V  V / | |___ / ___ \|  __/| |_| | |\  |_____|_____|
-    //              \_/\_/  |_____/_/   \_\_|    \___/|_| \_|            
-    //                                                                                                      
+    //              \_/\_/  |_____/_/   \_\_|    \___/|_| \_|
+    //
     "item_crowbar"
-    { 
+    {
         "Ilevel" "1"
         "damage" "33333"
         "m_damage" "333"
@@ -34,7 +34,7 @@
         "price" "333"
         "Equipement" "1"
         "cat"   "weapon"
-        //next are the bonus weapon get eachtime it level up 
+        //next are the bonus weapon get eachtime it level up
         "dmg_grow" "3333"
         "m_dmg_grow" "333"
         "range_grow" "33"
@@ -42,7 +42,7 @@
         "quality" "Mythical"
     }
     "item_rust_dagger"
-    { 
+    {
         "Ilevel" "1"
         "damage" "5"
         "range" "15"
@@ -50,7 +50,7 @@
         "price" "20"
         "Equipement" "1"
         "cat"	"weapon"
-        //next are the bonus weapon get eachtime it level up 
+        //next are the bonus weapon get eachtime it level up
         "dmg_grow" "2"
         "range_grow" "1"
         "as_grow" "5"
@@ -58,7 +58,7 @@
         "effect"{"1" "poison_1"} // rust is poisoneous
     }
     "item_broken_bow"
-    { 
+    {
         "Ilevel" "1"
         "damage" "3"
         "range" "400"
@@ -67,14 +67,14 @@
         "Equipement" "1"
         "ranged" "1"
         "cat"   "weapon"
-        //next are the bonus weapon get eachtime it level up 
+        //next are the bonus weapon get eachtime it level up
         "dmg_grow" "2"
         "range_grow" "15"
         "as_grow" "3"
         "quality" "Poor"
     }
     "item_bow"
-    { 
+    {
         "Ilevel" "4"
         "damage" "8"
         "range" "600"
@@ -83,14 +83,14 @@
         "Equipement" "1"
         "ranged" "1"
         "cat"   "weapon"
-        //next are the bonus weapon get eachtime it level up 
+        //next are the bonus weapon get eachtime it level up
         "dmg_grow" "4"
         "range_grow" "20"
         "as_grow" "5"
         "quality" "Normal"
     }
     "item_long_bow"
-    { 
+    {
         "Ilevel" "8"
         "damage" "20"
         "range" "1000"
@@ -99,33 +99,201 @@
         "Equipement" "1"
         "ranged" "1"
         "cat"   "weapon"
-        //next are the bonus weapon get eachtime it level up 
+        //next are the bonus weapon get eachtime it level up
         "dmg_grow" "10"
         "range_grow" "30"
         "as_grow" "1"
         "projectile_name"   "particles/units/heroes/hero_clinkz/clinkz_base_attack.vpcf"
         "quality" "Normal"
     }
+    "item_desert_bow"
+    {
+        "Ilevel" "12"
+        "damage" "40"
+        "range" "800"
+        "attack_speed" "30"
+        "price" "1500"
+        "Equipement" "1"
+        "ranged" "1"
+        "cat"   "weapon"
+        //next are the bonus weapon get eachtime it level up
+        "dmg_grow" "20"
+        "range_grow" "30"
+        "as_grow" "1"
+        "projectile_name"   "particles/units/heroes/hero_clinkz/clinkz_base_attack.vpcf"
+        "quality" "Normal"
+    }
+    "item_cleave_bow"
+    {
+        "Ilevel" "16"
+        "damage" "70"
+        "range" "800"
+        "attack_speed" "-20"
+        "price" "1500"
+        "Equipement" "1"
+        "ranged" "1"
+        "cat"   "weapon"
+        //next are the bonus weapon get eachtime it level up
+        "dmg_grow" "50"
+        "range_grow" "10"
+        "as_grow" "0"
+        "projectile_name"   "particles/units/heroes/hero_huskar/huskar_base_attack.vpcf"
+        "effect"{
+          "1" "cleave_I"
+        }
+        "quality" "Superior"
+    }
     "item_fire_long_bow"
-    { 
+    {
         "Ilevel" "20"
         "damage" "100"
+        "m_damage" "50"
         "range" "1000"
         "attack_speed" "10"
         "price" "2250"
         "Equipement" "1"
         "ranged" "1"
         "cat"   "weapon"
-        //next are the bonus weapon get eachtime it level up 
+        //next are the bonus weapon get eachtime it level up
         "dmg_grow" "25"
+        "m_dmg_grow" "50"
         "range_grow" "30"
         "as_grow" "1"
-        "quality" "Magic"
+        "quality" "Rare"
         "projectile_name"   "particles/units/heroes/hero_clinkz/clinkz_searing_arrow.vpcf"
         "effect"{"1" "fire_1"} // rust is poisoneous
     }
+
+    "item_skull_bow"
+    {
+        "Ilevel" "32"
+        "damage" "200"
+        "range" "600"
+        "ls" "10"
+        "attack_speed" "-20"
+        "price" "2800"
+        "Equipement" "1"
+        "ranged" "1"
+        "cat"   "weapon"
+        //next are the bonus weapon get eachtime it level up
+        "dmg_grow" "60"
+        "range_grow" "20"
+        "as_grow" "5"
+        "quality" "Magic"
+        "projectile_name"   "particles/units/heroes/hero_huskar/huskar_base_attack.vpcf"
+        "effect"{"1" "critical_I"} // rust is poisoneous
+    }
+
+    "item_black_bow"
+    {
+        "Ilevel" "45"
+        "damage" "450"
+        "range" "700"
+        "attack_speed" "-20"
+        "price" "2800"
+        "ls" "20"
+        "Equipement" "1"
+        "ranged" "1"
+        "cat"   "weapon"
+        //next are the bonus weapon get eachtime it level up
+        "dmg_grow" "80"
+        "range_grow" "20"
+        "as_grow" "5"
+        "quality" "Rare"
+        "projectile_name"   "particles/units/heroes/hero_huskar/huskar_base_attack.vpcf"
+        "effect"{
+          "1" "critical_I"
+          "2" "cleave_I"
+        } // rust is poisoneous
+    }
+
+
+    "item_frost_legion_bow"
+    {
+        "Ilevel" "57"
+        "damage" "600"
+        "range" "1500"
+        "attack_speed" "20"
+        "price" "5000"
+        "Equipement" "1"
+        "ranged" "1"
+        "cat"   "weapon"
+        //next are the bonus weapon get eachtime it level up
+        "dmg_grow" "130"
+        "range_grow" "10"
+        "as_grow" "5"
+        "quality" "Rare"
+        "projectile_name"   "particles/units/heroes/hero_drow/drow_base_attack.vpcf"
+        "effect"{"1" "Ice_II"} // rust is poisoneous
+    }
+
+    "item_frost_legion_bow_true"
+    {
+        "Ilevel" "70"
+        "damage" "900"
+        "range" "1500"
+        "attack_speed" "20"
+        "price" "7500"
+        "Equipement" "1"
+        "ranged" "1"
+        "cat"   "weapon"
+        //next are the bonus weapon get eachtime it level up
+        "dmg_grow" "180"
+        "range_grow" "15"
+        "as_grow" "5"
+        "quality" "Rare"
+        "projectile_name"   "particles/units/heroes/hero_drow/drow_frost_arrow.vpcf"
+        "effect"{"1" "Ice_III"} // rust is poisoneous
+    }
+
+    "item_black_frost_bow"
+    {
+        "Ilevel" "80"
+        "damage" "1200"
+        "range" "1500"
+        "ls" "20"
+        "attack_speed" "20"
+        "price" "10000"
+        "Equipement" "1"
+        "ranged" "1"
+        "cat"   "weapon"
+        //next are the bonus weapon get eachtime it level up
+        "dmg_grow" "220"
+        "range_grow" "15"
+        "as_grow" "5"
+        "quality" "Unique"
+        "projectile_name"   "particles/econ/items/drow/drow_bow_monarch/drow_frost_arrow_monarch.vpcf"
+        "effect"{
+          "1" "Ice_IV"
+        "2" "cleave_II"
+        }
+    }
+
+    "item_solar_bow"
+    {
+        "Ilevel" "100"
+        "damage" "2000"
+        "range" "1200"
+        "ls" "25"
+        "attack_speed" "30"
+        "price" "15000"
+        "Equipement" "1"
+        "cat"   "weapon"
+
+        //next are the bonus weapon get eachtime it level up
+        "dmg_grow" "300"
+        "range_grow" "30"
+        "as_grow" "5"
+        //quality , will be used for drop and color weapon's name :D
+        "quality" "Unique"
+        "effect"{"1" "critical_III"
+                "2" "fire_4"
+                "3" "cleave_II"
+                }
+    }
+
     "item_dagger"
-    { 
+    {
         "Ilevel" "5"
         "damage" "15"
         "range" "15"
@@ -135,14 +303,14 @@
         "price" "250"
         "Equipement" "1"
         "cat"   "weapon"
-        //next are the bonus weapon get eachtime it level up 
+        //next are the bonus weapon get eachtime it level up
         "dmg_grow" "4"
         "range_grow" "1"
         "as_grow" "5"
         "quality" "Normal"
     }
     "item_rust_sword"
-    { 
+    {
         "Ilevel" "3"
         "damage" "10"
         "range" "55"
@@ -151,7 +319,7 @@
         "Equipement" "1"
         "cat"   "weapon"
 
-        //next are the bonus weapon get eachtime it level up 
+        //next are the bonus weapon get eachtime it level up
         "dmg_grow" "3"
         "range_grow" "2"
         "as_grow" "2"
@@ -160,7 +328,7 @@
         "effect"{"1" "poison_1"} // rust is poisoneous
     }
     "item_sword"
-    { 
+    {
         "Ilevel" "8"
         "damage" "25"
         "range" "55"
@@ -169,7 +337,7 @@
         "Equipement" "1"
         "cat"   "weapon"
 
-        //next are the bonus weapon get eachtime it level up 
+        //next are the bonus weapon get eachtime it level up
         "dmg_grow" "5"
         "range_grow" "2"
         "as_grow" "2"
@@ -179,7 +347,7 @@
 
 
     "item_broken_great_sword"
-    { 
+    {
         "Ilevel" "4"
         "damage" "20"
         "range" "115"
@@ -188,16 +356,17 @@
         "Equipement" "1"
         "cat"   "weapon"
 
-        //next are the bonus weapon get eachtime it level up 
+        //next are the bonus weapon get eachtime it level up
         "dmg_grow" "5"
         "range_grow" "5"
         "as_grow" "2"
         //quality , will be used for drop and color weapon's name :D
         "quality" "Poor"
+
     }
 
     "item_great_sword"
-    { 
+    {
         "Ilevel" "10"
         "damage" "50"
         "range" "125"
@@ -206,7 +375,7 @@
         "Equipement" "1"
         "cat"   "weapon"
 
-        //next are the bonus weapon get eachtime it level up 
+        //next are the bonus weapon get eachtime it level up
         "dmg_grow" "10"
         "range_grow" "5"
         "as_grow" "2"
@@ -214,7 +383,7 @@
         "quality" "Normal"
     }
     "item_cleave_great_sword"
-    { 
+    {
         "Ilevel" "15"
         "damage" "75"
         "range" "125"
@@ -223,7 +392,7 @@
         "Equipement" "1"
         "cat"   "weapon"
 
-        //next are the bonus weapon get eachtime it level up 
+        //next are the bonus weapon get eachtime it level up
         "dmg_grow" "15"
         "range_grow" "5"
         "as_grow" "0"
@@ -232,7 +401,7 @@
         "effect"{"1" "cleave_I"}
     }
     "item_cleave_great_axe"
-    { 
+    {
         "Ilevel" "20"
         "damage" "100"
         "range" "125"
@@ -241,7 +410,7 @@
         "Equipement" "1"
         "cat"   "weapon"
 
-        //next are the bonus weapon get eachtime it level up 
+        //next are the bonus weapon get eachtime it level up
         "dmg_grow" "20"
         "range_grow" "5"
         "as_grow" "0"
@@ -251,7 +420,7 @@
     }
 
     "item_demon_steel_great_sword"
-    { 
+    {
         "Ilevel" "26"
         "damage" "200"
         "range" "150"
@@ -260,7 +429,7 @@
         "Equipement" "1"
         "cat"   "weapon"
 
-        //next are the bonus weapon get eachtime it level up 
+        //next are the bonus weapon get eachtime it level up
         "dmg_grow" "30"
         "range_grow" "10"
         "as_grow" "0"
@@ -270,7 +439,7 @@
     }
 
     "item_dual_blade_great_sword"
-    { 
+    {
         "Ilevel" "32"
         "damage" "300"
         "range" "150"
@@ -279,7 +448,7 @@
         "Equipement" "1"
         "cat"   "weapon"
 
-        //next are the bonus weapon get eachtime it level up 
+        //next are the bonus weapon get eachtime it level up
         "dmg_grow" "50"
         "range_grow" "10"
         "as_grow" "0"
@@ -290,17 +459,17 @@
     }
 
     "item_shatered_hero_great_sword"
-    { 
+    {
         "Ilevel" "35"
         "damage" "300"
         "range" "150"
         "attack_speed" "-50"
-        "price" "1"
+        "price" "0"
         "Equipement" "1"
         "cat"   "weapon"
 
-        //next are the bonus weapon get eachtime it level up 
-        "dmg_grow" "100"
+        //next are the bonus weapon get eachtime it level up
+        "dmg_grow" "150"
         "range_grow" "10"
         "as_grow" "0"
         //quality , will be used for drop and color weapon's name :D
@@ -309,7 +478,7 @@
     }
 
     "item_sixth_guardian"
-    { 
+    {
         "Ilevel" "38"
         "damage" "500"
         "range" "150"
@@ -318,7 +487,7 @@
         "Equipement" "1"
         "cat"   "weapon"
 
-        //next are the bonus weapon get eachtime it level up 
+        //next are the bonus weapon get eachtime it level up
         "dmg_grow" "100"
         "range_grow" "10"
         "as_grow" "0"
@@ -328,7 +497,7 @@
     }
 
     "item_silver_ruler"
-    { 
+    {
         "Ilevel" "43"
         "damage" "750"
         "range" "150"
@@ -337,7 +506,7 @@
         "Equipement" "1"
         "cat"   "weapon"
 
-        //next are the bonus weapon get eachtime it level up 
+        //next are the bonus weapon get eachtime it level up
         "dmg_grow" "120"
         "range_grow" "10"
         "as_grow" "0"
@@ -347,7 +516,7 @@
     }
 
     "item_ice_great_sword"
-    { 
+    {
         "Ilevel" "50"
         "damage" "1000"
         "range" "150"
@@ -356,17 +525,17 @@
         "Equipement" "1"
         "cat"   "weapon"
 
-        //next are the bonus weapon get eachtime it level up 
+        //next are the bonus weapon get eachtime it level up
         "dmg_grow" "150"
         "range_grow" "10"
         "as_grow" "0"
         //quality , will be used for drop and color weapon's name :D
         "quality" "Rare"
         "effect"{"1" "critical_II"
-                "2" "ice_I"}
+                "2" "Ice_I"}
     }
     "item_frost_legion_gs"
-    { 
+    {
         "Ilevel" "57"
         "damage" "1000"
         "range" "150"
@@ -375,16 +544,16 @@
         "Equipement" "1"
         "cat"   "weapon"
 
-        //next are the bonus weapon get eachtime it level up 
+        //next are the bonus weapon get eachtime it level up
         "dmg_grow" "200"
         "range_grow" "10"
         "as_grow" "0"
         //quality , will be used for drop and color weapon's name :D
         "quality" "Rare"
-        "effect"{"1" "ice_II"}
+        "effect"{"1" "Ice_II"}
     }
     "item_frost_general_gs"
-    { 
+    {
         "Ilevel" "73"
         "damage" "1750"
         "range" "150"
@@ -393,17 +562,17 @@
         "Equipement" "1"
         "cat"   "weapon"
 
-        //next are the bonus weapon get eachtime it level up 
+        //next are the bonus weapon get eachtime it level up
         "dmg_grow" "300"
         "range_grow" "10"
         "as_grow" "0"
         //quality , will be used for drop and color weapon's name :D
         "quality" "Rare"
-        "effect"{"1" "ice_III"}
+        "effect"{"1" "Ice_III"}
     }
 
     "item_frost_lord_gs"
-    { 
+    {
         "Ilevel" "80"
         "damage" "3000"
         "range" "80"
@@ -412,18 +581,18 @@
         "Equipement" "1"
         "cat"   "weapon"
 
-        //next are the bonus weapon get eachtime it level up 
+        //next are the bonus weapon get eachtime it level up
         "dmg_grow" "500"
         "range_grow" "10"
         "as_grow" "0"
         //quality , will be used for drop and color weapon's name :D
         "quality" "Unique"
-        "effect"{"1" "ice_IV"}
+        "effect"{"1" "Ice_IV"}
     }
-    
-    
+
+
     "item_curved_sword"
-    { 
+    {
         "Ilevel" "12"
         "damage" "35"
         "range" "50"
@@ -432,7 +601,7 @@
         "Equipement" "1"
         "cat"   "weapon"
 
-        //next are the bonus weapon get eachtime it level up 
+        //next are the bonus weapon get eachtime it level up
         "dmg_grow" "7"
         "range_grow" "2"
         "as_grow" "3"
@@ -440,7 +609,7 @@
         "quality" "Superior"
     }
     "item_skull_sword"
-    { 
+    {
         "Ilevel" "17"
         "damage" "70"
         "ls" "5"
@@ -450,7 +619,7 @@
         "Equipement" "1"
         "cat"   "weapon"
 
-        //next are the bonus weapon get eachtime it level up 
+        //next are the bonus weapon get eachtime it level up
         "dmg_grow" "15"
         "range_grow" "2"
         "as_grow" "4"
@@ -459,7 +628,7 @@
         "effect"{"1" "critical_I"}
     }
     "item_skeleton_sword"
-    { 
+    {
         "Ilevel" "27"
         "damage" "120"
         "ls" "10"
@@ -469,7 +638,7 @@
         "Equipement" "1"
         "cat"   "weapon"
 
-        //next are the bonus weapon get eachtime it level up 
+        //next are the bonus weapon get eachtime it level up
         "dmg_grow" "25"
         "range_grow" "2"
         "as_grow" "5"
@@ -478,65 +647,112 @@
         "effect"{"1" "critical_II"}
     }
 
+
+    "item_wolf_skull_sword"
+    {
+        "Ilevel" "40"
+        "damage" "400"
+        "ls" "30"
+        "range" "70"
+        "attack_speed" "40"
+        "price" "10000"
+        "Equipement" "1"
+        "cat"   "weapon"
+
+        //next are the bonus weapon get eachtime it level up
+        "dmg_grow" "80"
+        "range_grow" "3"
+        "as_grow" "5"
+        //quality , will be used for drop and color weapon's name :D
+        "quality" "Magic"
+        "effect"{"1" "critical_II"
+                }
+    }
+
+    "item_ice_sword"
+    {
+        "Ilevel" "47"
+        "damage" "400"
+        "range" "70"
+        "attack_speed" "70"
+        "price" "5500"
+        "Equipement" "1"
+        "cat"   "weapon"
+
+        //next are the bonus weapon get eachtime it level up
+        "dmg_grow" "150"
+        "range_grow" "10"
+        "as_grow" "0"
+        //quality , will be used for drop and color weapon's name :D
+        "quality" "Rare"
+        "effect"{"1" "critical_II"
+                "2" "Ice_I"}
+    }
+
     "item_frost_legion_sword"
-    { 
+    {
         "Ilevel" "55"
-        "damage" "700"
+        "damage" "500"
+        "m_damage"  "200"
         "range" "70"
         "attack_speed" "100"
         "price" "6500"
         "Equipement" "1"
         "cat"   "weapon"
 
-        //next are the bonus weapon get eachtime it level up 
+        //next are the bonus weapon get eachtime it level up
         "dmg_grow" "100"
         "range_grow" "3"
         "as_grow" "5"
         //quality , will be used for drop and color weapon's name :D
         "quality" "Rare"
-        "effect"{"1" "ice_II"}
+        "effect"{"1" "Ice_II"}
     }
 
     "item_frost_general_spear"
-    { 
+    {
         "Ilevel" "70"
-        "damage" "1200"
+        "damage" "1000"
+        "m_damage"  "300"
         "range" "400"
         "attack_speed" "0"
         "price" "8000"
         "Equipement" "1"
         "cat"   "weapon"
 
-        //next are the bonus weapon get eachtime it level up 
+        //next are the bonus weapon get eachtime it level up
         "dmg_grow" "150"
         "range_grow" "10"
         "as_grow" "5"
         //quality , will be used for drop and color weapon's name :D
         "quality" "Rare"
-        "effect"{"1" "ice_III"}
+        "effect"{"1" "Ice_III"}
     }
 
     "item_frost_lord_sword"
-    { 
+    {
         "Ilevel" "80"
-        "damage" "2000"
+        "damage" "1500"
+        "m_damage"  "600"
         "range" "80"
         "attack_speed" "70"
         "price" "10000"
         "Equipement" "1"
         "cat"   "weapon"
 
-        //next are the bonus weapon get eachtime it level up 
+        //next are the bonus weapon get eachtime it level up
         "dmg_grow" "300"
         "range_grow" "5"
         "as_grow" "10"
         //quality , will be used for drop and color weapon's name :D
         "quality" "Unique"
-        "effect"{"1" "ice_IV"}
+        "effect"{"1" "Ice_IV"}
     }
 
-    "item_dragon_skull_sword"
-    { 
+
+
+    "item_dragon_fang"
+    {
         "Ilevel" "100"
         "damage" "2500"
         "ls" "50"
@@ -546,19 +762,41 @@
         "Equipement" "1"
         "cat"   "weapon"
 
-        //next are the bonus weapon get eachtime it level up 
+        //next are the bonus weapon get eachtime it level up
         "dmg_grow" "400"
         "range_grow" "3"
         "as_grow" "5"
         //quality , will be used for drop and color weapon's name :D
-        "quality" "Magic"
+        "quality" "Rare"
         "effect"{"1" "critical_III"
                 "2" "fire_3"
-                } 
+                }
+    }
+
+    "item_dragon_claw"
+    {
+        "Ilevel" "150"
+        "damage" "5000"
+        "ls" "60"
+        "range" "80"
+        "attack_speed" "40"
+        "price" "30000"
+        "Equipement" "1"
+        "cat"   "weapon"
+
+        //next are the bonus weapon get eachtime it level up
+        "dmg_grow" "1000"
+        "range_grow" "3"
+        "as_grow" "5"
+        //quality , will be used for drop and color weapon's name :D
+        "quality" "Unique"
+        "effect"{"1" "critical_IV"
+                "2" "fire_3"
+                }
     }
 
     "item_mechanical_sword"
-    { 
+    {
         "Ilevel" "125"
         "damage" "3000"
         "ls" "2"
@@ -568,17 +806,17 @@
         "Equipement" "1"
         "cat"   "weapon"
 
-        //next are the bonus weapon get eachtime it level up 
+        //next are the bonus weapon get eachtime it level up
         "dmg_grow" "500"
         "range_grow" "3"
         "as_grow" "6"
         //quality , will be used for drop and color weapon's name :D
         "quality" "Unique"
         "effect"{"1" "mechanic_crit"
-                } 
+                }
     }
     "item_mechanoid_sword"
-    { 
+    {
         "Ilevel" "200"
         "damage" "7000"
         "ls" "2"
@@ -588,14 +826,14 @@
         "Equipement" "1"
         "cat"   "weapon"
 
-        //next are the bonus weapon get eachtime it level up 
+        //next are the bonus weapon get eachtime it level up
         "dmg_grow" "1500"
         "range_grow" "5"
         "as_grow" "10"
         //quality , will be used for drop and color weapon's name :D
         "quality" "Epic"
         "effect"{"1" "mechanoid_crit"
-                } 
+                }
     }
 
 
@@ -611,14 +849,14 @@
 
 
 
-    //                       _____  __  __  ____  _____                
-    // ______ ______   /\   |  __ \|  \/  |/ __ \|  __ \ ______ ______  ______ ______  ______ ______ 
+    //                       _____  __  __  ____  _____
+    // ______ ______   /\   |  __ \|  \/  |/ __ \|  __ \ ______ ______  ______ ______  ______ ______
     //|______|______| /  \  | |__) | \  / | |  | | |__) |______|______||______|______||______|______|
-    // ______ ______ / /\ \ |  _  /| |\/| | |  | |  _  / ______ ______  ______ ______  ______ ______ 
+    // ______ ______ / /\ \ |  _  /| |\/| | |  | |  _  / ______ ______  ______ ______  ______ ______
     //|______|______/ ____ \| | \ \| |  | | |__| | | \ \|______|______||______|______||______|______|
-    //             /_/    \_\_|  \_\_|  |_|\____/|_|  \_\              
+    //             /_/    \_\_|  \_\_|  |_|\____/|_|  \_\
     "item_leather_vest"
-    { 
+    {
         "Ilevel" "3"
         "hp" "15"
         "armor" "1.5"
@@ -629,7 +867,7 @@
         "quality" "Poor"
     }
     "item_leather_trousers"
-    { 
+    {
         "Ilevel" "2"
         "hp" "10"
         "armor" "0.5"
@@ -640,7 +878,7 @@
         "quality" "Poor"
     }
     "item_leather_boots"
-    { 
+    {
         "Ilevel" "1"
         "hp" "5"
         "armor" "0.5"
@@ -651,7 +889,7 @@
         "quality" "Poor"
     }
     "item_leather_gloves"
-    { 
+    {
         "Ilevel" "1"
         "hp" "5"
         "armor" "0.5"
@@ -663,7 +901,7 @@
     }
     "item_leather_hood"
     {
-        "Ilevel" "1" 
+        "Ilevel" "1"
         "hp" "5"
         "armor" "1"
         "attack_speed" "15"
@@ -673,7 +911,7 @@
         "quality" "Poor"
     }
     "item_heavy_leather_armor"
-    { 
+    {
         "Ilevel" "8"
         "hp" "50"
         "armor" "8"
@@ -684,7 +922,7 @@
         "quality" "normal"
     }
     "item_bruiser_armor"
-    { 
+    {
         "Ilevel" "15"
         "hp" "200"
         "armor" "20"
@@ -695,7 +933,7 @@
         "quality" "Superior"
     }
     "item_taraske_plate"
-    { 
+    {
         "Ilevel" "50"
         "hp" "4000"
         "str" "100"
@@ -710,7 +948,7 @@
     }
 
     "item_lone_warrior_armor"
-    { 
+    {
         "Ilevel" "25"
         "hp" "300"
         "armor" "50"
@@ -722,7 +960,7 @@
     }
 
     "item_frost_legion_armor"
-    { 
+    {
         "Ilevel" "50"
         "hp" "2000"
         "str" "100"
@@ -734,7 +972,7 @@
         "quality" "Magic"
     }
     "item_frost_general_armor"
-    { 
+    {
         "Ilevel" "70"
         "hp" "5000"
         "str" "200"
@@ -746,7 +984,7 @@
         "quality" "Rare"
     }
     "item_frost_general_helmet"
-    { 
+    {
         "Ilevel" "70"
         "hp" "3000"
         "str" "100"
@@ -757,7 +995,7 @@
         "quality" "Rare"
     }
     "item_frost_lord_helmet"
-    { 
+    {
         "Ilevel" "80"
         "hp" "5000"
         "str" "300"
@@ -768,7 +1006,7 @@
         "quality" "Unique"
     }
     "item_frost_lord_gloves"
-    { 
+    {
         "Ilevel" "80"
         "hp" "3000"
         "agi" "200"
@@ -783,7 +1021,7 @@
 
 
     "item_mechanical_vest_I"
-    { 
+    {
         "Ilevel" "100"
         "hp" "5000"
         "str" "100"
@@ -797,7 +1035,7 @@
         "effect"{"1" "auto_canon_I"}
     }
     "item_mechanical_vest_II"
-    { 
+    {
         "Ilevel" "125"
         "hp" "7000"
         "str" "200"
@@ -812,7 +1050,7 @@
         "effect"{"1" "auto_canon_II"}
     }
     "item_mechanical_gloves"
-    { 
+    {
         "Ilevel" "125"
         "hp" "1500"
         "str" "50"
@@ -826,7 +1064,7 @@
         "quality" "Rare"
     }
     "item_mechanical_helmet_I"
-    { 
+    {
         "Ilevel" "125"
         "hp" "2000"
         "str" "70"
@@ -840,7 +1078,7 @@
         "quality" "Rare"
     }
     "item_mechanical_vest_III"
-    { 
+    {
         "Ilevel" "150"
         "hp" "15000"
         "str" "400"
@@ -854,7 +1092,7 @@
         "effect"{"1" "auto_canon_III"}
     }
     "item_mechanical_vest_IV"
-    { 
+    {
         "Ilevel" "175"
         "hp" "20000"
         "str" "500"
@@ -868,7 +1106,7 @@
         "effect"{"1" "auto_canon_IV"}
     }
     "item_mechanical_helmet_II"
-    { 
+    {
         "Ilevel" "175"
         "hp" "10000"
         "str" "100"
@@ -882,7 +1120,7 @@
         "quality" "Unique"
     }
     "item_mechanoid_armor"
-    { 
+    {
         "Ilevel" "200"
         "hp" "25000"
         "str" "1000"
@@ -896,7 +1134,7 @@
         "effect"{"1" "auto_canon_V"}
     }
     "item_mechanoid_gloves"
-    { 
+    {
         "Ilevel" "200"
         "hp" "5000"
         "str" "200"
@@ -909,7 +1147,7 @@
         "quality" "Epic"
     }
     "item_mechanoid_helmet"
-    { 
+    {
         "Ilevel" "200"
         "hp" "12000"
         "str" "200"
@@ -931,7 +1169,7 @@
 
 
     "item_cursed_necklace"
-    { 
+    {
         "Ilevel" "100"
         "str" "1000"
         "armor" "10"
@@ -940,7 +1178,7 @@
         "cat"   "necklace"
         "quality" "Unique"
         "effect"{"1" "cursed_necklace"
-                } 
+                }
     }
 
 
@@ -962,14 +1200,14 @@
 
 
 
-    //                      _____   ____ _______ _____ ____  _   _                      
-    // ______ ______ ______|  __ \ / __ \__   __|_   _/ __ \| \ | |______ ______ ______ 
+    //                      _____   ____ _______ _____ ____  _   _
+    // ______ ______ ______|  __ \ / __ \__   __|_   _/ __ \| \ | |______ ______ ______
     //|______|______|______| |__) | |  | | | |    | || |  | |  \| |______|______|______|
-    // ______ ______ ______|  ___/| |  | | | |    | || |  | | . ` |______ ______ ______ 
+    // ______ ______ ______|  ___/| |  | | | |    | || |  | | . ` |______ ______ ______
     //|______|______|______| |    | |__| | | |   _| || |__| | |\  |______|______|______|
-    //                     |_|     \____/  |_|  |_____\____/|_| \_|                     
+    //                     |_|     \____/  |_|  |_____\____/|_| \_|
     "item_red_small_potion"
-    { 
+    {
         "heal" "50"
         "heal_pct" "5"
         "price" "5"
@@ -979,7 +1217,7 @@
         "quality" "Poor"
     }
     "item_blue_small_potion"
-    { 
+    {
         "heal_mana" "20"
         "heal_mana_pct" "5"
         "price" "3"
@@ -989,7 +1227,7 @@
         "quality" "Poor"
     }
     "item_purple_small_potion"
-    { 
+    {
         "heal" "50"
         "heal_pct" "3.5"
         "heal_mana" "20"
@@ -1002,7 +1240,7 @@
     }
 
     "item_red_potion"
-    { 
+    {
         "heal" "200"
         "heal_pct" "10"
         "price" "30"
@@ -1012,7 +1250,7 @@
         "quality" "Normal"
     }
     "item_blue_potion"
-    { 
+    {
         "heal_mana" "100"
         "heal_mana_pct" "10"
         "price" "25"
@@ -1022,7 +1260,7 @@
         "quality" "Normal"
     }
     "item_purple_potion"
-    { 
+    {
         "heal" "200"
         "heal_pct" "8"
         "heal_mana" "100"
@@ -1036,7 +1274,7 @@
 
 
     "item_super_potion"
-    { 
+    {
         "heal_pct" "100"
         "heal_mana_pct" "100"
         "price" "10000"
@@ -1090,7 +1328,7 @@
 
 
     "item_power_soul"
-    { 
+    {
         "damage" "0"
         "m_damage" "0"
         "range" "0"

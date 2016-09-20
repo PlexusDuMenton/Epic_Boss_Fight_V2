@@ -2,14 +2,32 @@ if lua_hero_stats_modifier == nil then
 	lua_hero_stats_modifier = class({})
 end
 
+function lua_hero_stats_modifier:OnCreated()
+	if IsServer() then
+		local hero = self:GetCaster()
+		Timers:CreateTimer(0.5,function()
+			if hero:HasModifier("lua_hero_stats_modifier") ~= true then
+				hero:AddNewModifier(hero, nil, "lua_hero_stats_modifier",{})
+			end
+			return 0.5
+		end)
+	end
+end
+
+function lua_hero_stats_modifier:CheckState()
+  local state = {
+  [MODIFIER_STATE_NO_HEALTH_BAR ] = true,
+  }
+
+  return state
+end
+
+
 function lua_hero_stats_modifier:DeclareFunctions()
 	local funcs = {
-MODIFIER_PROPERTY_BASEATTACK_BONUSDAMAGE ,
-MODIFIER_PROPERTY_ATTACKSPEED_BONUS_CONSTANT,
 MODIFIER_PROPERTY_ATTACK_RANGE_BONUS,
 MODIFIER_PROPERTY_PHYSICAL_ARMOR_BONUS,
 MODIFIER_PROPERTY_MAGICAL_RESISTANCE_BONUS,
-MODIFIER_PROPERTY_HEALTH_BONUS,
 MODIFIER_PROPERTY_HEALTH_REGEN_CONSTANT,
 MODIFIER_PROPERTY_MANA_BONUS,
 MODIFIER_PROPERTY_MANA_REGEN_CONSTANT,
@@ -26,7 +44,7 @@ function lua_hero_stats_modifier:IsHidden()
 end
 
 
-function lua_hero_stats_modifier:GetAttributes() 
+function lua_hero_stats_modifier:GetAttributes()
 	return MODIFIER_ATTRIBUTE_IGNORE_INVULNERABLE + MODIFIER_ATTRIBUTE_PERMANENT
 end
 
@@ -41,18 +59,6 @@ end
 function lua_hero_stats_modifier:GetModifierCastRangeBonus()
 	if IsServer() then
 		return (self:GetCaster().hero_stats.int + self:GetCaster().skill_bonus.int)*0.2
-	end
-end
-
-function lua_hero_stats_modifier:GetModifierBaseAttack_BonusDamage()
-	if IsServer() then
-		return ((self:GetCaster().hero_stats.str + self:GetCaster().skill_bonus.str)*1.5)
-	end
-end
-
-function lua_hero_stats_modifier:GetModifierAttackSpeedBonus_Constant()
-	if IsServer() then
-		return (self:GetCaster().hero_stats.attack_speed + self:GetCaster().skill_bonus.attack_speed) + (self:GetCaster().hero_stats.agi + self:GetCaster().skill_bonus.agi)*0.33
 	end
 end
 
@@ -71,12 +77,6 @@ end
 function lua_hero_stats_modifier:GetModifierMagicalResistanceBonus()
 	if IsServer() then
 		return  100 * ((1-(0.01*self:GetCaster().hero_stats.m_ress)) * (1-(0.01*self:GetCaster().skill_bonus.m_ress)))
-	end
-end
-
-function lua_hero_stats_modifier:GetModifierHealthBonus()
-	if IsServer() then
-		return (self:GetCaster().hero_stats.hp + self:GetCaster().skill_bonus.hp) *(math.log(self:GetCaster().equip_stats.str+self:GetCaster().hero_stats.str+self:GetCaster().skill_bonus.str +10)/math.log(10))
 	end
 end
 
@@ -106,7 +106,7 @@ end
 
 function lua_hero_stats_modifier:GetModifierEvasion_Constant()
 	if IsServer() then
-		return (self:GetCaster().hero_stats.dodge  + self:GetCaster().skill_bonus.dodge) 
+		return (self:GetCaster().hero_stats.dodge  + self:GetCaster().skill_bonus.dodge)
 	end
 end
 

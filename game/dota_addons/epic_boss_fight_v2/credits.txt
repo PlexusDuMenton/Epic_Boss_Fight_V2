@@ -1,0 +1,5 @@
+	
+	Pouk : For helping to improve HUD
+	BMD : for barebone (like almost every mods)
+	Elinea : for the storage lib (especialy JSON encoder)
+	

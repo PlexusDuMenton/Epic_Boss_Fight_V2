@@ -11,14 +11,14 @@ end
 
 function lua_hero_effect_fire_1:DeclareFunctions()
     local funcs = {
-    MODIFIER_EVENT_ON_ATTACK_LANDED 
+    MODIFIER_EVENT_ON_ATTACK_LANDED
     }
     return funcs
 end
 
 
 function lua_hero_effect_fire_1:GetAttributes()
-	return MODIFIER_ATTRIBUTE_NONE 
+	return MODIFIER_ATTRIBUTE_NONE
 end
 
 function lua_hero_effect_fire_1:OnAttackLanded(event)
@@ -39,16 +39,16 @@ function lua_hero_effect_fire_1:OnAttackLanded(event)
 				damage = damage,
 				damage_type = DAMAGE_TYPE_PHYSICAL,
 			}
-			if math.random(1,100) <= 25 and target.On_Fire == false then
+			if math.random(1,100) <= 25 and target.On_Fire  ~= true then
 				target.On_Fire = true
 				Fire_effect = ParticleManager:CreateParticle( "particles/units/heroes/hero_huskar/huskar_burning_spear_debuff.vpcf",  PATTACH_ABSORIGIN_FOLLOW , target )
 				Timers:CreateTimer(0.2, function()
 					timer = timer + 0.2
 					if timer <= duration then
-						ApplyDamage(damageTable) 
+						ApplyDamage(damageTable)
 						return 0.2
 					else
-						target.On_Fire = false
+						target.On_Fire = nil
 						ParticleManager:DestroyParticle(Fire_effect, false)
 					end
 			    end)
