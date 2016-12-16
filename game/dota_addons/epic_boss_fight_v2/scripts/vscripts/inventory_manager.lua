@@ -621,7 +621,7 @@ function inv_manager:calc_stat_item(equipement,stats,hero)
             if eq_slot.magical == true then
                 if eq_slot.projectile_name == nil then eq_slot.projectile_name = "particles/units/heroes/hero_leshrac/leshrac_base_attack.vpcf" end
                 hero:SetRangedProjectileName(eq_slot.projectile_name)
-                stats.m_damage = (stats.damage + eq_slot.damage + eq_slot.upgrade_damage + eq_slot.bonus_damage ) * damage_multiplier
+                stats.m_damage = (stats.damage + eq_slot.damage + eq_slot.upgrade_damage + eq_slot.bonus_damage) * damage_multiplier
                 stats.damage = 0
                 eq_slot.damage = 0
             else
@@ -635,7 +635,7 @@ function inv_manager:calc_stat_item(equipement,stats,hero)
             hero:SetAttackCapability(DOTA_UNIT_CAP_MELEE_ATTACK)
             stats.damage = (stats.damage + eq_slot.upgrade_damage + eq_slot.bonus_damage) * damage_multiplier
         end
-        stats.m_damage = (stats.m_damage + eq_slot.m_damage + eq_slot.m_damage) * damage_multiplier
+        stats.m_damage =stats.m_damage + ( eq_slot.m_damage + eq_slot.m_damage + hero.effect_bonus.magical_damage ) * damage_multiplier
         stats.range  = stats.range  + eq_slot.upgrade_range + eq_slot.bonus_range
         stats.loh = stats.loh + eq_slot.upgrade_loh + eq_slot.bonus_loh
         stats.attack_speed = stats.attack_speed + eq_slot.upgrade_attack_speed + eq_slot.bonus_attack_speed
@@ -764,7 +764,6 @@ function inv_manager:Calculate_stats(hero) -- call this when equipement is modif
     stats = self:calc_stat_item(hero.equipement.weapon,stats,hero) --put it at the end since it'll affect all magical damage and range
 
     if hero.equipement.weapon == nil and stats.range > 500 then stats.range = 500 end
-
     hero.equip_stats = stats
     --to add : a function that add hero side stats (levels...) and apply them
     local key = "player_"..hero:GetPlayerID()
@@ -845,6 +844,10 @@ function inv_manager:Create_Inventory(hero) -- call this when the hero entity is
     hero.effect_bonus = {}
     hero.effect_bonus.damage = 0
     hero.effect_bonus.as = 0
+    hero.effect_bonus.magical_damage = 0
+    hero.effect_bonus.mp_regen = 0
+    hero.effect_bonus.hp_regen = 0
+    hero.effect_bonus.movespeed = 0
     inv_manager:Add_Item(hero,Item)
 end
 

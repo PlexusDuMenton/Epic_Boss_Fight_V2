@@ -75,3 +75,87 @@ function Boss_think()
 		end
 	end
 end
+
+
+
+
+
+
+
+
+
+
+
+function _isUnitClose(radius,origin)
+	enemy = FindUnitsInRadius(DOTA_TEAM_BADGUYS,
+                              origin,
+                              nil,
+                              radius,
+                              DOTA_UNIT_TARGET_TEAM_ENEMY,
+                              DOTA_UNIT_TARGET_ALL,
+                              DOTA_UNIT_TARGET_FLAG_NONE,
+                              FIND_ANY_ORDER,
+                              false)
+	if #enemy > 0 then
+		return true
+	else
+		return false
+	end
+end
+
+
+
+function _damagePercentAOE(origin,radius,percent,team,damageType,attacker)
+	targets = FindUnitsInRadius(team,
+												origin,
+												nil,
+												radius,
+												DOTA_UNIT_TARGET_TEAM_ENEMY,
+												DOTA_UNIT_TARGET_ALL,
+												DOTA_UNIT_TARGET_FLAG_NONE,
+												FIND_ANY_ORDER,
+												false)
+
+	for k,v in pairs(targets) do
+		local damageTable = {
+			victim = v,
+			attacker = attacker,
+			damage = v:GetMaxHealth()*(0.01*percent),
+			damage_type = damageType,
+		}
+		ApplyDamage(damageTable)
+	end
+end
+
+function _damageAOE(origin,radius,damage,team,damageType,attacker)
+	targets = FindUnitsInRadius(team,
+												origin,
+												nil,
+												radius,
+												DOTA_UNIT_TARGET_TEAM_ENEMY,
+												DOTA_UNIT_TARGET_ALL,
+												DOTA_UNIT_TARGET_FLAG_NONE,
+												FIND_ANY_ORDER,
+												false)
+
+	for k,v in pairs(targets) do
+		local damageTable = {
+			victim = v,
+			attacker = attacker,
+			damage = damage,
+			damage_type = damageType,
+		}
+		ApplyDamage(damageTable)
+	end
+end
+
+function _predictPlayerPos(player,projectile_time)
+	if player:IsMoving() then
+		local playerPos = player:GetAbsOrigin()
+		local playerAdditionalMovement = player:GetForwardVector()*player:GetBaseMoveSpeed()*projectile_time
+
+		return playerPos + playerAdditionalMovement
+	else
+		return player:GetAbsOrigin()
+	end
+end

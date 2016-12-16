@@ -25,6 +25,23 @@
 }
 
 
+.bg_buff
+{
+	background-image: url("file://{images}/custom_game/HUD/tooltip_effect_background.png");
+	background-size: 100% 100%;
+	height: 180px;
+  width: 300px;
+}
+
+.overlay_buff
+{
+	background-image: url("file://{images}/custom_game/HUD/tooltip_effect_overlay.png");
+	background-size: 100% 100%;
+	height: 180px;
+  width: 300px;
+}
+
+
 #PortaitImage_cut {
 	vertical-align: center;
 	vertical-align: center;
@@ -107,6 +124,17 @@
   background-size: 100% 100%;
 }
 
+.modifier_image_TT
+{
+  border-radius: 10%;
+  width: 44px;
+  height: 44px;
+  margin-left: 22px;
+  margin-top: 28px;
+  background-image: url("file://{images}/custom_game/CD_Mask.png");
+  background-size: 100% 100%;
+}
+
 .modifier_image
 {
   border-radius: 10%;
@@ -137,6 +165,35 @@
 {
   width: 50px;
   height: 50px;
+}
+
+
+.title
+{
+	text-overflow: clip;
+	font-weight: thin;
+	font-size: 15px;
+  margin-left: 73px;
+  margin-top: 20px;
+  width: 185px;
+  height: 45px;
+	color: #AACCFF;
+	text-shadow: 1px 1px 2px 3.0 #885533b1;
+	brightness: 3.0;
+}
+
+
+.desc
+{
+	text-overflow: clip;
+	font-weight: thin;
+	font-size: 15px;
+  margin-left: 20px;
+  margin-top: 52px;
+  width: 240px;
+  height: 80px;
+	color: #AACCFF;
+	text-shadow: 1px 1px 1px 3.0 #333333b0;
 }
 
 
@@ -380,8 +437,8 @@ background-image: url("file://{images}/custom_game/HUD/Hud_background.png");
   margin-left: 320px;
   vertical-align: bottom;
   margin-bottom: 0px;
-  height: 220;
-  width: 1280;
+  height: 220px;
+  width: 1280px;
   overflow: clip;
 }
 

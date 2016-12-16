@@ -295,7 +295,7 @@ function update_modifier(modifier)
 
 
 			//To do : Make tooltip when hovering the modifier :D
-			/*
+
 
 			modifier_image.SetPanelEvent("onmouseover", function(){
 				tooltip_buff(buff_name,debuff)
@@ -306,7 +306,7 @@ function update_modifier(modifier)
 					}
 				)
 			})
-			*/
+
 
 		}
 	}
@@ -319,7 +319,7 @@ function tooltip_buff(buff_name,debuff){
 	pos_mouse[0] = (pos_mouse[0])*screen_rat()[0]
 	pos_mouse[1] = (pos_mouse[1])*screen_rat()[1]
 	tooltip_panel.style.position = (pos_mouse[0]-25) +"px "+(pos_mouse[1]-60)+"px 0px";
-	tooltip_panel.SetHasClass( "small_tooltip", true );
+	tooltip_panel.SetHasClass( "bg_buff", true );
 
 	var text = $.CreatePanel( "Label", tooltip_panel , "Title" );
 	text.SetHasClass( "title", true );
@@ -332,6 +332,25 @@ function tooltip_buff(buff_name,debuff){
 	desc.text = $.Localize("#modifier_"+buff_name+"_desc");
 	desc.style.position = "5px 30px 0px";
 	desc.hittest = false
+
+	var effect_BG = $.CreatePanel( "Image", tooltip_panel, "modifier_image");
+	effect_BG.SetHasClass("modifier_image_TT",true)
+	if (debuff == false){
+		effect_BG.SetHasClass("buff",true)
+	}else{
+		effect_BG.SetHasClass("debuff",true)
+	}
+	effect_BG.style.position = "-2px -2px 0px";
+	effect_BG.hittest = false
+
+	var effect_image = $.CreatePanel( "Image", tooltip_panel, "modifier_image");
+	effect_image.SetHasClass("modifier_image_TT",true)
+	effect_image.SetImage("file://{images}/custom_game/modifier/"+buff_name+".png")
+	effect_image.hittest = false
+
+	var OLEffect = $.CreatePanel( "Panel", tooltip_panel , "OLEffect" );
+	OLEffect.SetHasClass( "overlay_buff", true );
+	OLEffect.hittest = false
 }
 
 

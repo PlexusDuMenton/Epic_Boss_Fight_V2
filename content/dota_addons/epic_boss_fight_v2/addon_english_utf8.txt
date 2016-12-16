@@ -8,8 +8,21 @@
                 "I_Level"                                                 "Required Level"
 
                 "Level"														"Lvl"
+                "confirm"                               "Confirm"
+                "WAIT"                               "Wait"
+                "DELETE_HERO"                               "Delete Hero"
+                "LOAD"                               "Load"
+
+                "mute_music"                            "Mute Music : "
+                "Change_Difficulty"                            "Change The Difficulty"
 
                 "npc_dota_hero_legion_commander_ebf"                                                 "Legionary Duelist"
+                "npc_dota_hero_legion_commander_ebf_desc"                                                 "The Legionary Duelist is a heroe who focus on melee attack and tanking ennemy attack, she can also support her ally with various ability"
+                "npc_dota_hero_windrunner_ebf"                                                       "Royal Archer"
+                "npc_dota_hero_windrunner_ebf_desc"                                                 "The Royal Archer is a hero who focus on ranged attack and kitting ennemy, her spell are focused on dealing damage and running aways as fast as possible"
+
+                "Create_New_Hero"                                                 "Create new hero"
+                "New_Hero"                                                          "New Hero"
 
 
                 "REWARD"                                                                                                          "Reward for completing Round"
@@ -60,6 +73,10 @@
                 "new_soul_attack_speed"    "Attack speed of soul : "
                 "new_soul_ls"      "Lifesteal of soul : "
 
+                "WAIT_60_AFTER_VOTE"    "You have to wait 60 Sec after a vote"
+                "DIFF_VOTE_IN_PROGRESS"    "A vote for difficulty is allready in progress"
+                "CANT_VOTE_IN_FIGHT"    "You can't change difficulty when In arena"
+
 
                 "gold_trade"   "Gold"
 
@@ -90,6 +107,8 @@
                 "IS_NOT_WEAPON"         "The item is not a weapon !"
                 "NO_WEAPON"     "There is not weapon !"
                 "NOT_LEVEL_5"   "The weapon must be level 5 to be crystalized"
+                "MUST_BE_LEVEL_3"       "A weapon must best level 3 to be reforged"
+                "NO_WEAP_CANT_BE_REFORGE" "A armor piece can't be reforged more than once !"
                 "WEAPON_NO_UPGRADE_SLOT"        "The weapon don't have infusion capacity"
                 "DONT_HAVE_REQUIREMENT"         "The weapon don't meet all requirement for this evolution !"
                 "NOSLOT"     "There is no free space in inventory !"
@@ -97,6 +116,21 @@
                 "NO_REQ_LEVEL"  "You don't meet the required level to equip this item"
                 "EMPTY_SLOT"   ""
                 "IN_TRADING"                                                                                                            "You can do this while trading"
+                "FORBIDEN_LOBBY"      "It's forbiden to be in lobby in while there is a fight in arena"
+
+                "IMCOMPATIBLE_SKILL_TREE"                       "Your skill-tree is OUTDATED.So your skill-tree has being reset"
+
+                "slot"                                                                                                          "Slot "
+                "Upgrade_Skill"                                                                                                          "Upgrade Skill"
+                "Equip_skill"                                                                                                          "Equip Skill"
+                "Unequip_skill"                                                                                                          "Unequip Skill"
+                "respec"                                                                                                               "Respecification"
+
+                "respec_free"                                                                                                                 "The respecification is free for gamepass owner"
+                "respec_cost"                                                                                                                 "The respecification will cost 5% of your max XP"
+
+                "NEGATIVE_XP"                                                                                                                  "You can't do respecification if you Xp is negative !"
+                "RESPEC_USELESS"                                                                                                               "Your skill tree is allready reseted, you don't need respecification"
 
                 "Xp_gain"      "Total XP gain from Transmutation : "
 
@@ -113,7 +147,6 @@
 
 
                 "item_power_soul"                                                                           "Power soul"
-
                 "item_power_soul_desc"                                                                              "A Piece of a powerfull boss' power \ncan either be drop from boss or obtain via Crystallization of powerfull weapon \nUsed to increase power of weapons"
 
                 "item_rust_dagger"										"Rusty Dagger"
@@ -124,6 +157,9 @@
 
                 "item_bow"                                                                              "Bow"
                 "item_bow_desc"                                                                         "A very classic bow , shot fast but don't deal lot of damage"
+
+                "item_long_bow"                                                                              "LongBow"
+                "item_long_bow_desc"                                                                         "A Bow made for longer attack , dealing more attack but take a bit longer to reload"
 
                 "item_long_bow"                                                                              "LongBow"
                 "item_long_bow_desc"                                                                         "A Bow made for longer attack , dealing more attack but take a bit longer to reload"
@@ -149,8 +185,35 @@
                 "item_skeleton_sword"                                                                               "TombStone Sword"
                 "item_skeleton_sword_desc"                                                                          "A sword which lacerate his ennemy , sometime dealing huge damage"
 
-                "item_dragon_skull_sword"                                                                               "Dragon Skull Sword"
-                "item_dragon_skull_sword_desc"                                                                          "A Strong sword made for the skull of a dragon !"
+                "item_wolf_skull_sword"                                                                               "Wolf Skull Sword"
+                "item_wolf_skull_sword_desc"                                                                          "A Strong sword made for the skull of a wolf !"
+
+                "item_black_bow"                                                                               "Black Bow"
+                "item_black_bow_desc"                                                                          "A black metal bow\nShot Heavy arrows cursed with dark power"
+
+                "item_black_frost_bow"                                                                               "Black Frost Bow"
+                "item_black_frost_bow_desc"                                                                          "Heavely modified Black bow by the frost legion,\nused by the lord of frost legion, you better wear his Crown"
+
+                "item_frost_legion_bow_true"                                                                               "Frost General Bow"
+                "item_frost_legion_bow_true_desc"                                                                          "A most powerful enhancement has been added to this bow\nLong-Bow Used by the Frost General, You better wear his helmet !"
+
+                "item_frost_legion_bow"                                                                               "Frost Legion Bow"
+                "item_frost_legion_bow_desc"                                                                          "A magicaly enhanced classic Long-Bow made for the use of the frost legion\nIt seam to be more efficiency when wearing their armor"
+
+                "item_skull_bow"                                                                               "Skull Bow"
+                "item_skull_bow_desc"                                                                          "A Scary bow made from bone of human and anhanced by a skill-less witch"
+
+                "item_cleave_bow"                                                                               "Impact Bow"
+                "item_cleave_bow_desc"                                                                          "A Heavy and slow Large-Bow which affect a large zone on impact"
+
+                "item_desert_bow"                                                                               "Oriental Bow"
+                "item_desert_bow_desc"                                                                          "A ortiental bow used by steppe inhabitant.\nmore sturdy and reliable than most bow"
+
+                "item_solar_bow"                                                                               "Fading sun"
+                "item_solar_bow_desc"                                                                          "An powerfull bow enhanced by the greater power of sun and death !\nthis is the common project of a great smither, a necromancer and a pyromancer !"
+
+
+
 
 
                 "item_red_small_potion"                                                                               "Small Red Potion"
@@ -179,6 +242,15 @@
 
                 "item_leather_hood"										"Leather Hood"
                 "item_leather_hodd_desc"										"Keep your head warm, but still not protected"
+
+                "item_leather_boots"                                                                             "Leather Boots"
+                "item_leather_boots_desc"                                                                                "You better wears some boots, only noob don't wear boots"
+
+                "item_leather_gloves"                                                                             "Leather Gloves"
+                "item_leather_gloves_desc"                                                                                "Protect your hand against cold and minor impact, a basic if you want to fight epic monster"
+
+                "item_leather_trousers"                                                                             "Leather Trousers"
+                "item_leather_trousers_desc"                                                                                "At wear it until you find better protection for legs, it's shame to stay without pants"
 
                 "item_heavy_leather_armor"                                                                             "Hardened Leather Armor"
                 "item_heavy_leather_armor_desc"                                                                                "Quite Heavy, but can effectivly protect you from minor damages"
@@ -246,8 +318,10 @@
 
 
                 "item_ice_great_sword"                                                                             "Ice Great Sword"
-                "item_ice_great_sword_desc"                                                                                "A very cold and strong great sword"
+                "item_ice_great_sword_desc"                                                                                "A very cold and strong great sword\nUsed as base by Frost legion for their weapon"
 
+                "item_ice_sword"                                                                             "Ice Sword"
+                "item_ice_sword_desc"                                                                                "A very cold and strong gut light sword\nUsed as base by Frost legion for their weapon"
 
                 "item_frost_legion_gs"                                                                             "Great Sword of the frost Legion"
                 "item_frost_legion_gs_desc"                                                                                "Great Sword used by the frost legion, It seam to be more efficiency when wearing their armor"
@@ -268,6 +342,12 @@
 
                 "item_frost_lord_sword"                                                                             "Sword of the frost Lord"
                 "item_frost_lord_sword_desc"                                                                                "Sword used by the lord of frost legion, you better wear his Crown"
+
+                "item_dragon_fang"                                                                             "Dragon Fang"
+                "item_dragon_fang_desc"                                                                                "A powerful sword forged from a broken fang of dragon"
+
+                "item_dragon_claw"                                                                             "Dragon Claw"
+                "item_dragon_claw_desc"                                                                                "You can fell his warmth when you weld it"
 
 
 
@@ -300,7 +380,10 @@
                 "fire_2_desc"                                                                         "Chance : 25% \nBurn the ennemy with cold fire , which Deal 400% of the damage over 5 seconds (physical)\nFire can't stack with himself"
 
                 "fire_3"                                                                              "Dragon Flame"
-                "fire_3_desc"                                                                         "Chance : 50% \nBurn the ennemy with dragon flame, which Deal 600% of the damage over 5 seconds (physical)\nFire can't stack with himself"
+                "fire_3_desc"                                                                         "Chance : 33% \nBurn the ennemy with dragon flame, which Deal 600% of the damage over 5 seconds (physical)\nFire can't stack with himself"
+
+                "fire_4"                                                                              "Solar Burn"
+                "fire_4_desc"                                                                         "Burn the ennemy with Solar Energy, which Deal 300% of the damage over 5 seconds (physical)\Can't stack with himself"
 
                 "critical_I"                                                                           "Critical Hit"
                 "critical_I_desc"                                                                         "Chance : 20% \nHit the ennemy with a critical hit dealing 200% of damage" // + 20% dps
@@ -322,7 +405,7 @@
                 "Ice_III_desc"                                                                         "Chance : 30% \nSlow the ennemy by 30% of his movement speed for 4 seconds\nIf you have the Frost General or Frost Lord Helmet equiped you'll have 30% to apply a 300% or 400% critical hit "
 
                 "Ice_IV"                                                                           "Frost Lord Curse"
-                "Ice_IV_desc"                                                                         "Chance : 30% \nSlow the ennemy by 35% of his movement speed for 5 seconds\nIf you have the Frost Lord Helmet equiped you'll have 30% to apply a 500% critical hit "
+                "Ice_IV_desc"                                                                         "Chance : 30% \nSlow the ennemy by 35% of his movement speed for 5 seconds\nIf you have the Frost Lord Helmet equiped you'll have 35% to apply a 500% critical hit "
 
 
                 "hidden_power"                                                                           "Hidden Power"
@@ -339,6 +422,9 @@
                 "tarask_blood_desc"                                                                         "Regen the wearer for 3.5% of his Health per seconds"
 
                 "str_1"                                                 "Superior Strength"
+                "str_2"                                                 "Sureal Strength"
+                "str_3"                                                 "Titan Strength"
+                "str_4"                                                 "GodLike Strength"
 
                 "hp_1"                                                 "Excelent Vitality"
                 "hp_2"                                                 "Boiling Blood"
@@ -347,7 +433,28 @@
 
                 "armor_1"                                                 "Armored Skin"
 
-                "active_1"												"Test Skill"
+                "move_speed_1"                                                 "Athletic Training"
+
+
+
+                "unshakable_charge"												"Unshakable Charge"
+
+                "shield_faith"                                                                                              "Shield of faith"
+
+                "courage_call"                                                                                               "Call of courage"
+
+                "cluster_shot"                                                                                               "Cluster Shots"
+
+                "focused_shot"                                                                                               "Focused Shot"
+
+
+
+
+
+
+                "cancel_ranged_malus"                                                                                               "Ranged Mastery"
+                "cancel_ranged_malus_desc"                                                                                               "Cancel the damage debuff when equiped with a ranged weapon"
+
 
                 "damage_1"                                                 "Damage Increase"
 
@@ -380,6 +487,7 @@
                 "Required_level"											"Required Level"
 
                 "Required_Ability"											"Required Ability"
+                "Req_ability"                                                                                      "Required Ability"
 
                 "Power_Points"												"Power Points"
 
@@ -426,10 +534,75 @@
 
                 // HERE GOES SOME OTHER STUFF
 
-                "DOTA_Tooltip_ability_shield_faith"                        "Shield Of Faith"
-                "DOTA_Tooltip_ability_shield_faith_Description"            "Protect his caster from damage"
-                "DOTA_Tooltip_ability_shield_faith_damage_reduction"          "%DAMAGE ABSORB:
-                "DOTA_Tooltip_ability_shield_faith_duration"               "DURATION:"
+                "DOTA_Tooltip_ability_shield_faith"                        "Shield of Faith"
+                "DOTA_Tooltip_ability_shield_faith_Description"            "Protect his caster from damage for a short duration"
+                "DOTA_Tooltip_ability_shield_faith_damage_reduction"          "%Damage reduction :"
+                "DOTA_Tooltip_ability_shield_faith_duration"               "Duration :"
+
+                "DOTA_Tooltip_ability_courage_call"                        "Call of Courage"
+                "DOTA_Tooltip_ability_courage_call_Description"            "Increase your and your allies movement speed for a short duration"
+                "DOTA_Tooltip_ability_courage_call_movement_bonus"         "%Bonus Movement Speed :"
+                "DOTA_Tooltip_ability_courage_call_duration"               "Duration :"
+
+                "DOTA_Tooltip_ability_unshakable_charge"                        "Unshakable Charge"
+                "DOTA_Tooltip_ability_unshakable_charge_Description"            "Enter into an unstopable charge"
+                "DOTA_Tooltip_ability_unshakable_charge_distance"         "Distance :"
+                "DOTA_Tooltip_ability_unshakable_charge_damage_percent"               "%Damage inflicted : "
+
+                "DOTA_Tooltip_ability_cluster_shot"                        "Cluster Shots"
+                "DOTA_Tooltip_ability_cluster_shot_Description"            "Shot multiple arrows in short time"
+                "DOTA_Tooltip_ability_cluster_shot_number_of_projectile"         "Number of projectile :"
+                "DOTA_Tooltip_ability_cluster_shot_damage_percent"               "%Damage inflicted : "
+
+                "DOTA_Tooltip_ability_focused_shot"                        "Focused Shots"
+                "DOTA_Tooltip_ability_focused_shot_Description"            "Focus to shot a single powerfull arrows"
+                "DOTA_Tooltip_ability_focused_shot_range"         "Range :"
+                "DOTA_Tooltip_ability_focused_shot_damage_percent"               "%Damage inflicted : "
+
+                "DOTA_Tooltip_Ability_explosive_arrow"                        "Explosive Arrows"
+                "DOTA_Tooltip_ability_explosive_arrow_Description"            "Load your quivers with PowerFull Explosive arrows which will damage unit arround the target "
+                "DOTA_Tooltip_ability_explosive_arrow_duration"         "Duration :"
+                "DOTA_Tooltip_ability_explosive_arrow_area"         "Radius :"
+                "DOTA_Tooltip_ability_explosive_arrow_damage_percent"               "%Bonus Damage inflicted : "
+
+                "DOTA_Tooltip_ability_arrows_rain"                        "Arrows Rain"
+                "DOTA_Tooltip_ability_arrows_rain_Description"            "Shot Multiple Arrows over an area, Applying damage over time."
+                "DOTA_Tooltip_ability_arrows_rain_duration"         "Duration :"
+                "DOTA_Tooltip_ability_arrows_rain_radius"         "Radius :"
+                "DOTA_Tooltip_ability_arrows_rain_damage_percent"               "%Damage inflicted : "
+
+                "DOTA_Tooltip_ability_arrow_stream"                        "Arrow Stream"
+                "DOTA_Tooltip_ability_arrow_stream_Description"            "Continuously shot arrows to an target at very high rate !"
+                "DOTA_Tooltip_ability_arrow_stream_duration"         "Duration :"
+                "DOTA_Tooltip_ability_arrow_stream_range"         "Range :"
+                "DOTA_Tooltip_ability_arrow_stream_arrows_ammount"               "Number of Arrows : "
+
+                "DOTA_Tooltip_ability_homming_arrow"                        "Homming Arrows"
+                "DOTA_Tooltip_ability_homming_arrow_Description"            "Shot Many arrows to random ennemy arround you"
+                "DOTA_Tooltip_ability_homming_arrow_duration"         "Duration :"
+                "DOTA_Tooltip_ability_homming_arrow_range"         "Range :"
+                "DOTA_Tooltip_ability_homming_arrow_arrows_ammount"               "Number of Arrows : "
+
+
+
+
+
+                "DOTA_Tooltip_Ability_empty1"                           ""
+                "DOTA_Tooltip_Ability_empty1_Description"               "A PlaceHolder Skill waiting to be filled"
+
+                "DOTA_Tooltip_Ability_empty2"                           ""
+                "DOTA_Tooltip_Ability_empty2_Description"               "A PlaceHolder Skill waiting to be filled"
+
+                "DOTA_Tooltip_Ability_empty3"                           ""
+                "DOTA_Tooltip_Ability_empty3_Description"               "A PlaceHolder Skill waiting to be filled"
+
+                "DOTA_Tooltip_Ability_empty4"                           ""
+                "DOTA_Tooltip_Ability_empty4_Description"               "A PlaceHolder Skill waiting to be filled"
+
+                "DOTA_Tooltip_Ability_empty5"                           ""
+                "DOTA_Tooltip_Ability_empty5_Description"               "A PlaceHolder Skill waiting to be filled"
+
+
 
 
         }

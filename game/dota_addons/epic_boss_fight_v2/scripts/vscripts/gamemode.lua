@@ -1143,19 +1143,20 @@ function epic_boss_fight:update_net_table(hero,ID)
       inv_manager:cancel_trade(hero,hero.trade_with)
     end
   else
-    local modifier_list = {}
-    local list_size = 0
+    local modifierList = {}
+    local listSize = 0
+    --yes I know i could use #modifierList but for no reason i had issue with
     if hero:GetUnitName()~= "npc_dota_hero_wisp" then
       for k,v in pairs(hero:FindAllModifiers()) do
-        local modifier_name = v:GetName()
-        local modifier = hero:FindModifierByName(modifier_name)
+        local modifierName = v:GetName()
+        local modifier = hero:FindModifierByName(modifierName)
         if modifier:IsHidden() ~= nil then
           if not modifier:IsHidden() then
-            local modifier_table = {}
-            modifier_table.name = modifier_name
-            modifier_table.debuff = modifier:IsDebuff()
-            modifier_list[list_size] = modifier_table
-            list_size = list_size+1
+            local modifierTable = {}
+            modifierTable.name = modifierName
+            modifierTable.debuff = modifier:IsDebuff()
+            modifierList[listSize] = modifierTable
+            listSize = listSize+1
           end
         end
       end
@@ -1167,7 +1168,7 @@ function epic_boss_fight:update_net_table(hero,ID)
       else
         CustomNetTables:SetTableValue( "info",key, {damage_mult = hero.final_damage_multiplier,admin = hero.admin,gold = math.floor(hero.gold) ,CD = hero.CD,Name = hero:GetUnitName(),inforge = hero.Isinforge,inshop = hero.Isinshop,LVL = hero.Level ,WName = "Fist", WLVL = 0 ,HP = hero:GetHealth(),MAXHP = hero:GetMaxHealth(),MP = hero:GetMana(),MAXMP = hero:GetMaxMana(),HXP = current_XP,MAXHXP = Get_Xp_To_Next_Level(hero.Level),WXP = 0,MAXWXP = 0  } )
       end
-      CustomNetTables:SetTableValue( "KVFILE","modifier_"..key, {modifier_list = modifier_list} )
+      CustomNetTables:SetTableValue( "KVFILE","modifier_"..key, {modifier_list = modifierList} )
     end
   end
 end
